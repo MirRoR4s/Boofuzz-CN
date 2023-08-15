@@ -10,6 +10,7 @@ project = 'rainfuzz'
 copyright = '一袭青衣尽长安'
 author = 'MirRoR4s'
 release = '0.0'
+language = "zh_CN"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
