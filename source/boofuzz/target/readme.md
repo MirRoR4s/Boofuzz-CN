@@ -1,6 +1,4 @@
-# [Target](https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Target)
-this is a test.
-
+# [Target](https://boofuzz.readthedocs.io/en/stable/source/Target.html)
 ## 前言
 
 Target 是目标描述符容器。

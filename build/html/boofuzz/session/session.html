@@ -44,7 +44,7 @@ Graph 类，所以 Session 对象相当于一个<strong>图</strong>。</p>
 <ul class="simple">
 <li><p>id（int）- 图的 id</p></li>
 <li><p>clusters（list）-</p></li>
-<li><p>edges（dist）- 由图中的所有边构成的一个字典。键名</p></li>
+<li><p>edges（dist）- 由图中的所有边构成的一个字典。</p></li>
 <li><p>nodes（dist）- 由图中的所有节点构成的一个字典。键名是节点
 id，键值则是对应的节点</p></li>
 </ul>
@@ -52,7 +52,7 @@ id，键值则是对应的节点</p></li>
 <section id="id2">
 <h2>成员变量和方法<a class="headerlink" href="#id2" title="此标题的永久链接">¶</a></h2>
 <section id="init">
-<h3>init<a class="headerlink" href="#init" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session">__init__</a><a class="headerlink" href="#init" title="此标题的永久链接">¶</a></h3>
 <p>会话类的构造函数。以下是各个成员变量的汇总表：</p>
 <table class="docutils align-default">
 <thead>
@@ -62,7 +62,8 @@ id，键值则是对应的节点</p></li>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>session_filename（str）</p></td>
-<td><p>存放序列化数据的文件名，默认为空</p></td>
+<td><p>存放序列化数据的文件名，默认为
+None</p></td>
 </tr>
 <tr class="row-odd"><td><p>index_start</p></td>
 <td><p>要运行的第一个测试用例的索引</p></td>
@@ -71,93 +72,146 @@ id，键值则是对应的节点</p></li>
 <td><p>要运行的最后一个测试用例的索引</p></td>
 </tr>
 <tr class="row-odd"><td><p>sleep_time</p></td>
-<td><p>每个测试用例之间等待的秒数，默认为0</p></td>
+<td><p>每
+个测试用例之间等待的秒数，默认为
+0</p></td>
 </tr>
 <tr class="row-even"><td><p>restart_interval</p></td>
-<td><p>在n个测试用例之
-后重启目标。默认情况下为0，表示禁用该选项</p></td>
+<td><p>在 n
+个测试用例之后重启目
+标。默认情况下为0，表示禁用该选项</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>console_gui</strong></p></td>
-<td><p>是否使用 curses 生成类似于 Web
-界面的静态控制台屏幕，默认为
-False（还未在 Windows 下进行测试）</p></td>
+<tr class="row-odd"><td><p>console_gui</p></td>
+<td><p>是否使用 curses 在 web
+端生成一个静态控制台，默认为
+False（还未在 Windows
+下进行测试）</p></td>
 </tr>
 <tr class="row-even"><td><p>crash_threshold_request</p></td>
-<td><p>请求耗尽之前允许的
-最大崩溃次数，默认为12。什么是请求耗尽？</p></td>
+<td><p>请求耗
+尽之前允许的最大崩溃次数，默认为
+12。什么是请求耗尽？</p></td>
 </tr>
 <tr class="row-odd"><td><p>crash_threshold_element</p></td>
-<td><p>元素耗尽之前允许的最大崩溃次数，默认为3</p></td>
+<td><p>元素耗
+尽之前允许的最大崩溃次数，默认为
+3</p></td>
 </tr>
 <tr class="row-even"><td><p>restart_sleep_time</p></td>
-<td><p>当目标无法重启时等待的秒数，默认为5</p></td>
+<td><p>当
+目标无法重启时等待的秒数，默认为5</p></td>
 </tr>
 <tr class="row-odd"><td><p>restart_callbacks</p></td>
 <td><p>在 <code class="docutils literal notranslate"><span class="pre">post_test_case_callback</span></code>
-失败后调用的回调方法列表，默认为 None 。</p></td>
+失败后调用的回调方法列表，默认为
+None</p></td>
 </tr>
 <tr class="row-even"><td><p>restart_threshold</p></td>
-<td></td>
+<td><p>丢失
+目标连接时的最大重试次数，默认为
+None（无限次）</p></td>
 </tr>
-<tr class="row-odd"><td></td>
-<td></td>
+<tr class="row-odd"><td><p>restart_timeout</p></td>
+<td><p>重新
+连接尝试的超时时间（秒），默认为
+None（无限次）</p></td>
 </tr>
-<tr class="row-even"><td></td>
-<td></td>
+<tr class="row-even"><td><p>pre_send_callbacks</p></td>
+<td><p>在每个模糊（测试）请
+求之前调用的注册方法列表，默认为
+None</p></td>
 </tr>
-<tr class="row-odd"><td></td>
-<td></td>
+<tr class="row-odd"><td><p>post_test_case_callbacks</p></td>
+<td><p>在每个模糊测试用例之
+后调用的注册方法列表，默认为None</p></td>
+</tr>
+<tr class="row-even"><td><p>post_start_target_callbacks</p></td>
+<td><p>目标启动或重新启动后<strong>进
+程监视器</strong>会调用的方法，默认为
+None 。</p></td>
+</tr>
+<tr class="row-odd"><td><p>web_port</p></td>
+<td><p>通过 Web
+浏览
+器监视模糊测试活动的端口。设置为
+None 表示禁用 Web
+应用程序，默认为 26000</p></td>
+</tr>
+<tr class="row-even"><td><p>keep_web_open</p></td>
+<td><p>在会话完成后保持 Web
+界面打开，默认为 True</p></td>
+</tr>
+<tr class="row-odd"><td><p>fuzz_loggers（list）</p></td>
+<td><p>日志记录器列表，用于保存
+测试数据和结果。默认将日志记录到
+STDOUT 。</p></td>
+</tr>
+<tr class="row-even"><td><p>fuzz_db_keep_only_n_pass_cases</p></td>
+<td><p>仅在最近的n个失败或错
+误之前保存通过的测试用例，以减少
+磁盘使用量。设置为0以每个测试用例
+都保存（高磁盘I/O！），默认为0。</p></td>
+</tr>
+<tr class="row-odd"><td><p>receive_data_after_each_request</p></td>
+<td><p>如果为
+True，在传输每个非模糊
+节点后尝试接收回复，默认为True。</p></td>
+</tr>
+<tr class="row-even"><td><p>receive_data_after_fuzz（bool）</p></td>
+<td><p>如果该变量为真，那么在传输完一个
+fuzzed 消息后，Session
+会尝试接收一个响应</p></td>
+</tr>
+<tr class="row-odd"><td><p>ignore_connection_reset（bool）</p></td>
+<td><p>将 ECONNREST
+错误（目标连接复位）记录为 “info”
+而非 failures</p></td>
+</tr>
+<tr class="row-even"><td><p>i
+gnore_connection_aborted（bool）</p></td>
+<td><p>将ECONNABORTED错误记录
+为“info”而不是失败，默认为False。</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ignore_connection
+_issues_when_sending_fuzz_data</strong></p></td>
+<td><p>忽略
+发送模糊数据时的连接故障，默认为
+True。这
+通常是一个有用的设置，因为目标一
+旦消息明显无效就可能会断开连接。</p></td>
+</tr>
+<tr class="row-even"><td><p>ignore_connection_ssl_errors</p></td>
+<td><p>将SSL相关错误记录
+为“info”而不是失败，默认为False。</p></td>
+</tr>
+<tr class="row-odd"><td><p>reuse_target_connection</p></td>
+<td><p>如果为
+True，则只使用一个目标连接，而
+不是每个测试用例重新连接。默认为
+False。</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>target</strong></p></td>
+<td><p>模糊（测试）会话的
+目标。目标必须完全初始化。默认为
+None。</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>db_filename</strong></p></td>
+<td><p>存储测试结果和案例信息的 SQLite
+数据库文件名。默认为
+<code class="docutils literal notranslate"><span class="pre">./boofuzz-</span>
+<span class="pre">results/{uniq_timestamp}.db</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p>targets</p></td>
+<td><p>一个包含着多个 Target 对象的列表</p></td>
+</tr>
+<tr class="row-odd"><td><p>_callback_monitor</p></td>
+<td><p>一个回调监视器列表，具体参看源码</p></td>
 </tr>
 </tbody>
 </table>
-<ul>
-<li><p>restart_callbacks（list of method）：在 <code class="docutils literal notranslate"><span class="pre">post_test_case_callback</span></code>
-失败后调用的回调方法列表，默认为 None 。</p></li>
-<li><p>restart_threshold：丢失目标连接时的最大重试次数，默认为
-None（无限次）。</p></li>
-<li><p>restart_timeout：重新连接尝试的超时时间（秒），默认为
-None（无限次）。</p></li>
-<li><p><strong>pre_send_callbacks</strong>（list of
-method）：在每个模糊（测试）请求之前调用的注册方法列表，默认为 None
-。</p></li>
-<li><p><strong>post_test_case_callbacks</strong>：在每个模糊测试用例之后调用的注册方法列表，默认为None。</p></li>
-<li><p>post_start_target_callbacks：目标启动或重新启动后<strong>进程监视器</strong>会调用的方法，默认为
-None 。</p></li>
-<li><p>web_port（int 或 None）：通过 Web
-浏览器监视模糊测试活动的端口。设置为 None 表示禁用 Web
-应用程序，默认为 26000。</p></li>
-<li><p>keep_web_open：在会话完成后保持 Web 界面打开，默认为 True。</p></li>
-<li><p>fuzz_db_keep_only_n_pass_cases：仅在最近的n个失败或错误之前保存通过的测试用例，以减少磁盘使用量。设置为0以每个测试用例都保存（高磁盘I/O！），默认为0。</p></li>
-<li><p>check_data_received_each_request：如果为True，在传输每个非模糊节点后验证是否已接收到一些数据，如果没有，则注册一个失败。如果为False，则不执行此检查，默认为False。除非receive_data_after_each_request为False，否则仍会尝试接收。</p></li>
-<li><p>receive_data_after_fuzz：如果为True，在传输模糊消息后尝试接收回复，默认为False。</p></li>
-<li><p>ignore_connection_reset：将ECONNRESET错误（“目标连接重置”）记录为“info”而不是失败，默认为False。</p></li>
-<li><p>ignore_connection_aborted：将ECONNABORTED错误记录为“info”而不是失败，默认为False。</p></li>
-<li><p>ignore_connection_issues_when_sending_fuzz_data：忽略发送模糊数据时的连接故障，默认为True。这通常是一个有用的设置，因为目标一旦消息明显无效就可能会断开连接。</p></li>
-<li><p>ignore_connection_ssl_errors：将SSL相关错误记录为“info”而不是失败，默认为False。</p></li>
-<li><p>reuse_target_connection：如果为True，则只使用一个目标连接，而不是每个测试用例重新连接。默认为False。</p></li>
-<li><p>web_address：Boofuzz 日志记录器公开的地址。默认为 <code class="docutils literal notranslate"><span class="pre">localhost</span></code>。</p></li>
-<li><p><strong>session_filename（str）</strong></p>
-<p>序列化持久数据的文件名，默认为None。</p>
-<p><strong>target</strong></p>
-<p>模糊（测试）会话的目标。目标必须完全初始化。默认为
-None。</p>
-<p><strong>fuzz_loggers (list of ifuzz_logger.IFuzzLogger)</strong></p>
-<p>日志记录器列表，用于保存测试数据和结果。默认将日志记录到 STDOUT 。</p>
-<p><strong>db_filename</strong></p>
-<p>存储测试结果和案例信息的 SQLite 数据库文件名。默认为
-<code class="docutils literal notranslate"><span class="pre">./boofuzz-results/{uniq_timestamp}.db</span></code>。</p>
-<p><strong>receive_data_after_each_request</strong></p>
-<p>如果为 True，在传输每个非模糊节点后尝试接收回复，默认为True。</p>
-</li>
-</ul>
 </section>
-<section id="add-node">
-<h3>add_node<a class="headerlink" href="#add-node" title="此标题的永久链接">¶</a></h3>
-<p>顾名思义，用于添加节点。实现思路如下：</p>
-<ol class="arabic simple">
-<li><p>获取当前节点集合长度作为新增节点的编号 number 和 id。</p></li>
-<li><p>若当前要添加的节点未在节点集合中，那么加入节点集。</p></li>
-</ol>
+<section id="add-node-node">
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_node">add_node(node)</a><a class="headerlink" href="#add-node-node" title="此标题的永久链接">¶</a></h3>
 <p><strong>参数：</strong></p>
 <ul class="simple">
 <li><p>node（pgraph.Node）- 要加入会话图的节点</p></li>
@@ -166,45 +220,30 @@ None。</p>
 <ul class="simple">
 <li><p>None</p></li>
 </ul>
-<blockquote>
-<div><p><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_node">源码</a></p>
-</div></blockquote>
+<p><strong>实现思路：</strong></p>
+<ul class="simple">
+<li><p>获取当前节点集合长度作为新增节点的编号 number 和 id。</p></li>
+<li><p>若当前要添加的节点未在节点集合中，那么加入节点集。</p></li>
+</ul>
 </section>
 <section id="add-target">
 <h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_target">add_target</a><a class="headerlink" href="#add-target" title="此标题的永久链接">¶</a></h3>
-<p>向 session
-中添加一个目标，可以同时对多个目标进行模糊测试。实现思路如下：</p>
-<ol class="arabic simple">
-<li><p>1</p></li>
-<li><p>设置模糊测试数据日志记录器</p></li>
-</ol>
-<p>参数：</p>
+<p>向 session 中添加一个目标，可以同时对多个目标进行模糊测试</p>
+<p><strong>参数：</strong></p>
 <ul class="simple">
 <li><p>target（Target）- 要加入 session 的 Target</p></li>
 </ul>
-<p>返回值：</p>
+<p><strong>返回值：</strong></p>
 <ul class="simple">
 <li><p>None</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add a target to the session. Multiple targets can be added for parallel fuzzing.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        target (Target): Target to add to session</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># pass specified target parameters to the PED-RPC server.</span>
-    <span class="n">target</span><span class="o">.</span><span class="n">monitors_alive</span><span class="p">()</span>
-    <span class="n">target</span><span class="o">.</span><span class="n">set_fuzz_data_logger</span><span class="p">(</span><span class="n">fuzz_data_logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback_monitor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">target</span><span class="o">.</span><span class="n">monitors</span><span class="p">:</span>
-        <span class="n">target</span><span class="o">.</span><span class="n">monitors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_callback_monitor</span><span class="p">)</span>
-
-    <span class="c1"># add target to internal list.</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-</pre></div>
-</div>
+<p><strong>实现思路：</strong></p>
+<ul class="simple">
+<li><p>等待监视器启动（活跃）/与 RPC 服务器建立连接</p></li>
+<li><p>设置模糊测试数据日志记录器</p></li>
+<li><p>如果 <code class="docutils literal notranslate"><span class="pre">_callback_monitors</span></code> 不在 target.monitors 中，那么就添加进去</p></li>
+<li><p>将 target 添入 targets</p></li>
+</ul>
 </section>
 <section id="build-webapp-thread">
 <h3>build_webapp_thread<a class="headerlink" href="#build-webapp-thread" title="此标题的永久链接">¶</a></h3>
@@ -280,7 +319,7 @@ Tornado 的 I/O 循环实例，<code class="docutils literal notranslate"><span 
 <p><strong>实现思路：</strong></p>
 <ol class="arabic simple">
 <li><p>若仅提供了源节点，那么将传入的源节点置为目的节点，将根节点置为真正的源节点</p></li>
-<li><p>如果传入的源节点和目标节点是字符串类型的，默认为传入的是节点名称，所以调用
+<li><p>如果传入的源节点和目标节点是字符串类型的，那么默认传入的是节点名称，调用
 <code class="docutils literal notranslate"><span class="pre">find_node</span></code> 方法寻找名称对应的节点</p></li>
 <li><p>若寻找到了源节点并且该节点不是根节点，则调用
 <code class="docutils literal notranslate"><span class="pre">add_node</span></code>将其加入节点集</p></li>
@@ -311,7 +350,7 @@ Tornado 的 I/O 循环实例，<code class="docutils literal notranslate"><span 
 <p><strong>实现思路：</strong></p>
 <ol class="arabic simple">
 <li><p>若没有设置 <code class="docutils literal notranslate"><span class="pre">session_filename</span></code> 则直接返回</p></li>
-<li><p>构造要写入磁盘的数据，这实际上是一个字典，包含了
+<li><p>构造要写入磁盘的数据，实际上是一个字典，包含了
 session_filename、total_mutant_index、sleep_time 等 session
 中的成员变量</p></li>
 <li><p>新建一个名为 <code class="docutils literal notranslate"><span class="pre">session_fielname</span></code> 的文件</p></li>
@@ -320,7 +359,6 @@ session_filename、total_mutant_index、sleep_time 等 session
 </section>
 <section id="num-mutations-recursive">
 <h3>_num_mutations_recursive<a class="headerlink" href="#num-mutations-recursive" title="此标题的永久链接">¶</a></h3>
-<p>num_mutation的帮助器？</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_num_mutations_recursive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this_node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">this_node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">this_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span>
@@ -417,13 +455,9 @@ case进行模糊测试</p></li>
 </ol>
 </section>
 <section id="fuzz-by-name">
-<h3>fuzz_by_name<a class="headerlink" href="#fuzz-by-name" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.fuzz_by_name">fuzz_by_name</a><a class="headerlink" href="#fuzz-by-name" title="此标题的永久链接">¶</a></h3>
 <p>该方法通过名字对特定的测试案例或节点进行模糊测试，目前已<strong>弃用</strong>，使用
 fuzz 方法并传入 name 参数即可。</p>
-<blockquote>
-<div><p>源码：<a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.fuzz_by_name">boofuzz.sessions — boofuzz 0.4.1
-documentation</a></p>
-</div></blockquote>
 <p>参数：</p>
 <ul class="simple">
 <li><p>name（str）- 节点名称</p></li>
@@ -432,6 +466,9 @@ documentation</a></p>
 <ul class="simple">
 <li><p>None</p></li>
 </ul>
+</section>
+<section id="fuzz-single-case">
+<h3>fuzz_single_case<a class="headerlink" href="#fuzz-single-case" title="此标题的永久链接">¶</a></h3>
 </section>
 </section>
 </section>
