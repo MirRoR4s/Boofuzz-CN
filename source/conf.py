@@ -9,6 +9,7 @@
 project = 'rainfuzz'
 copyright = '一袭青衣尽长安'
 author = 'MirRoR4s'
+version = "0.0"
 release = '0.0'
 language = "zh_CN"
 
@@ -25,4 +26,4 @@ exclude_patterns = []
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
-html_static_path = ['../build/html/_static']
+html_static_path = ['../build/html/_static','_static']

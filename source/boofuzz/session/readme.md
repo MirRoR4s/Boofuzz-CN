@@ -74,7 +74,7 @@ Session 类即会话类是 boofuzz 中的重要组成部分，主要负责发送
 
   **target**
 
-  模糊（测试）会话的目标。目标必须完全初始化。默认为 None。![image-20230727152658618](file:///C:/Users/mirror4s/Desktop/rainfuzz/boofuzz-zhong-wen-wen-dang/session/images/image-20230727152658618.png?lastModify=1691983613)
+  模糊（测试）会话的目标。目标必须完全初始化。默认为 None。
 
   **fuzz\_loggers (list of ifuzz\_logger.IFuzzLogger)**
 
