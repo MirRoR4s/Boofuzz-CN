@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session &mdash; test 0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=44496db0"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Target" href="../Target/readme.html" />
+    <link rel="prev" title="boofuzz分析" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            test
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">环境搭建</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">boofuzz分析</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Session</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">前言</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">成员变量和方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#init">init</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#add-node">add_node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#add-target">add_target</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#build-webapp-thread">build_webapp_thread</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#connect">connect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-test-case-callback">example_test_case_callback</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#export-file">export_file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#num-mutations-recursive">_num_mutations_recursive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#num-mutations">num_mutations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feature-check">feature_check</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fuzz">fuzz</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fuzz-by-name">fuzz_by_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fuzz-single-case">fuzz_single_case</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Target/readme.html">Target</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">boofuzz分析</a></li>
+      <li class="breadcrumb-item active">Session</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/boofuzz/Session/readme.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="session">
+<h1>Session<a class="headerlink" href="#session" title="Permalink to this heading"></a></h1>
+<section id="id1">
+<h2>前言<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<p>Session 类即会话类是 boofuzz 中的重要组成部分，主要负责发送和接收模糊测试数据包等。Session类继承自 Graph 类，所以 Session 对象相当于一个<strong>图</strong>。</p>
+<p>这张图有什么属性呢？参看 Graph 类可以知道，主要有以下四种和图相关的属性：</p>
+<ul class="simple">
+<li><p>id（int）- 图的 id</p></li>
+<li><p>clusters（list）-</p></li>
+<li><p>edges（dist）- 由图中的所有边构成的一个字典。键名</p></li>
+<li><p>nodes（dist）- 由图中的所有节点构成的一个字典。键名是节点 id，键值则是对应的节点</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2>成员变量和方法<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<section id="init">
+<h3>init<a class="headerlink" href="#init" title="Permalink to this heading"></a></h3>
+<p>会话类的构造函数。以下是各个成员变量的汇总表：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>名称</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>session_filename（str）</p></td>
+<td><p>存放序列化数据的文件名，默认为空</p></td>
+</tr>
+<tr class="row-odd"><td><p>index_start</p></td>
+<td><p>要运行的第一个测试用例的索引</p></td>
+</tr>
+<tr class="row-even"><td><p>index_end</p></td>
+<td><p>要运行的最后一个测试用例的索引</p></td>
+</tr>
+<tr class="row-odd"><td><p>sleep_time</p></td>
+<td><p>每个测试用例之间等待的秒数，默认为0</p></td>
+</tr>
+<tr class="row-even"><td><p>restart_interval</p></td>
+<td><p>在n个测试用例之后重启目标。默认情况下为0，表示禁用该选项</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>console_gui</strong></p></td>
+<td><p>是否使用 curses 生成类似于 Web 界面的静态控制台屏幕，默认为 False（还未在 Windows 下进行测试）</p></td>
+</tr>
+<tr class="row-even"><td><p>crash_threshold_request</p></td>
+<td><p>请求耗尽之前允许的最大崩溃次数，默认为12。什么是请求耗尽？</p></td>
+</tr>
+<tr class="row-odd"><td><p>crash_threshold_element</p></td>
+<td><p>元素耗尽之前允许的最大崩溃次数，默认为3</p></td>
+</tr>
+<tr class="row-even"><td><p>restart_sleep_time</p></td>
+<td><p>当目标无法重启时等待的秒数，默认为5</p></td>
+</tr>
+<tr class="row-odd"><td><p>restart_callbacks</p></td>
+<td><p>在 <code class="docutils literal notranslate"><span class="pre">post_test_case_callback</span></code> 失败后调用的回调方法列表，默认为 None 。</p></td>
+</tr>
+<tr class="row-even"><td><p>restart_threshold</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>restart_callbacks（list of method）：在 <code class="docutils literal notranslate"><span class="pre">post_test_case_callback</span></code> 失败后调用的回调方法列表，默认为 None 。</p></li>
+<li><p>restart_threshold：丢失目标连接时的最大重试次数，默认为 None（无限次）。</p></li>
+<li><p>restart_timeout：重新连接尝试的超时时间（秒），默认为 None（无限次）。</p></li>
+<li><p><strong>pre_send_callbacks</strong>（list of method）：在每个模糊（测试）请求之前调用的注册方法列表，默认为 None 。</p></li>
+<li><p><strong>post_test_case_callbacks</strong>：在每个模糊测试用例之后调用的注册方法列表，默认为None。</p></li>
+<li><p>post_start_target_callbacks：目标启动或重新启动后<strong>进程监视器</strong>会调用的方法，默认为 None 。</p></li>
+<li><p>web_port（int 或 None）：通过 Web 浏览器监视模糊测试活动的端口。设置为 None 表示禁用 Web 应用程序，默认为 26000。</p></li>
+<li><p>keep_web_open：在会话完成后保持 Web 界面打开，默认为 True。</p></li>
+<li><p>fuzz_db_keep_only_n_pass_cases：仅在最近的n个失败或错误之前保存通过的测试用例，以减少磁盘使用量。设置为0以每个测试用例都保存（高磁盘I/O！），默认为0。</p></li>
+<li><p>check_data_received_each_request：如果为True，在传输每个非模糊节点后验证是否已接收到一些数据，如果没有，则注册一个失败。如果为False，则不执行此检查，默认为False。除非receive_data_after_each_request为False，否则仍会尝试接收。</p></li>
+<li><p>receive_data_after_fuzz：如果为True，在传输模糊消息后尝试接收回复，默认为False。</p></li>
+<li><p>ignore_connection_reset：将ECONNRESET错误（”目标连接重置”）记录为”info”而不是失败，默认为False。</p></li>
+<li><p>ignore_connection_aborted：将ECONNABORTED错误记录为”info”而不是失败，默认为False。</p></li>
+<li><p>ignore_connection_issues_when_sending_fuzz_data：忽略发送模糊数据时的连接故障，默认为True。这通常是一个有用的设置，因为目标一旦消息明显无效就可能会断开连接。</p></li>
+<li><p>ignore_connection_ssl_errors：将SSL相关错误记录为”info”而不是失败，默认为False。</p></li>
+<li><p>reuse_target_connection：如果为True，则只使用一个目标连接，而不是每个测试用例重新连接。默认为False。</p></li>
+<li><p>web_address：Boofuzz 日志记录器公开的地址。默认为 <code class="docutils literal notranslate"><span class="pre">localhost</span></code>。</p></li>
+<li><p><strong>session_filename（str）</strong></p>
+<p>序列化持久数据的文件名，默认为None。</p>
+<p><strong>target</strong></p>
+<p>模糊（测试）会话的目标。目标必须完全初始化。默认为 None。![image-20230727152658618](file:///C:/Users/mirror4s/Desktop/rainfuzz/boofuzz-zhong-wen-wen-dang/session/images/image-20230727152658618.png?lastModify=1691983613)</p>
+<p><strong>fuzz_loggers (list of ifuzz_logger.IFuzzLogger)</strong></p>
+<p>日志记录器列表，用于保存测试数据和结果。默认将日志记录到 STDOUT 。</p>
+<p><strong>db_filename</strong></p>
+<p>存储测试结果和案例信息的 SQLite 数据库文件名。默认为 <code class="docutils literal notranslate"><span class="pre">./boofuzz-results/{uniq_timestamp}.db</span></code>。</p>
+<p><strong>receive_data_after_each_request</strong></p>
+<p>如果为 True，在传输每个非模糊节点后尝试接收回复，默认为True。</p>
+</li>
+</ul>
+</section>
+<section id="add-node">
+<h3>add_node<a class="headerlink" href="#add-node" title="Permalink to this heading"></a></h3>
+<p>顾名思义，用于添加节点。实现思路如下：</p>
+<ol class="arabic simple">
+<li><p>获取当前节点集合长度作为新增节点的编号 number 和 id。</p></li>
+<li><p>若当前要添加的节点未在节点集合中，那么加入节点集。</p></li>
+</ol>
+<p><strong>参数：</strong></p>
+<ul class="simple">
+<li><p>node（pgraph.Node）- 要加入会话图的节点</p></li>
+</ul>
+<p><strong>返回值：</strong></p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+<blockquote>
+<div><p><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_node">源码</a></p>
+</div></blockquote>
+</section>
+<section id="add-target">
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_target">add_target</a><a class="headerlink" href="#add-target" title="Permalink to this heading"></a></h3>
+<p>向 session 中添加一个目标，可以同时对多个目标进行模糊测试。实现思路如下：</p>
+<ol class="arabic simple">
+<li><p>1</p></li>
+<li><p>设置模糊测试数据日志记录器</p></li>
+</ol>
+<p>参数：</p>
+<ul class="simple">
+<li><p>target（Target）- 要加入 session 的 Target</p></li>
+</ul>
+<p>返回值：</p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">add_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a target to the session. Multiple targets can be added for parallel fuzzing.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target (Target): Target to add to session</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># pass specified target parameters to the PED-RPC server.</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">monitors_alive</span><span class="p">()</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">set_fuzz_data_logger</span><span class="p">(</span><span class="n">fuzz_data_logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback_monitor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">target</span><span class="o">.</span><span class="n">monitors</span><span class="p">:</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">monitors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_callback_monitor</span><span class="p">)</span>
+
+        <span class="c1"># add target to internal list.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="build-webapp-thread">
+<h3>build_webapp_thread<a class="headerlink" href="#build-webapp-thread" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">build_webapp_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">DEFAULT_WEB_UI_PORT</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">DEFAULT_WEB_UI_ADDRESS</span><span class="p">):</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">http_server</span> <span class="o">=</span> <span class="n">HTTPServer</span><span class="p">(</span><span class="n">WSGIContainer</span><span class="p">(</span><span class="n">app</span><span class="p">))</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">http_server</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="n">address</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="c1"># Only handle &quot;Address already in use&quot;</span>
+                <span class="k">if</span> <span class="n">exc</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EADDRINUSE</span><span class="p">:</span>
+                    <span class="k">raise</span>
+                <span class="n">port</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Web interface can be found at http://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+                <span class="k">break</span>
+        <span class="n">flask_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">IOLoop</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+        <span class="n">flask_thread</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">flask_thread</span>
+</pre></div>
+</div>
+<p>这段代码是一个创建和启动基于 Flask 的 Web 应用程序的线程的方法 <code class="docutils literal notranslate"><span class="pre">build_webapp_thread()</span></code>。它使用 Tornado 的 <code class="docutils literal notranslate"><span class="pre">HTTPServer</span></code> 类来监听指定的端口和地址，并将 Flask 的应用程序包装在 Tornado 的 <code class="docutils literal notranslate"><span class="pre">WSGIContainer</span></code> 中。</p>
+<p>具体解释如下：</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">app.session</span> <span class="pre">=</span> <span class="pre">self</span></code>：将当前对象 <code class="docutils literal notranslate"><span class="pre">self</span></code> 分配给 Flask 应用程序的 <code class="docutils literal notranslate"><span class="pre">session</span></code> 属性，以便在应用程序中访问当前会话的上下文。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">http_server</span> <span class="pre">=</span> <span class="pre">HTTPServer(WSGIContainer(app))</span></code>：创建一个 <code class="docutils literal notranslate"><span class="pre">HTTPServer</span></code> 实例，并将 Flask 的应用程序包装在 Tornado 的 <code class="docutils literal notranslate"><span class="pre">WSGIContainer</span></code> 中。<code class="docutils literal notranslate"><span class="pre">HTTPServer</span></code> 是 Tornado 的 HTTP 服务器，而 <code class="docutils literal notranslate"><span class="pre">WSGIContainer</span></code> 则允许在 Tornado 中运行 WSGI 应用程序。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">while</span> <span class="pre">True:</span></code>：进入一个无限循环，用于处理端口冲突的情况。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">http_server.listen(port,</span> <span class="pre">address=address)</span></code>：尝试监听指定的端口和地址。如果该端口被占用，则会引发 <code class="docutils literal notranslate"><span class="pre">socket.error</span></code> 异常。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">except</span> <span class="pre">socket.error</span> <span class="pre">as</span> <span class="pre">exc:</span></code>：捕获 <code class="docutils literal notranslate"><span class="pre">socket.error</span></code> 异常。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">exc.errno</span> <span class="pre">!=</span> <span class="pre">errno.EADDRINUSE:</span></code>：检查异常的错误代码是否为 <code class="docutils literal notranslate"><span class="pre">errno.EADDRINUSE</span></code>，即地址已在使用中的错误代码。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">port</span> <span class="pre">+=</span> <span class="pre">1</span></code>：如果端口被占用，则增加端口号，继续尝试监听新的端口。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">else:</span></code>：如果成功监听端口，则执行以下代码。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">self._fuzz_data_logger.log_info(&quot;Web</span> <span class="pre">interface</span> <span class="pre">can</span> <span class="pre">be</span> <span class="pre">found</span> <span class="pre">at</span> <span class="pre">http://%s:%d&quot;</span> <span class="pre">%</span> <span class="pre">(address,</span> <span class="pre">port))</span></code>：记录日志，指示 Web 接口的地址和端口。这个日志语句将在成功启动 Web 应用程序后执行。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">break</span></code>：跳出循环，终止继续尝试监听端口。</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">flask_thread</span> <span class="pre">=</span> <span class="pre">threading.Thread(target=IOLoop.instance().start)</span></code>：创建一个线程，目标为 <code class="docutils literal notranslate"><span class="pre">IOLoop.instance().start</span></code> 方法。<code class="docutils literal notranslate"><span class="pre">IOLoop.instance()</span></code> 返回 Tornado 的 I/O 循环实例，<code class="docutils literal notranslate"><span class="pre">.start</span></code> 方法用于启动 I/O 循环。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">flask_thread.daemon</span> <span class="pre">=</span> <span class="pre">True</span></code>：将线程标记为守护线程，以确保在主线程结束时自动退出。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">flask_thread</span></code>：返回创建的线程对象。</p></li>
+</ol>
+<p>通过调用 <code class="docutils literal notranslate"><span class="pre">build_webapp_thread()</span></code> 方法，可以创建并启动一个在后台运行的线程来托管基于 Flask 的 Web 应用程序，并监听指定的地址和端口。</p>
+</section>
+<section id="connect">
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.connect">connect</a><a class="headerlink" href="#connect" title="Permalink to this heading"></a></h3>
+<p>建立两个请求（即两个节点）之间的连接。</p>
+<p><strong>参数：</strong></p>
+<ul class="simple">
+<li><p>src（ str 或 Request ）- 源节点名或源请求节点</p></li>
+<li><p>dst</p></li>
+<li><p>callback（def，可选）- 回调函数</p></li>
+</ul>
+<p><strong>返回值：</strong></p>
+<ul class="simple">
+<li><p>pgraph.Edge</p></li>
+</ul>
+<p><strong>实现思路：</strong></p>
+<ol class="arabic simple">
+<li><p>若仅提供了源节点，那么将传入的源节点置为目的节点，将根节点置为真正的源节点</p></li>
+<li><p>如果传入的源节点和目标节点是字符串类型的，默认为传入的是节点名称，所以调用 <code class="docutils literal notranslate"><span class="pre">find_node</span></code> 方法寻找名称对应的节点</p></li>
+<li><p>若寻找到了源节点并且该节点不是根节点，则调用 <code class="docutils literal notranslate"><span class="pre">add_node</span></code>将其加入节点集</p></li>
+<li><p>若找到了目的节点，则将其加入节点集</p></li>
+<li><p>根据源节点和目的节点的 id，实例化 Connection 类新建一条边</p></li>
+<li><p>调用 <code class="docutils literal notranslate"><span class="pre">add_edge</span></code> 将新建的边加入 session</p></li>
+</ol>
+</section>
+<section id="example-test-case-callback">
+<h3>example_test_case_callback<a class="headerlink" href="#example-test-case-callback" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">example_test_case_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">fuzz_data_logger</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">test_case_context</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># default to doing nothing.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;No post_send callback registered.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="export-file">
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.export_file">export_file</a><a class="headerlink" href="#export-file" title="Permalink to this heading"></a></h3>
+<p>将对象值导出到磁盘中。</p>
+<p>参数：</p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+<p>返回值：</p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+<p><strong>实现思路：</strong></p>
+<ol class="arabic simple">
+<li><p>若没有设置 <code class="docutils literal notranslate"><span class="pre">session_filename</span></code> 则直接返回</p></li>
+<li><p>构造要写入磁盘的数据，这实际上是一个字典，包含了 session_filename、total_mutant_index、sleep_time 等 session 中的成员变量</p></li>
+<li><p>新建一个名为 <code class="docutils literal notranslate"><span class="pre">session_fielname</span></code> 的文件</p></li>
+<li><p>将数据序列化并压缩后写入到文件中</p></li>
+</ol>
+</section>
+<section id="num-mutations-recursive">
+<h3>_num_mutations_recursive<a class="headerlink" href="#num-mutations-recursive" title="Permalink to this heading"></a></h3>
+<p>num_mutation的帮助器？</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">_num_mutations_recursive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this_node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">this_node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">this_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">total_num_mutations</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_from</span><span class="p">(</span><span class="n">this_node</span><span class="o">.</span><span class="n">id</span><span class="p">):</span> <span class="c1">#  edges_from寻找所有以this_node.id为起点的边，并以一个列表的形式返回</span>
+            <span class="n">next_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">dst</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">total_num_mutations</span> <span class="o">+=</span> <span class="n">next_node</span><span class="o">.</span><span class="n">get_num_mutations</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">src</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_mutations_recursive</span><span class="p">(</span><span class="n">next_node</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># finished with the last node on the path, pop it off the path stack.</span>
+        <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_num_mutations</span>
+</pre></div>
+</div>
+<p>参数：</p>
+<ul class="simple">
+<li><p>this_node（request）- 当前正被模糊测试的节点，默认为空</p></li>
+<li><p>path（list）-</p></li>
+</ul>
+</section>
+<section id="num-mutations">
+<h3>num_mutations<a class="headerlink" href="#num-mutations" title="Permalink to this heading"></a></h3>
+<p>graph中的总变异数。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">num_mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">max_depth</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">max_depth</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">total_num_mutations</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_num_mutations</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_mutations_recursive</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>参数：</p>
+<ul class="simple">
+<li><p>max_depth（int）- fuzzing所用的最大组合深度</p></li>
+</ul>
+<p>返回值：</p>
+<p>本次会话变异总数（int）</p>
+</section>
+<section id="feature-check">
+<h3>feature_check<a class="headerlink" href="#feature-check" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">feature_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check all messages/features.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_mutant_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_num_mutations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_mutations</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iterate_protocol_message_paths</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_message_check</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="fuzz">
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.fuzz">fuzz</a><a class="headerlink" href="#fuzz" title="Permalink to this heading"></a></h3>
+<p>对整个协议树进行模糊测试</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">fuzz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_mutant_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_num_mutations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_mutations</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_main_fuzz_loop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_mutations_indefinitely</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fuzz_by_name</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>参数：</strong></p>
+<ul class="simple">
+<li><p>name（str）- 一个 Request 或 test case 的名称。传入Request name就对Reuqest消息进行模糊测试，传入test case name就对test case进行模糊测试</p></li>
+<li><p>max_depth（int）- 最大组合深度？设为 1 表示 simple fuzzing</p></li>
+</ul>
+<p><strong>返回值：</strong></p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+<p><strong>实现思路：</strong></p>
+<ol class="arabic simple">
+<li><p>根据 max_depth 调用 <code class="docutils literal notranslate"><span class="pre">num_mutations</span></code> 方法获得变异总数</p></li>
+<li><p>若 name 为空或 None，调用 <code class="docutils literal notranslate"><span class="pre">_main_fuzz_loop</span></code> ，否则调用 <code class="docutils literal notranslate"><span class="pre">fuzz_by_name</span></code></p></li>
+</ol>
+</section>
+<section id="fuzz-by-name">
+<h3>fuzz_by_name<a class="headerlink" href="#fuzz-by-name" title="Permalink to this heading"></a></h3>
+<p>该方法通过名字对特定的测试案例或节点进行模糊测试，目前已<strong>弃用</strong>，使用 fuzz 方法并传入 name 参数即可。</p>
+<blockquote>
+<div><p>源码：<a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.fuzz_by_name">boofuzz.sessions — boofuzz 0.4.1 documentation</a></p>
+</div></blockquote>
+<p>参数：</p>
+<ul class="simple">
+<li><p>name（str）- 节点名称</p></li>
+</ul>
+<p>返回值：</p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+</section>
+<section id="fuzz-single-case">
+<h3>fuzz_single_case<a class="headerlink" href="#fuzz-single-case" title="Permalink to this heading"></a></h3>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="boofuzz分析" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Target/readme.html" class="btn btn-neutral float-right" title="Target" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, test.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
