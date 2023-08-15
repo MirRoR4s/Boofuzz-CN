@@ -48,7 +48,7 @@ Session 类即会话类是 boofuzz 中的重要组成部分，主要负责发送
 | **target**                                                | 模糊（测试）会话的目标。目标必须完全初始化。默认为 None。    |
 | **db\_filename**                                          | 存储测试结果和案例信息的 SQLite 数据库文件名。默认为 `./boofuzz-results/{uniq_timestamp}.db`。 |
 | targets                                                   | 一个包含着多个 Target 对象的列表                             |
-| _callback_monitor                                         | self._callback_monitor = CallbackMonitor(<br/>    on_pre_send=pre_send_methods,<br/>    on_post_send=post_test_case_methods,<br/>    on_restart_target=restart_methods,<br/>    on_post_start_target=post_start_target_methods,<br/>) |
+| _callback_monitor                                         | 一个回调监视器列表，具体参看源码                             |
 
 
 

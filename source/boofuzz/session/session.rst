@@ -140,15 +140,7 @@ Graph 类，所以 Session 对象相当于一个\ **图**\ 。
 +----------------------------------+-----------------------------------+
 | targets                          | 一个包含着多个 Target 对象的列表  |
 +----------------------------------+-----------------------------------+
-| \_callback_monitor               | self._callback_monitor =          |
-|                                  | CallbackMonitor(                  |
-|                                  | on_pre_send=pre_send_methods,     |
-|                                  | on_                               |
-|                                  | post_send=post_test_case_methods, |
-|                                  | o                                 |
-|                                  | n_restart_target=restart_methods, |
-|                                  | on_post_start_t                   |
-|                                  | arget=post_start_target_methods,) |
+| \_callback_monitor               | 一个回调监视器列表，具体参看源码  |
 +----------------------------------+-----------------------------------+
 
 `add_node(node) <https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_node>`__
