@@ -6,6 +6,7 @@ boofuzz分析
 
    session/session
    target/target
+   examples/examples
    protocol_definition/protocol_definition
 
 
