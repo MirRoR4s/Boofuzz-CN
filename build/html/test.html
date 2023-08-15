@@ -38,18 +38,6 @@
 <ol class="arabic simple">
 <li><p>跟随这篇博客直至支持 Markdown 步骤 <a class="reference external" href="https://luhuadong.blog.csdn.net/article/details/109006380?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscan&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscan&amp;utm_relevant_index=1">Read the
 Docs</a></p></li>
-<li><p>安装 MyST 支持 Markdown</p></li>
-</ol>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>myst-parser
-</pre></div>
-</div>
-<p>之后在conf.py下：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">extentions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;myst_parser&quot;</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>详情请参看：<a class="reference external" href="https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html">Getting started with Sphinx — Read the Docs user
-documentation</a></p>
-<ol class="arabic simple" start="3">
 <li><p>由于read the
 docs正进行配置文件的更新，所以现在进行文档托管时要额外编写一个名为<code class="docutils literal notranslate"><span class="pre">.readthedocs.yaml</span></code>的配置文件。</p></li>
 </ol>
@@ -61,6 +49,7 @@ docs正进行配置文件的更新，所以现在进行文档托管时要额外�
 <span class="w">  </span><span class="nt">tools</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">python</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.10&quot;</span>
 <span class="nt">sphinx</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./docs/conf.py</span>
 <span class="w">  </span><span class="nt">fail_on_warning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="nt">formats</span><span class="p">:</span>
@@ -72,8 +61,14 @@ docs正进行配置文件的更新，所以现在进行文档托管时要额外�
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">requirements</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./requirements.txt</span>
 </pre></div>
 </div>
+<ol class="arabic simple" start="3">
+<li><p>requirements.txt 和 conf.py 的内容如下：</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sphinx</span><span class="o">-</span><span class="n">rtd</span><span class="o">-</span><span class="n">theme</span>
+</pre></div>
+</div>
 <ol class="arabic simple" start="4">
-<li><p>也可以不安装 markdown 支持插件，而是直接编写 markdown 并将其转为 rst</p></li>
+<li><p>为方便起见我选择用 markdown 进行文档编写，但是 markdown 插件装好后每次上传都会报错，所以最后笔者选择直接编写 markdown 并将其转为 rst。通过 pandoc 可以完成文件格式的转化！</p></li>
 </ol>
 <p>代码如下：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">pandoc</span>
