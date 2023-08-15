@@ -434,7 +434,4 @@ fuzz 方法并传入 name 参数即可。
 
 -  None
 
-fuzz_single_case
-~~~~~~~~~~~~~~~~
 
-.. |image-20230727152658618| image:: file:///C:/Users/mirror4s/Desktop/rainfuzz/boofuzz-zhong-wen-wen-dang/session/images/image-20230727152658618.png?lastModify=1691983613
