@@ -24,8 +24,6 @@ Target 是目标描述符容器。
 
 - Traget对象
 
-
-
 ### [close](https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Target.close)
 
 关闭到目标系统的连接。

@@ -49,7 +49,7 @@ documentation <https://docs.readthedocs.io/en/stable/intro/getting-started-with-
 代码如下：
 
 .. code:: python
-::
+
    
    sudo apt install pandoc
    pandoc -f markdown -t rst input.md -o output.rst
