@@ -18,7 +18,9 @@
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="boofuzz分析" href="boofuzz/index.html" />
+    <link rel="prev" title="Welcome to test’s documentation!" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,7 +43,8 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">环境搭建</a></li>
 <li class="toctree-l1"><a class="reference internal" href="boofuzz/index.html">boofuzz分析</a></li>
 </ul>
 
@@ -61,7 +64,7 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">环境搭建</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/readme.md.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/test.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -73,7 +76,8 @@
 <h1>环境搭建<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
 <p>操作系统环境：<strong>WSL-ubuntu22.04</strong></p>
 <ol class="arabic simple">
-<li><p>跟随这篇博客直至支持 Markdown 步骤 <a class="reference external" href="https://luhuadong.blog.csdn.net/article/details/109006380?spm=1001.2101.3001.6661.1&amp;amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscan&amp;amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscan&amp;amp;utm_relevant_index=1">Read the Docs </a></p></li>
+<li><p>跟随这篇博客直至支持 Markdown 步骤 <a class="reference external" href="https://luhuadong.blog.csdn.net/article/details/109006380?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscan&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscan&amp;utm_relevant_index=1">Read the
+Docs</a></p></li>
 <li><p>安装 MyST 支持 Markdown</p></li>
 </ol>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>myst-parser
@@ -83,9 +87,11 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">extentions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;myst_parser&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>详情请参看：<a class="reference external" href="https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html">Getting started with Sphinx — Read the Docs user documentation</a></p>
+<p>详情请参看：<a class="reference external" href="https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html">Getting started with Sphinx — Read the Docs user
+documentation</a></p>
 <ol class="arabic simple" start="3">
-<li><p>由于read the docs正进行配置文件的更新，所以现在进行文档托管时要额外编写一个名为<code class="docutils literal notranslate"><span class="pre">.readthedocs.yaml</span></code>的配置文件。</p></li>
+<li><p>由于read the
+docs正进行配置文件的更新，所以现在进行文档托管时要额外编写一个名为<code class="docutils literal notranslate"><span class="pre">.readthedocs.yaml</span></code>的配置文件。</p></li>
 </ol>
 <p>我的内容如下:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
@@ -106,13 +112,24 @@
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">requirements</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./requirements.txt</span>
 </pre></div>
 </div>
+<ol class="arabic simple" start="4">
+<li><p>也可以不安装 markdown 支持插件，而是直接编写 markdown 并将其转为 rst</p></li>
+</ol>
+<p>代码如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">pandoc</span>
+<span class="n">pandoc</span> <span class="o">-</span><span class="n">f</span> <span class="n">markdown</span> <span class="o">-</span><span class="n">t</span> <span class="n">rst</span> <span class="nb">input</span><span class="o">.</span><span class="n">md</span> <span class="o">-</span><span class="n">o</span> <span class="n">output</span><span class="o">.</span><span class="n">rst</span>
+</pre></div>
+</div>
 <p>详情可参看<a class="reference external" href="https://docs.readthedocs.io/en/stable/tutorial/index.html">官方文档</a>。</p>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to test’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="boofuzz/index.html" class="btn btn-neutral float-right" title="boofuzz分析" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

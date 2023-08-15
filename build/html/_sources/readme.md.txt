@@ -2,10 +2,10 @@
 
 #  环境搭建
 
-操作系统环境：WSL-ubuntu22.04
+操作系统环境：**WSL-ubuntu22.04**
 
-1. 跟随这篇博客直至支持Markdown步骤 [Read the Docs ](https://luhuadong.blog.csdn.net/article/details/109006380?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscan&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscan&utm_relevant_index=1)
-2. 安装MyST支持Markdown
+1. 跟随这篇博客直至支持 Markdown 步骤 [Read the Docs ](https://luhuadong.blog.csdn.net/article/details/109006380?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscan&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscan&utm_relevant_index=1)
+2. 安装 MyST 支持 Markdown
 
 ```shell
 pip install myst-parser

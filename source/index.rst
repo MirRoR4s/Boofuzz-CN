@@ -10,7 +10,8 @@ Welcome to test's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   readme
+   
+   test
    boofuzz/index
    
 

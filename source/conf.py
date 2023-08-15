@@ -6,15 +6,14 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'test'
-copyright = '2023, test'
-author = 'test'
+project = 'rainfuzz'
+copyright = '一袭青衣尽长安'
+author = 'MirRoR4s'
 release = '0.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["myst_parser"]
 
 templates_path = ['_templates']
 exclude_patterns = []
