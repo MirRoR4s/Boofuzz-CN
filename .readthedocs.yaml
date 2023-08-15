@@ -11,3 +11,7 @@ formats:
   - pdf
   - epub
 
+python:
+  install:
+  - requirements: myst_parser
+
