@@ -111,7 +111,7 @@ init
    **target**
 
    模糊（测试）会话的目标。目标必须完全初始化。默认为
-   None。\ |image-20230727152658618|
+   None。
 
    **fuzz_loggers (list of ifuzz_logger.IFuzzLogger)**
 
