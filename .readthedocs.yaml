@@ -13,5 +13,5 @@ formats:
 
 python:
   install:
-  - requirements: myst_parser
+  - requirements: docs/requirements.txt
 
