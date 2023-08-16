@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>boofuzz.primitives.bit_field &#8212; rainfuzz 0.0 文档</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=039e1c02" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=16727793"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>boofuzz.primitives.bit_field 源代码</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">range</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">past.builtins</span> <span class="kn">import</span> <span class="nb">map</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">from</span> <span class="nn">..constants</span> <span class="kn">import</span> <span class="n">LITTLE_ENDIAN</span>
+<span class="kn">from</span> <span class="nn">..fuzzable</span> <span class="kn">import</span> <span class="n">Fuzzable</span>
+
+
+<span class="k">def</span> <span class="nf">binary_string_to_int</span><span class="p">(</span><span class="n">binary</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a binary string to a decimal number.</span>
+
+<span class="sd">    @type  binary: str</span>
+<span class="sd">    @param binary: Binary string</span>
+
+<span class="sd">    @rtype:  int</span>
+<span class="sd">    @return: Converted bit string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">int_to_binary_string</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">bit_width</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a number to a binary string.</span>
+
+<span class="sd">    @type  number:    int</span>
+<span class="sd">    @param number:    (Optional, def=self._value) Number to convert</span>
+<span class="sd">    @type  bit_width: int</span>
+<span class="sd">    @param bit_width: (Optional, def=self.width) Width of bit string</span>
+
+<span class="sd">    @rtype:  str</span>
+<span class="sd">    @return: Bit string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">((</span><span class="n">number</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">bit_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+
+
+<div class="viewcode-block" id="BitField"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.BitField">[文档]</a><span class="k">class</span> <span class="nc">BitField</span><span class="p">(</span><span class="n">Fuzzable</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The bit field primitive represents a number of variable length and is used to define all other integer types.</span>
+
+<span class="sd">    :type  name: str, optional</span>
+<span class="sd">    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,</span>
+<span class="sd">        defaults to None</span>
+<span class="sd">    :type  default_value: int, optional</span>
+<span class="sd">    :param default_value: Default integer value, defaults to 0</span>
+<span class="sd">    :type  width: int, optional</span>
+<span class="sd">    :param width: Width in bits, defaults to 8</span>
+<span class="sd">    :type  max_num: int, optional</span>
+<span class="sd">    :param max_num: Maximum number to iterate up to, defaults to None</span>
+<span class="sd">    :type  endian: char, optional</span>
+<span class="sd">    :param endian: Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</span>
+<span class="sd">    :type  output_format: str, optional</span>
+<span class="sd">    :param output_format: Output format, &quot;binary&quot; or &quot;ascii&quot;, defaults to binary</span>
+<span class="sd">    :type  signed: bool, optional</span>
+<span class="sd">    :param signed: Make size signed vs. unsigned (applicable only with format=&quot;ascii&quot;), defaults to False</span>
+<span class="sd">    :type  full_range: bool, optional</span>
+<span class="sd">    :param full_range: If enabled the field mutates through *all* possible values, defaults to False</span>
+<span class="sd">    :type  fuzz_values: list, optional</span>
+<span class="sd">    :param fuzz_values: List of custom fuzz values to add to the normal mutations, defaults to None</span>
+<span class="sd">    :type  fuzzable: bool, optional</span>
+<span class="sd">    :param fuzzable: Enable/disable fuzzing of this primitive, defaults to true</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">default_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">max_num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">endian</span><span class="o">=</span><span class="n">LITTLE_ENDIAN</span><span class="p">,</span>
+        <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+        <span class="n">signed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">full_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BitField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">default_value</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">integer_types</span><span class="p">),</span> <span class="s2">&quot;width must be an integer!&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span> <span class="o">=</span> <span class="n">max_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endian</span> <span class="o">=</span> <span class="n">endian</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="n">output_format</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signed</span> <span class="o">=</span> <span class="n">signed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">full_range</span> <span class="o">=</span> <span class="n">full_range</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span> <span class="o">=</span> <span class="n">binary_string_to_int</span><span class="p">(</span><span class="s2">&quot;1&quot;</span> <span class="o">+</span> <span class="s2">&quot;0&quot;</span> <span class="o">*</span> <span class="n">width</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_num</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">integer_types</span><span class="p">),</span> <span class="s2">&quot;max_num must be an integer!&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_iterate_fuzz_lib</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">full_range</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">i</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># try only &quot;smart&quot; values.</span>
+            <span class="n">interesting_boundaries</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span> <span class="o">//</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span> <span class="o">//</span> <span class="mi">8</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span> <span class="o">//</span> <span class="mi">16</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span> <span class="o">//</span> <span class="mi">32</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="k">for</span> <span class="n">boundary</span> <span class="ow">in</span> <span class="n">interesting_boundaries</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yield_integer_boundaries</span><span class="p">(</span><span class="n">boundary</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">v</span>
+        <span class="c1"># TODO Add a way to inject a list of fuzz values</span>
+        <span class="c1"># elif isinstance(default_value, (list, tuple)):</span>
+        <span class="c1"># for val in iter(default_value):</span>
+        <span class="c1">#    yield val</span>
+
+        <span class="c1"># TODO: Add injectable arbitrary bit fields</span>
+
+    <span class="k">def</span> <span class="nf">_yield_integer_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add the supplied integer and border cases to the integer fuzz heuristics library.</span>
+
+<span class="sd">        @type  integer: int</span>
+<span class="sd">        @param integer: int to append to fuzz heuristics</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+            <span class="n">case</span> <span class="o">=</span> <span class="n">integer</span> <span class="o">+</span> <span class="n">i</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">case</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_num</span><span class="p">:</span>
+                <span class="c1"># some day: if case not in self._user_provided_values</span>
+                <span class="k">yield</span> <span class="n">case</span>
+
+    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mutation_context</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_int</span><span class="p">(</span>
+            <span class="n">value</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">bit_width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">endian</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">endian</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">signed</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">helpers</span><span class="o">.</span><span class="n">str_to_bytes</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iterate_fuzz_lib</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">val</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_render_int</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">output_format</span><span class="p">,</span> <span class="n">bit_width</span><span class="p">,</span> <span class="n">endian</span><span class="p">,</span> <span class="n">signed</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert value to a bit or byte string.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (int): Value to convert to a byte string.</span>
+<span class="sd">            output_format (str): &quot;binary&quot; or &quot;ascii&quot;</span>
+<span class="sd">            bit_width (int): Width of output in bits.</span>
+<span class="sd">            endian: BIG_ENDIAN or LITTLE_ENDIAN</span>
+<span class="sd">            signed (bool):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: value converted to a byte string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">output_format</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
+            <span class="n">bit_stream</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">rendered</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+
+            <span class="c1"># pad the bit stream to the next byte boundary.</span>
+            <span class="k">if</span> <span class="n">bit_width</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">bit_stream</span> <span class="o">+=</span> <span class="n">int_to_binary_string</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">bit_width</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bit_stream</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">-</span> <span class="p">(</span><span class="n">bit_width</span> <span class="o">%</span> <span class="mi">8</span><span class="p">))</span>
+                <span class="n">bit_stream</span> <span class="o">+=</span> <span class="n">int_to_binary_string</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">bit_width</span><span class="p">)</span>
+
+            <span class="c1"># convert the bit stream from a string of bits into raw bytes.</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bit_stream</span><span class="p">)</span> <span class="o">//</span> <span class="mi">8</span><span class="p">):</span>
+                <span class="n">chunk_min</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">i</span>
+                <span class="n">chunk_max</span> <span class="o">=</span> <span class="n">chunk_min</span> <span class="o">+</span> <span class="mi">8</span>
+                <span class="n">chunk</span> <span class="o">=</span> <span class="n">bit_stream</span><span class="p">[</span><span class="n">chunk_min</span><span class="p">:</span><span class="n">chunk_max</span><span class="p">]</span>
+                <span class="n">rendered</span> <span class="o">+=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">binary_string_to_int</span><span class="p">(</span><span class="n">chunk</span><span class="p">))</span>
+
+            <span class="c1"># if necessary, convert the endianness of the raw bytes.</span>
+            <span class="k">if</span> <span class="n">endian</span> <span class="o">==</span> <span class="n">LITTLE_ENDIAN</span><span class="p">:</span>
+                <span class="c1"># reverse the bytes</span>
+                <span class="n">rendered</span> <span class="o">=</span> <span class="n">rendered</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">_rendered</span> <span class="o">=</span> <span class="n">rendered</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Otherwise we have ascii/something else</span>
+            <span class="c1"># if the sign flag is raised and we are dealing with a signed integer (first bit is 1).</span>
+            <span class="k">if</span> <span class="n">signed</span> <span class="ow">and</span> <span class="n">int_to_binary_string</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">bit_width</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span>
+                <span class="n">max_num</span> <span class="o">=</span> <span class="n">binary_string_to_int</span><span class="p">(</span><span class="s2">&quot;1&quot;</span> <span class="o">+</span> <span class="s2">&quot;0&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">bit_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="c1"># chop off the sign bit.</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">value</span> <span class="o">&amp;</span> <span class="n">binary_string_to_int</span><span class="p">(</span><span class="s2">&quot;1&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">bit_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+                <span class="c1"># account for the fact that the negative scale works backwards.</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">max_num</span> <span class="o">-</span> <span class="n">val</span> <span class="o">-</span> <span class="mi">1</span>
+
+                <span class="c1"># toss in the negative sign.</span>
+                <span class="n">_rendered</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="o">~</span><span class="n">val</span>
+
+            <span class="c1"># unsigned integer or positive signed integer.</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_rendered</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">_rendered</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">rainfuzz</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../test.html">环境搭建</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../boofuzz1/index.html">boofuzz分析</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">模块代码</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="提交" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;一袭青衣尽长安.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

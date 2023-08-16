@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>boofuzz.primitives.bytes &#8212; rainfuzz 0.0 文档</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=039e1c02" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=16727793"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>boofuzz.primitives.bytes 源代码</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">ByteString</span>
+
+<span class="kn">from</span> <span class="nn">funcy</span> <span class="kn">import</span> <span class="n">compose</span>
+
+<span class="kn">from</span> <span class="nn">..fuzzable</span> <span class="kn">import</span> <span class="n">Fuzzable</span>
+
+
+<div class="viewcode-block" id="Bytes"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.Bytes">[文档]</a><span class="k">class</span> <span class="nc">Bytes</span><span class="p">(</span><span class="n">Fuzzable</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Primitive that fuzzes a binary byte string with arbitrary length.</span>
+
+<span class="sd">    :type name: str, optional</span>
+<span class="sd">    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,</span>
+<span class="sd">        defaults to None</span>
+<span class="sd">    :type default_value: bytes, optional</span>
+<span class="sd">    :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value,</span>
+<span class="sd">        defaults to b&quot;&quot;</span>
+<span class="sd">    :type size: int, optional</span>
+<span class="sd">    :param size: Static size of this field, leave None for dynamic, defaults to None</span>
+<span class="sd">    :type padding: chr, optional</span>
+<span class="sd">    :param padding: Value to use as padding to fill static field size, defaults to b&quot;\\x00&quot;</span>
+<span class="sd">    :type max_len: int, optional</span>
+<span class="sd">    :param max_len: Maximum string length, defaults to None</span>
+<span class="sd">    :type fuzzable: bool, optional</span>
+<span class="sd">    :param fuzzable: Enable/disable fuzzing of this primitive, defaults to true</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># This binary strings will always included as testcases.</span>
+    <span class="n">_fuzz_library</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFF</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;A&quot;</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;A&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;A&quot;</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;A&quot;</span> <span class="o">*</span> <span class="mi">5000</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;A&quot;</span> <span class="o">*</span> <span class="mi">10000</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;A&quot;</span> <span class="o">*</span> <span class="mi">100000</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="c1"># from https://en.wikipedia.org/wiki/Magic_number_(programming)#Magic_debug_values</span>
+    <span class="n">_magic_debug_values</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00\x81</span><span class="s2">#&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\xfa\xca\xde</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x1b\xad\xb0\x02</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x8b\xad\xf0\r</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xa5\xa5\xa5\xa5</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xa5</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xab\xab\xab\xab</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xab\xad\xba\xbe</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xab\xba\xba\xbe</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xab\xad\xca\xfe</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xb1</span><span class="s2">k</span><span class="se">\x00\xb5</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xba\xad\xf0\r</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xba\xaa\xaa\xad</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xba\xd2</span><span class="s1">&quot;&quot;&#39;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xba\xdb\xad\xba\xdb\xad</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xba\xdc\x0f\xfe\xe0\xdd\xf0\r</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xba\xdd\xca\xfe</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xbb\xad\xbe\xef</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xbe\xef\xca\xce</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xc0\x00\x10\xff</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xca\xfe\xba\xbe</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xca\xfe\xd0\r</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xca\xfe\xfe\xed</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xcc\xcc\xcc\xcc</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xcd\xcd\xcd\xcd</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\r\x15\xea</span><span class="s2">^&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xdd\xdd\xdd\xdd</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xde\xad\x10\xcc</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xde\xad\xba\xbe</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xde\xad\xbe\xef</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xde\xad\xca\xfe</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xde\xad\xc0\xde</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xde\xad\xfa\x11</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xde\xad\xf0\r</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xde\xfe\xc8\xed</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xde\xad\xde\xad</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xeb\xeb\xeb\xeb</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xfa\xde\xde\xad</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xfd\xfd\xfd\xfd</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xfe\xe1\xde\xad</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xfe\xed\xfa\xce</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xfe\xee\xfe\xee</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="c1"># This is a list of &quot;interesting&quot; 1,2 and 4 byte binary strings.</span>
+    <span class="c1"># The lists are used to replace each block of 1, 2 or 4 byte in the original</span>
+    <span class="c1"># value with each of those &quot;interesting&quot; values.</span>
+    <span class="n">_fuzz_strings_1byte</span> <span class="o">=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x01</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x7F</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x80</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFF</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+        <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">_magic_debug_values</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="p">]</span>
+
+    <span class="n">_fuzz_strings_2byte</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x01\x00</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x01</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x7F\xFF</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFF\x7F</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFE\xFF</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFF\xFE</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFF\xFF</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">_magic_debug_values</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">_fuzz_strings_4byte</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00\x00\x00</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00\x00\x01</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x01\x00\x00\x00</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x7F\xFF\xFF\xFF</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFF\xFF\xFF\x7F</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFE\xFF\xFF\xFF</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFF\xFF\xFF\xFE</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFF\xFF\xFF\xFF</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">_magic_debug_values</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">]</span>
+
+    <span class="n">_mutators_of_default_value</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">default_value</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">padding</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">max_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default_value</span><span class="p">,</span> <span class="n">ByteString</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;default_value of Bytes must be of ByteString type&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="n">ByteString</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;padding of Bytes must be of ByteString type&quot;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">Bytes</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">default_value</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_len</span> <span class="o">=</span> <span class="n">max_len</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padding</span> <span class="o">=</span> <span class="n">padding</span>
+
+    <span class="k">def</span> <span class="nf">mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">fuzz_value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iterate_fuzz_cases</span><span class="p">(</span><span class="n">default_value</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">fuzz_value</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">compose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_adjust_mutation_for_size</span><span class="p">,</span> <span class="n">fuzz_value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adjust_mutation_for_size</span><span class="p">(</span><span class="n">fuzz_value</span><span class="o">=</span><span class="n">fuzz_value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_adjust_mutation_for_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fuzz_value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fuzz_value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">fuzz_value</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_len</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">fuzz_value</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">fuzz_value</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_len</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">fuzz_value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_len</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fuzz_value</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_len</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fuzz_value</span>
+
+    <span class="k">def</span> <span class="nf">_iterate_fuzz_cases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">fuzz_value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_library</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">fuzz_value</span>
+        <span class="k">for</span> <span class="n">fuzz_value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mutators_of_default_value</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">fuzz_value</span>
+        <span class="k">for</span> <span class="n">fuzz_value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_magic_debug_values</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">fuzz_value</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">default_value</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">fuzz_bytes</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_strings_1byte</span><span class="p">:</span>
+
+                <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="n">value</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">fuzz_bytes</span> <span class="o">+</span> <span class="n">value</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">value</span>
+
+                <span class="k">yield</span> <span class="n">f</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">default_value</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">fuzz_bytes</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_strings_2byte</span><span class="p">:</span>
+
+                <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">value</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">fuzz_bytes</span> <span class="o">+</span> <span class="n">value</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span> <span class="p">:]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">value</span>
+
+                <span class="k">yield</span> <span class="n">f</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">default_value</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">fuzz_bytes</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_strings_4byte</span><span class="p">:</span>
+
+                <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">value</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">fuzz_bytes</span> <span class="o">+</span> <span class="n">value</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span> <span class="p">:]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">value</span>
+
+                <span class="k">yield</span> <span class="n">f</span>
+
+    <span class="k">def</span> <span class="nf">num_mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate and return the total number of mutations for this individual primitive.</span>
+
+<span class="sd">        @rtype:  int</span>
+<span class="sd">        @return: Number of mutated forms this primitive can take</span>
+<span class="sd">        :param default_value:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_library</span><span class="p">),</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mutators_of_default_value</span><span class="p">),</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_magic_debug_values</span><span class="p">),</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_strings_1byte</span><span class="p">)</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">default_value</span><span class="p">)</span> <span class="o">-</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_strings_2byte</span><span class="p">)</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">default_value</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_strings_4byte</span><span class="p">)</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">default_value</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mutation_context</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">rainfuzz</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../test.html">环境搭建</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../boofuzz1/index.html">boofuzz分析</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">模块代码</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="提交" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;一袭青衣尽长安.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

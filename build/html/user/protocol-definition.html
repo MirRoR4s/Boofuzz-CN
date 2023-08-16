@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Protocol Definition &#8212; rainfuzz 0.0 文档</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=039e1c02" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=16727793"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/translations.js?v=beaddf03"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="protocol-definition">
+<span id="id1"></span><h1>Protocol Definition<a class="headerlink" href="#protocol-definition" title="此标题的永久链接">¶</a></h1>
+<p>For the old school Spike-style static protocol definition format, see
+<a class="reference internal" href="static-protocol-definition.html#static-primitives"><span class="std std-ref">static protocol definition functions</span></a>. The non-static protocol definition
+described here is the newer (but still somewhat experimental) approach.</p>
+<p>See the <a class="reference internal" href="quickstart.html#quickstart"><span class="std std-ref">Quickstart</span></a> guide for an intro to using boofuzz in general and a basic protocol definition
+example.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="此标题的永久链接">¶</a></h2>
+<p>Requests are messages, Blocks are chunks within a message, and Primitives are the elements (bytes, strings, numbers,
+checksums, etc.) that make up a Block/Request.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="此标题的永久链接">¶</a></h2>
+<p>Here is an example of an HTTP message. It demonstrates how to use Request, Block, and several primitives:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="s2">&quot;HTTP-Request&quot;</span><span class="p">,</span><span class="n">children</span><span class="o">=</span><span class="p">(</span>
+    <span class="n">Block</span><span class="p">(</span><span class="s2">&quot;Request-Line&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">Group</span><span class="p">(</span><span class="s2">&quot;Method&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;HEAD&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="s2">&quot;CONNECT&quot;</span><span class="p">,</span> <span class="s2">&quot;OPTIONS&quot;</span><span class="p">,</span> <span class="s2">&quot;TRACE&quot;</span><span class="p">]),</span>
+        <span class="n">Delim</span><span class="p">(</span><span class="s2">&quot;space-1&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">),</span>
+        <span class="n">String</span><span class="p">(</span><span class="s2">&quot;URI&quot;</span><span class="p">,</span> <span class="s2">&quot;/index.html&quot;</span><span class="p">),</span>
+        <span class="n">Delim</span><span class="p">(</span><span class="s2">&quot;space-2&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">),</span>
+        <span class="n">String</span><span class="p">(</span><span class="s2">&quot;HTTP-Version&quot;</span><span class="p">,</span> <span class="s2">&quot;HTTP/1.1&quot;</span><span class="p">),</span>
+        <span class="n">Static</span><span class="p">(</span><span class="s2">&quot;CRLF&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="p">)),</span>
+    <span class="n">Block</span><span class="p">(</span><span class="s2">&quot;Host-Line&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">String</span><span class="p">(</span><span class="s2">&quot;Host-Key&quot;</span><span class="p">,</span> <span class="s2">&quot;Host:&quot;</span><span class="p">),</span>
+        <span class="n">Delim</span><span class="p">(</span><span class="s2">&quot;space&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">),</span>
+        <span class="n">String</span><span class="p">(</span><span class="s2">&quot;Host-Value&quot;</span><span class="p">,</span> <span class="s2">&quot;example.com&quot;</span><span class="p">),</span>
+        <span class="n">Static</span><span class="p">(</span><span class="s2">&quot;CRLF&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="p">)),</span>
+    <span class="n">Static</span><span class="p">(</span><span class="s2">&quot;CRLF&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">),</span>
+<span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="request">
+<h2>Request<a class="headerlink" href="#request" title="此标题的永久链接">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Request">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Request" title="永久链接至目标">¶</a></dt>
+<dd><p>Top level container. Can hold any block structure or primitive.</p>
+<p>This can essentially be thought of as a super-block, root-block, daddy-block or whatever other alias you prefer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of this request</p></li>
+<li><p><strong>children</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – Children of this request, defaults to None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="blocks">
+<h2>Blocks<a class="headerlink" href="#blocks" title="此标题的永久链接">¶</a></h2>
+<section id="block">
+<h3>Block<a class="headerlink" href="#block" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Block">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dep_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dep_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dep_compare</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'=='</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Block" title="永久链接至目标">¶</a></dt>
+<dd><p>The basic building block. Can contain primitives, sizers, checksums or other blocks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>Any</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value,
+defaults to None</p></li>
+<li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – Request this block belongs to, defaults to None</p></li>
+<li><p><strong>children</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – Children of this block, defaults to None</p></li>
+<li><p><strong>group</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of group to associate this block with, defaults to None</p></li>
+<li><p><strong>encoder</strong> (<em>callable</em><em>, </em><em>optional</em>) – Optional pointer to a function to pass rendered data to prior to return, defaults to None</p></li>
+<li><p><strong>dep</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional primitive whose specific value this block is dependant on, defaults to None</p></li>
+<li><p><strong>dep_value</strong> (<em>Any</em><em>, </em><em>optional</em>) – Value that field “dep” must contain for block to be rendered, defaults to None</p></li>
+<li><p><strong>dep_values</strong> (<em>list</em><em>, </em><em>optional</em>) – Values that field “dep” may contain for block to be rendered, defaults to None</p></li>
+<li><p><strong>dep_compare</strong> (<em>str</em><em>, </em><em>optional</em>) – Comparison method to apply to dependency (==, !=, &gt;, &gt;=, &lt;, &lt;=), defaults to None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="checksum">
+<h3>Checksum<a class="headerlink" href="#checksum" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Checksum">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Checksum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'crc32'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ipv4_src_block_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ipv4_dst_block_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Checksum" title="永久链接至目标">¶</a></dt>
+<dd><p>Checksum bound to the block with the specified name.</p>
+<p>The algorithm may be chosen by name with the algorithm parameter, or a custom function may be specified with
+the algorithm parameter.</p>
+<p>The length field is only necessary for custom algorithms.
+When using your own custom checksum function, the return value should be the calculated checksum of the data.</p>
+<p>Function signature:  &lt;function_name&gt;(data_bytes). Returns a number represented as a bytes type.</p>
+<p>Recursive checksums are supported; the checksum field itself will render as all zeros for the sake of checksum
+or length calculations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>block_name</strong> (<em>str</em>) – Name of target block for checksum calculations.</p></li>
+<li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – Request this block belongs to</p></li>
+<li><p><strong>algorithm</strong> (<em>str</em><em>, </em><em>function def name</em><em>, </em><em>optional</em>) – Checksum algorithm to use from this list, default is crc32 (crc32, crc32c, adler32, md5, sha1,
+ipv4, udp). See above for custom checksum function example.</p></li>
+<li><p><strong>length</strong> (<em>int</em><em>, </em><em>optional</em>) – Length of checksum, auto-calculated by default. Must be specified manually when using custom
+algorithm, defaults to 0</p></li>
+<li><p><strong>endian</strong> (<em>chr</em><em>, </em><em>optional</em>) – Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</p></li>
+<li><p><strong>ipv4_src_block_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Required for ‘udp’ algorithm. Name of block yielding IPv4 source address,
+defaults to None</p></li>
+<li><p><strong>ipv4_dst_block_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Required for ‘udp’ algorithm. Name of block yielding IPv4 destination address,
+defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this block, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="repeat">
+<h3>Repeat<a class="headerlink" href="#repeat" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Repeat">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Repeat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_reps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_reps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Repeat" title="永久链接至目标">¶</a></dt>
+<dd><p>Repeat the rendered contents of the specified block cycling from min_reps to max_reps counting by step.</p>
+<p>By default renders to nothing. This block modifier is useful for fuzzing overflows in table entries. This block
+modifier MUST come after the block it is being applied to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>block_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of block to repeat</p></li>
+<li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – Request this block belongs to, defaults to None</p></li>
+<li><p><strong>min_reps</strong> (<em>int</em><em>, </em><em>optional</em>) – Minimum number of block repetitions, defaults to 0</p></li>
+<li><p><strong>max_reps</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of block repetitions, defaults to None</p></li>
+<li><p><strong>step</strong> (<em>int</em><em>, </em><em>optional</em>) – Step count between min and max reps, defaults to 1</p></li>
+<li><p><strong>variable</strong> (<em>Boofuzz Integer Primitive</em><em>, </em><em>optional</em>) – Repetitions will be derived from this variable, disables fuzzing, defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>Raw</em>) – Value used when the element is not being fuzzed - should typically represent a valid value,
+defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this block, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="size">
+<h3>Size<a class="headerlink" href="#size" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Size">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclusive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">math</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Size" title="永久链接至目标">¶</a></dt>
+<dd><p>Create a sizer block bound to the block with the specified name.</p>
+<p>Size blocks that size their own parent or grandparent are allowed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>block_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of block to apply sizer to.</p></li>
+<li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – Request this block belongs to.</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset for calculated size value, defaults to 0</p></li>
+<li><p><strong>length</strong> (<em>int</em><em>, </em><em>optional</em>) – Length of sizer, defaults to 4</p></li>
+<li><p><strong>endian</strong> (<em>chr</em><em>, </em><em>optional</em>) – Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</p></li>
+<li><p><strong>output_format</strong> (<em>str</em><em>, </em><em>optional</em>) – Output format, “binary” or “ascii”, defaults to binary</p></li>
+<li><p><strong>inclusive</strong> (<em>bool</em><em>, </em><em>optional</em>) – Should the sizer count its own length? Defaults to False</p></li>
+<li><p><strong>signed</strong> (<em>bool</em><em>, </em><em>optional</em>) – Make size signed vs. unsigned (applicable only with format=”ascii”), defaults to False</p></li>
+<li><p><strong>math</strong> (<em>def</em><em>, </em><em>optional</em>) – Apply the mathematical op defined in this function to the size, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this block, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="aligned">
+<h3>Aligned<a class="headerlink" href="#aligned" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Aligned">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Aligned</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modulus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b'\x00'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Aligned" title="永久链接至目标">¶</a></dt>
+<dd><p>FuzzableBlock that aligns its contents to a certain number of bytes</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will
+be given, defaults to None</p></li>
+<li><p><strong>modulus</strong> (<em>int</em><em>, </em><em>optional</em>) – Pad length of child content to this many bytes, defaults to 1</p></li>
+<li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – Request this block belongs to</p></li>
+<li><p><strong>pattern</strong> (<em>bytes</em><em>, </em><em>optional</em>) – Pad using these byte(s)</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this block, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="primitives">
+<h2>Primitives<a class="headerlink" href="#primitives" title="此标题的永久链接">¶</a></h2>
+<section id="static">
+<h3>Static<a class="headerlink" href="#static" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Static">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Static</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Static" title="永久链接至目标">¶</a></dt>
+<dd><p>Static primitives are fixed and not mutated while fuzzing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>Raw</em><em>, </em><em>optional</em>) – Raw static data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="simple">
+<h3>Simple<a class="headerlink" href="#simple" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Simple">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Simple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Simple" title="永久链接至目标">¶</a></dt>
+<dd><p>Simple bytes value with manually specified fuzz values only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>Raw</em><em>, </em><em>optional</em>) – Raw static data</p></li>
+<li><p><strong>fuzz_values</strong> (<em>list</em><em>, </em><em>optional</em>) – List of fuzz values, defaults to None. If empty, Simple is equivalent to Static.</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="delim">
+<h3>Delim<a class="headerlink" href="#delim" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Delim">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Delim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Delim" title="永久链接至目标">¶</a></dt>
+<dd><p>Represent a delimiter such as :,r,n, ,=,&gt;,&lt; etc… Mutations include repetition, substitution and exclusion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>char</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value.</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="group">
+<h3>Group<a class="headerlink" href="#group" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Group">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ascii'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Group" title="永久链接至目标">¶</a></dt>
+<dd><p>This primitive represents a list of static values, stepping through each one on mutation.</p>
+<p>You can tie a block
+to a group primitive to specify that the block should cycle through all possible mutations for <em>each</em> value
+within the group. The group primitive is useful for example for representing a list of valid opcodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>values</strong> (<em>list</em><em> of </em><em>bytes</em><em> or </em><em>list</em><em> of </em><em>str</em>) – List of possible raw values this group can take.</p></li>
+<li><p><strong>default_value</strong> (<em>str</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value,
+defaults to None</p></li>
+<li><p><strong>encoding</strong> (<em>str</em><em>, </em><em>optional</em>) – String encoding, ex: utf_16_le for Microsoft Unicode, defaults to ascii</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="randomdata">
+<h3>RandomData<a class="headerlink" href="#randomdata" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.RandomData">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">RandomData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_mutations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.RandomData" title="永久链接至目标">¶</a></dt>
+<dd><p>Generate a random chunk of data while maintaining a copy of the original.</p>
+<p>A random length range can be specified. For a static length, set min/max length to be the same.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>str</em><em> or </em><em>bytes</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value,
+defaults to None</p></li>
+<li><p><strong>min_length</strong> (<em>int</em><em>, </em><em>optional</em>) – Minimum length of random block, defaults to 0</p></li>
+<li><p><strong>max_length</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum length of random block, defaults to 1</p></li>
+<li><p><strong>max_mutations</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of mutations to make before reverting to default, defaults to 25</p></li>
+<li><p><strong>step</strong> (<em>int</em><em>, </em><em>optional</em>) – If not None, step count between min and max reps, otherwise random, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="string">
+<h3>String<a class="headerlink" href="#string" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.String">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">String</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b'\x00'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.String" title="永久链接至目标">¶</a></dt>
+<dd><p>Primitive that cycles through a library of “bad” strings.</p>
+<p>The class variable ‘fuzz_library’ contains a list of
+smart fuzz values global across all instances. The ‘this_library’ variable contains fuzz values specific to
+the instantiated primitive. This allows us to avoid copying the near ~70MB fuzz_library data structure across
+each instantiated primitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>str</em>) – Value used when the element is not being fuzzed - should typically represent a valid value.</p></li>
+<li><p><strong>size</strong> (<em>int</em><em>, </em><em>optional</em>) – Static size of this field, leave None for dynamic, defaults to None</p></li>
+<li><p><strong>padding</strong> (<em>chr</em><em>, </em><em>optional</em>) – Value to use as padding to fill static field size, defaults to “x00”</p></li>
+<li><p><strong>encoding</strong> (<em>str</em><em>, </em><em>optional</em>) – String encoding, ex: utf_16_le for Microsoft Unicode, defaults to ascii</p></li>
+<li><p><strong>max_len</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum string length, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="fromfile">
+<h3>FromFile<a class="headerlink" href="#fromfile" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.FromFile">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">FromFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.FromFile" title="永久链接至目标">¶</a></dt>
+<dd><p>Cycles through a list of “bad” values from a file(s).</p>
+<p>Takes filename and open the file(s) to read the values to use in fuzzing process. filename may contain glob
+characters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>str</em>) – Default string value</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Filename pattern to load all fuzz value</p></li>
+<li><p><strong>max_len</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum string length, defaults to 0</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="mirror">
+<h3>Mirror<a class="headerlink" href="#mirror" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Mirror">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Mirror</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primitive_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Mirror" title="永久链接至目标">¶</a></dt>
+<dd><p>Primitive used to keep updated with another primitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>primitive_name</strong> (<em>str</em>) – Name of target primitive.</p></li>
+<li><p><strong>request</strong> (<em>boofuzz.Request</em>) – Request this primitive belongs to.</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="bitfield">
+<h3>BitField<a class="headerlink" href="#bitfield" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.BitField">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">BitField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.BitField" title="永久链接至目标">¶</a></dt>
+<dd><p>The bit field primitive represents a number of variable length and is used to define all other integer types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>int</em><em>, </em><em>optional</em>) – Default integer value, defaults to 0</p></li>
+<li><p><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – Width in bits, defaults to 8</p></li>
+<li><p><strong>max_num</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number to iterate up to, defaults to None</p></li>
+<li><p><strong>endian</strong> (<em>char</em><em>, </em><em>optional</em>) – Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</p></li>
+<li><p><strong>output_format</strong> (<em>str</em><em>, </em><em>optional</em>) – Output format, “binary” or “ascii”, defaults to binary</p></li>
+<li><p><strong>signed</strong> (<em>bool</em><em>, </em><em>optional</em>) – Make size signed vs. unsigned (applicable only with format=”ascii”), defaults to False</p></li>
+<li><p><strong>full_range</strong> (<em>bool</em><em>, </em><em>optional</em>) – If enabled the field mutates through <em>all</em> possible values, defaults to False</p></li>
+<li><p><strong>fuzz_values</strong> (<em>list</em><em>, </em><em>optional</em>) – List of custom fuzz values to add to the normal mutations, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="byte">
+<h3>Byte<a class="headerlink" href="#byte" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Byte">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Byte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Byte" title="永久链接至目标">¶</a></dt>
+<dd><p>The byte sized bit field primitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>int</em><em>, </em><em>optional</em>) – Default integer value, defaults to 0</p></li>
+<li><p><strong>max_num</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number to iterate up to, defaults to None</p></li>
+<li><p><strong>endian</strong> (<em>char</em><em>, </em><em>optional</em>) – Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</p></li>
+<li><p><strong>output_format</strong> (<em>str</em><em>, </em><em>optional</em>) – Output format, “binary” or “ascii”, defaults to binary</p></li>
+<li><p><strong>signed</strong> (<em>bool</em><em>, </em><em>optional</em>) – Make size signed vs. unsigned (applicable only with format=”ascii”), defaults to False</p></li>
+<li><p><strong>full_range</strong> (<em>bool</em><em>, </em><em>optional</em>) – If enabled the field mutates through <em>all</em> possible values, defaults to False</p></li>
+<li><p><strong>fuzz_values</strong> (<em>list</em><em>, </em><em>optional</em>) – List of custom fuzz values to add to the normal mutations, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="bytes">
+<h3>Bytes<a class="headerlink" href="#bytes" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Bytes">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">b''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">b'\x00'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Bytes" title="永久链接至目标">¶</a></dt>
+<dd><p>Primitive that fuzzes a binary byte string with arbitrary length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>bytes</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value,
+defaults to b””</p></li>
+<li><p><strong>size</strong> (<em>int</em><em>, </em><em>optional</em>) – Static size of this field, leave None for dynamic, defaults to None</p></li>
+<li><p><strong>padding</strong> (<em>chr</em><em>, </em><em>optional</em>) – Value to use as padding to fill static field size, defaults to b”x00”</p></li>
+<li><p><strong>max_len</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum string length, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="word">
+<h3>Word<a class="headerlink" href="#word" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.Word">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Word" title="永久链接至目标">¶</a></dt>
+<dd><p>The 2 byte sized bit field primitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>int</em><em>, </em><em>optional</em>) – Default integer value, defaults to 0</p></li>
+<li><p><strong>max_num</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number to iterate up to, defaults to None</p></li>
+<li><p><strong>endian</strong> (<em>char</em><em>, </em><em>optional</em>) – Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</p></li>
+<li><p><strong>output_format</strong> (<em>str</em><em>, </em><em>optional</em>) – Output format, “binary” or “ascii”, defaults to binary</p></li>
+<li><p><strong>signed</strong> (<em>bool</em><em>, </em><em>optional</em>) – Make size signed vs. unsigned (applicable only with format=”ascii”), defaults to False</p></li>
+<li><p><strong>full_range</strong> (<em>bool</em><em>, </em><em>optional</em>) – If enabled the field mutates through <em>all</em> possible values, defaults to False</p></li>
+<li><p><strong>fuzz_values</strong> (<em>list</em><em>, </em><em>optional</em>) – List of custom fuzz values to add to the normal mutations, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="dword">
+<h3>DWord<a class="headerlink" href="#dword" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.DWord">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">DWord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.DWord" title="永久链接至目标">¶</a></dt>
+<dd><p>The 4 byte sized bit field primitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>int</em><em>, </em><em>optional</em>) – Default integer value, defaults to 0</p></li>
+<li><p><strong>max_num</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number to iterate up to, defaults to None</p></li>
+<li><p><strong>endian</strong> (<em>char</em><em>, </em><em>optional</em>) – Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</p></li>
+<li><p><strong>output_format</strong> (<em>str</em><em>, </em><em>optional</em>) – Output format, “binary” or “ascii”, defaults to binary</p></li>
+<li><p><strong>signed</strong> (<em>bool</em><em>, </em><em>optional</em>) – Make size signed vs. unsigned (applicable only with format=”ascii”), defaults to False</p></li>
+<li><p><strong>full_range</strong> (<em>bool</em><em>, </em><em>optional</em>) – If enabled the field mutates through <em>all</em> possible values, defaults to False</p></li>
+<li><p><strong>fuzz_values</strong> (<em>list</em><em>, </em><em>optional</em>) – List of custom fuzz values to add to the normal mutations, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="qword">
+<h3>QWord<a class="headerlink" href="#qword" title="此标题的永久链接">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.QWord">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">QWord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.QWord" title="永久链接至目标">¶</a></dt>
+<dd><p>The 8 byte sized bit field primitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>int</em><em>, </em><em>optional</em>) – Default integer value, defaults to 0</p></li>
+<li><p><strong>max_num</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number to iterate up to, defaults to None</p></li>
+<li><p><strong>endian</strong> (<em>char</em><em>, </em><em>optional</em>) – Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</p></li>
+<li><p><strong>output_format</strong> (<em>str</em><em>, </em><em>optional</em>) – Output format, “binary” or “ascii”, defaults to binary</p></li>
+<li><p><strong>signed</strong> (<em>bool</em><em>, </em><em>optional</em>) – Make size signed vs. unsigned (applicable only with format=”ascii”), defaults to False</p></li>
+<li><p><strong>full_range</strong> (<em>bool</em><em>, </em><em>optional</em>) – If enabled the field mutates through <em>all</em> possible values, defaults to False</p></li>
+<li><p><strong>fuzz_values</strong> (<em>list</em><em>, </em><em>optional</em>) – List of custom fuzz values to add to the normal mutations, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="making-your-own-block-primitive">
+<span id="custom-blocks"></span><h2>Making Your Own Block/Primitive<a class="headerlink" href="#making-your-own-block-primitive" title="此标题的永久链接">¶</a></h2>
+<p>Now I know what you’re thinking: “With that many sweet primitives and blocks available, what else could I ever
+conceivably need? And yet, I am urged by joy to contribute my own sweet blocks!”</p>
+<p>To make your own block/primitive:</p>
+<ol class="arabic simple">
+<li><p>Create an object that inherits from <a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fuzzable</span></code></a> or <a class="reference internal" href="#boofuzz.FuzzableBlock" title="boofuzz.FuzzableBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">FuzzableBlock</span></code></a></p></li>
+<li><p>Override <a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations</span></code></a> and/or <a class="reference internal" href="#boofuzz.Fuzzable.encode" title="boofuzz.Fuzzable.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">encode</span></code></a>.</p></li>
+<li><p>Optional: Create an accompanying static primitive function. See boofuzz’s <cite>__init__.py</cite> file for examples.</p></li>
+<li><p>???</p></li>
+<li><p>Profit!</p></li>
+</ol>
+<p>If your block depends on references to other blocks, the way a checksum or length field depends on other parts of the
+message, see the <a class="reference internal" href="#boofuzz.Size" title="boofuzz.Size"><code class="xref py py-class docutils literal notranslate"><span class="pre">Size</span></code></a> source code for an example of how to avoid recursion issues, and Be
+Careful. :)</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Fuzzable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzzable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parent class for all primitives and blocks.</p>
+<p>When making new fuzzable types, one will typically override <a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> and/or <a class="reference internal" href="#boofuzz.Fuzzable.encode" title="boofuzz.Fuzzable.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code></a>.</p>
+<p><a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> is a generator function yielding mutations, typically of type bytes.</p>
+<p><a class="reference internal" href="#boofuzz.Fuzzable.encode" title="boofuzz.Fuzzable.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code></a> is a function that takes a value and encodes it. The value comes from <a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> or
+<code class="docutils literal notranslate"><span class="pre">default_value</span></code>. <a class="reference internal" href="#boofuzz.FuzzableBlock" title="boofuzz.FuzzableBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">FuzzableBlock</span></code></a> types can also encode the data generated by
+child nodes.</p>
+<p>Implementors may also want to override <a class="reference internal" href="#boofuzz.Fuzzable.num_mutations" title="boofuzz.Fuzzable.num_mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">num_mutations()</span></code></a> – the default implementation manually exhausts
+<a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> to get a number.</p>
+<p>The rest of the methods are used by boofuzz to handle fuzzing and are typically not overridden.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>Any</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value.
+Can be a static value, or a ReferenceValueTestCaseSession, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable fuzzing of this primitive, defaults to True</p></li>
+<li><p><strong>fuzz_values</strong> (<em>list</em><em>, </em><em>optional</em>) – List of custom fuzz values to add to the normal mutations, defaults to None</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.context_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context_path</span></span><a class="headerlink" href="#boofuzz.Fuzzable.context_path" title="永久链接至目标">¶</a></dt>
+<dd><p>Dot-delimited string that describes the path up to this element. Configured after the object is attached
+to a Request.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.encode">
+<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.encode" title="永久链接至目标">¶</a></dt>
+<dd><p>Takes a value and encodes/renders/serializes it to a bytes (byte string).</p>
+<p>Optional if mutations() yields bytes.</p>
+<p>Example: Yield strings with mutations() and encode them to UTF-8 using encode().</p>
+<p>Default behavior: Return value.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>value: Value to encode. Type should match the type yielded by mutations()
+mutation_context (MutationContext): Context for current mutation, if any.</p>
+</dd>
+<dt>Returns:</dt><dd><p>bytes: Encoded/serialized value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.fuzzable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fuzzable</span></span><a class="headerlink" href="#boofuzz.Fuzzable.fuzzable" title="永久链接至目标">¶</a></dt>
+<dd><p>If False, this element should not be mutated in normal fuzzing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.get_mutations">
+<span class="sig-name descname"><span class="pre">get_mutations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.get_mutations" title="永久链接至目标">¶</a></dt>
+<dd><p>Iterate mutations. Used by boofuzz framework.</p>
+<dl class="simple">
+<dt>Yields:</dt><dd><p>list of Mutation: Mutations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.get_num_mutations">
+<span class="sig-name descname"><span class="pre">get_num_mutations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.get_num_mutations" title="永久链接至目标">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.get_value">
+<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mutation_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.get_value" title="永久链接至目标">¶</a></dt>
+<dd><p>Helper method to get the currently applicable value.</p>
+<p>This is either the default value, or the active mutation value as dictated by mutation_context.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mutation_context (MutationContext):</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.mutations">
+<span class="sig-name descname"><span class="pre">mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.mutations" title="永久链接至目标">¶</a></dt>
+<dd><p>Generator to yield mutation values for this element.</p>
+<p>Values are either plain values or callable functions that take a “default value” and mutate it. Functions are
+used when the default or “normal” value influences the fuzzed value. Functions are used because the “normal”
+value is sometimes dynamic and not known at the time of generation.</p>
+<p>Each mutation should be a pre-rendered value. That is, it must be suitable to pass to encode().</p>
+<p>Default: Empty iterator.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>default_value:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#boofuzz.Fuzzable.name" title="永久链接至目标">¶</a></dt>
+<dd><p>Element name, should be unique for each instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.name_counter">
+<span class="sig-name descname"><span class="pre">name_counter</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#boofuzz.Fuzzable.name_counter" title="永久链接至目标">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.num_mutations">
+<span class="sig-name descname"><span class="pre">num_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.num_mutations" title="永久链接至目标">¶</a></dt>
+<dd><p>Return the total number of mutations for this element (not counting “fuzz_values”).</p>
+<p>Default implementation exhausts the mutations() generator, which is inefficient. Override if you can provide a
+value more efficiently, or if exhausting the mutations() generator has side effects.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>default_value: Use if number of mutations depends on the default value. Provided by FuzzableWrapper.</dt><dd><p>Note: It is generally good behavior to have a consistent number of mutations for a given default value
+length.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>int: Number of mutated forms this primitive can take</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.original_value">
+<span class="sig-name descname"><span class="pre">original_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_case_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.original_value" title="永久链接至目标">¶</a></dt>
+<dd><p>Original, non-mutated value of element.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>test_case_context (ProtocolSession): Used to resolve ReferenceValueTestCaseSession type default values.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.qualified_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qualified_name</span></span><a class="headerlink" href="#boofuzz.Fuzzable.qualified_name" title="永久链接至目标">¶</a></dt>
+<dd><p>Dot-delimited name that describes the request name and the path to the element within the request.</p>
+<p>Example: “request1.block1.block2.node1”</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mutation_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.render" title="永久链接至目标">¶</a></dt>
+<dd><p>Render after applying mutation, if applicable.
+:type mutation_context: MutationContext</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.request">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">request</span></span><a class="headerlink" href="#boofuzz.Fuzzable.request" title="永久链接至目标">¶</a></dt>
+<dd><p>Reference to the Request to which this object is attached.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.stop_mutations">
+<span class="sig-name descname"><span class="pre">stop_mutations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.stop_mutations" title="永久链接至目标">¶</a></dt>
+<dd><p>Stop yielding mutations on the currently running <a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> call.</p>
+<p>Used by boofuzz to stop fuzzing an element when it’s already caused several failures.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>NoneType: None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="boofuzz.FuzzableBlock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">FuzzableBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.FuzzableBlock" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.fuzzable.Fuzzable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fuzzable</span></code></a></p>
+<p>Fuzzable type designed to have children elements.</p>
+<p>FuzzableBlock overrides the following methods, changing the default behavior for any type based on FuzzableBlock:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#boofuzz.FuzzableBlock.mutations" title="boofuzz.FuzzableBlock.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> Iterate through the mutations yielded by all child nodes.</p></li>
+<li><p><a class="reference internal" href="#boofuzz.FuzzableBlock.num_mutations" title="boofuzz.FuzzableBlock.num_mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">num_mutations()</span></code></a> Sum the mutations represented by each child node.</p></li>
+<li><p><a class="reference internal" href="#boofuzz.FuzzableBlock.encode" title="boofuzz.FuzzableBlock.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code></a> Call <a class="reference internal" href="#boofuzz.FuzzableBlock.get_child_data" title="boofuzz.FuzzableBlock.get_child_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_child_data()</span></code></a>.</p></li>
+</ol>
+<p>FuzzableBlock adds the following methods:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#boofuzz.FuzzableBlock.get_child_data" title="boofuzz.FuzzableBlock.get_child_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_child_data()</span></code></a> Render and concatenate all child nodes.</p></li>
+<li><p><a class="reference internal" href="#boofuzz.FuzzableBlock.push" title="boofuzz.FuzzableBlock.push"><code class="xref py py-meth docutils literal notranslate"><span class="pre">push()</span></code></a> Add an additional child node; generally used only internally.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – Request this block belongs to, defaults to None</p></li>
+<li><p><strong>children</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – List of child nodes (typically given to FuzzableBlock types)m defaults to None</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.FuzzableBlock.encode">
+<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.FuzzableBlock.encode" title="永久链接至目标">¶</a></dt>
+<dd><p>Takes a value and encodes/renders/serializes it to a bytes (byte string).</p>
+<p>Optional if mutations() yields bytes.</p>
+<p>Example: Yield strings with mutations() and encode them to UTF-8 using encode().</p>
+<p>Default behavior: Return value.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>value: Value to encode. Type should match the type yielded by mutations()
+mutation_context (MutationContext): Context for current mutation, if any.</p>
+</dd>
+<dt>Returns:</dt><dd><p>bytes: Encoded/serialized value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.FuzzableBlock.get_child_data">
+<span class="sig-name descname"><span class="pre">get_child_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mutation_context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.FuzzableBlock.get_child_data" title="永久链接至目标">¶</a></dt>
+<dd><p>Get child or referenced data for this node.</p>
+<p>For blocks that reference other data from the message structure (e.g. size, checksum, blocks). See
+FuzzableBlock for an example.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mutation_context (MutationContext): Mutation context.</p>
+</dd>
+<dt>Returns:</dt><dd><p>bytes: Child data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.FuzzableBlock.mutations">
+<span class="sig-name descname"><span class="pre">mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_elements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.FuzzableBlock.mutations" title="永久链接至目标">¶</a></dt>
+<dd><p>Generator to yield mutation values for this element.</p>
+<p>Values are either plain values or callable functions that take a “default value” and mutate it. Functions are
+used when the default or “normal” value influences the fuzzed value. Functions are used because the “normal”
+value is sometimes dynamic and not known at the time of generation.</p>
+<p>Each mutation should be a pre-rendered value. That is, it must be suitable to pass to encode().</p>
+<p>Default: Empty iterator.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>default_value:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.FuzzableBlock.num_mutations">
+<span class="sig-name descname"><span class="pre">num_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.FuzzableBlock.num_mutations" title="永久链接至目标">¶</a></dt>
+<dd><p>Return the total number of mutations for this element (not counting “fuzz_values”).</p>
+<p>Default implementation exhausts the mutations() generator, which is inefficient. Override if you can provide a
+value more efficiently, or if exhausting the mutations() generator has side effects.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>default_value: Use if number of mutations depends on the default value. Provided by FuzzableWrapper.</dt><dd><p>Note: It is generally good behavior to have a consistent number of mutations for a given default value
+length.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>int: Number of mutated forms this primitive can take</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.FuzzableBlock.push">
+<span class="sig-name descname"><span class="pre">push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.FuzzableBlock.push" title="永久链接至目标">¶</a></dt>
+<dd><p>Push a child element onto this block’s stack.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>item (Fuzzable): Some wrapped Fuzzable element</p>
+</dd>
+</dl>
+<p>Returns: None</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">rainfuzz</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../test.html">环境搭建</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../boofuzz1/index.html">boofuzz分析</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="提交" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;一袭青衣尽长安.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/user/protocol-definition.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -5,7 +5,9 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
+import os
+import sys
+#sys.path.insert(0,os.path.abspath('.'))
 project = 'rainfuzz'
 copyright = '一袭青衣尽长安'
 author = 'MirRoR4s'
@@ -19,7 +21,10 @@ language = "zh_CN"
 
 templates_path = ['_templates']
 exclude_patterns = []
+extensions = [
 
+'sphinx.ext.autodoc','sphinx.ext.napoleon','sphinx.ext.viewcode'
+        ]
 
 
 # -- Options for HTML output -------------------------------------------------

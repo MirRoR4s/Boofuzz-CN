@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Protocol Definition &#8212; rainfuzz 0.0 文档</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=039e1c02" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=16727793"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/translations.js?v=beaddf03"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="Other Modules" href="../other_modules/other_modules.html" />
+    <link rel="prev" title="样例分析" href="../examples/examples.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="protocol-definition">
+<h1><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/user/protocol-definition.html#request">Protocol Definition</a><a class="headerlink" href="#protocol-definition" title="此标题的永久链接">¶</a></h1>
+<p>对于老旧风格的协议定义，可以参看<a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/user/static-protocol-definition.html#static-primitives">这里</a>，此处描述的是新版本的协议格式。</p>
+<section id="id1">
+<h2>概述<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h2>
+<p><strong>Request</strong> 可以看作是要发送的消息，而 <strong>Blocks</strong>
+则可视为消息内的块，<strong>Primitives</strong> 则是构成 Block/Request
+的元素，这些元素可以是字节、字符串、数字、checksums。</p>
+</section>
+<section id="id2">
+<h2>样例<a class="headerlink" href="#id2" title="此标题的永久链接">¶</a></h2>
+<p>以下是一个 HTTP 消息的例子，演示了如何使用 Request、Block 和
+primitives。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="s2">&quot;HTTP-Request&quot;</span><span class="p">,</span><span class="n">children</span><span class="o">=</span><span class="p">(</span>
+    <span class="n">Block</span><span class="p">(</span><span class="s2">&quot;Request-Line&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">Group</span><span class="p">(</span><span class="s2">&quot;Method&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;HEAD&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="s2">&quot;CONNECT&quot;</span><span class="p">,</span> <span class="s2">&quot;OPTIONS&quot;</span><span class="p">,</span> <span class="s2">&quot;TRACE&quot;</span><span class="p">]),</span>
+        <span class="n">Delim</span><span class="p">(</span><span class="s2">&quot;space-1&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">),</span>
+        <span class="n">String</span><span class="p">(</span><span class="s2">&quot;URI&quot;</span><span class="p">,</span> <span class="s2">&quot;/index.html&quot;</span><span class="p">),</span>
+        <span class="n">Delim</span><span class="p">(</span><span class="s2">&quot;space-2&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">),</span>
+        <span class="n">String</span><span class="p">(</span><span class="s2">&quot;HTTP-Version&quot;</span><span class="p">,</span> <span class="s2">&quot;HTTP/1.1&quot;</span><span class="p">),</span>
+        <span class="n">Static</span><span class="p">(</span><span class="s2">&quot;CRLF&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="p">)),</span>
+    <span class="n">Block</span><span class="p">(</span><span class="s2">&quot;Host-Line&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">String</span><span class="p">(</span><span class="s2">&quot;Host-Key&quot;</span><span class="p">,</span> <span class="s2">&quot;Host:&quot;</span><span class="p">),</span>
+        <span class="n">Delim</span><span class="p">(</span><span class="s2">&quot;space&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">),</span>
+        <span class="n">String</span><span class="p">(</span><span class="s2">&quot;Host-Value&quot;</span><span class="p">,</span> <span class="s2">&quot;example.com&quot;</span><span class="p">),</span>
+        <span class="n">Static</span><span class="p">(</span><span class="s2">&quot;CRLF&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="p">)),</span>
+    <span class="n">Static</span><span class="p">(</span><span class="s2">&quot;CRLF&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">),</span>
+<span class="p">))</span>
+</pre></div>
+</div>
+<p>下面对 boofuzz 框架<strong>协议定义类</strong>的实现展开分析。</p>
+</section>
+<section id="fuzzable">
+<h2><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable">Fuzzable</a><a class="headerlink" href="#fuzzable" title="此标题的永久链接">¶</a></h2>
+<p>Fuzzable 是所有 primitives 和 blocks
+的父类（准确地说是父类的父类），当创建 Fuzzable
+的子类时，一般情况下会重写 <code class="docutils literal notranslate"><span class="pre">mutations()</span></code> 和/或 <code class="docutils literal notranslate"><span class="pre">encode()</span></code>
+方法。<code class="docutils literal notranslate"><span class="pre">mutations()</span></code>
+方法是一个用于生成突变（通常是字节类型）的函数。而 <code class="docutils literal notranslate"><span class="pre">encode()</span></code>
+方法是一个编码函数，会对来自于 <code class="docutils literal notranslate"><span class="pre">mutations()</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">default_value</span></code>
+的参数值进行编码。</p>
+<p>此外，也可以重写 <code class="docutils literal notranslate"><span class="pre">num_mutations()</span></code> - 默认实现是调用 <code class="docutils literal notranslate"><span class="pre">mutations()</span></code>
+获取一个数字。 对于余下的方法，由 boofuzz
+自行处理，所以通常不需要重写它们。</p>
+<p>下面进行方法/函数的分析。</p>
+<section id="init">
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable">__init__()</a><a class="headerlink" href="#init" title="此标题的永久链接">¶</a></h3>
+<p><strong>参数：</strong></p>
+<ul class="simple">
+<li><p>name (str) -
+名称，用于后续引用。通常应提供名称，但如果没有提供，则会给出默认名称。</p></li>
+<li><p>default_value (str) -
+当元素不进行模糊化时使用的值。应该代表一个有效的值。可以是静态值，也可以是<code class="docutils literal notranslate"><span class="pre">ReferenceValueTestCaseSession</span></code>对象。</p></li>
+<li><p>fuzzable（bool）- 用于标识是否需要对该原语进行模糊化，默认为 True</p></li>
+<li><p>fuzz_values () -
+自定义模糊值列表，添加到正常的突变值中。默认为<code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+<p><strong>返回值：</strong></p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+<p><strong>实现思路：</strong></p>
+<ul>
+<li><p>进行成员变量赋值。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fuzz_values</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_fuzzable</span> <span class="o">=</span> <span class="n">fuzzable</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_default_value</span> <span class="o">=</span> <span class="n">default_value</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_context_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="c1">#  （上下文路径）初始化为空字符串</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_request</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1">#  （请求）初始化为None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_halt_mutations</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># （停止突变）初始化为 False，表示不停止突变。</span>
+</pre></div>
+</div>
+</li>
+<li><p>模糊值列表如果未提供，则初始化为空列表。如果未指定名称(<code class="docutils literal notranslate"><span class="pre">name</span></code> is
+None)，则会使用默认名称。默认名称是基于类名和一个计数器生成的。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">fuzz_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">fuzz_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_values</span> <span class="o">=</span> <span class="n">fuzz_values</span>
+
+<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">Fuzzable</span><span class="o">.</span><span class="n">name_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">Fuzzable</span><span class="o">.</span><span class="n">name_counter</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>_context_path
+是一个以点号作为分隔符的字符串，描述了到达当前元素的路径。</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="encode">
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable.encode">encode()</a><a class="headerlink" href="#encode" title="此标题的永久链接">¶</a></h3>
+<p>该方法用于将 value 编码成一个字节串。</p>
+<p><strong>参数：</strong></p>
+<ul class="simple">
+<li><p>value (str) - 要编码的值，类型应和由 <code class="docutils literal notranslate"><span class="pre">mutations()</span></code>
+方法产生的变量相匹配。</p></li>
+<li><p>mutation_context (MutationContext) - 当前变异的上下文</p></li>
+</ul>
+<p><strong>返回值：</strong></p>
+<ul class="simple">
+<li><p>编码后/序列化后的值 (bytes)</p></li>
+</ul>
+<p><strong>实现：</strong></p>
+<ul class="simple">
+<li><p>具体实现由子类负责</p></li>
+</ul>
+<blockquote>
+<div><p>fuzzable 属性用于表明元素是否要进行模糊测试，如果为 False 则不需要。</p>
+</div></blockquote>
+</section>
+<section id="get-mutations">
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable.get_mutations">get_mutations()</a><a class="headerlink" href="#get-mutations" title="此标题的永久链接">¶</a></h3>
+</section>
+<section id="fuzzable-1">
+<span id="id3"></span><h3>fuzzable()<a class="headerlink" href="#fuzzable-1" title="此标题的永久链接">¶</a></h3>
+<p>装饰器方法，&#64;property 将该方法转换为了属性。比如 a 是一个 Fuzzable
+对象，那么可以通过 <code class="docutils literal notranslate"><span class="pre">a.fuzzable</span></code> 获取到 _fuzzable 属性。</p>
+<blockquote>
+<div><p>装饰器方法允许我们像调用成员变量一样去调用成员方法。</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">fuzzable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;If False, this element should not be mutated in normal fuzzing.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fuzzable</span>
+</pre></div>
+</div>
+</section>
+<section id="name">
+<h3>name()<a class="headerlink" href="#name" title="此标题的永久链接">¶</a></h3>
+<p>返回元素名称，该名称对于每个实例来说应该是唯一的。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Element name, should be unique for each instance.</span>
+
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+</pre></div>
+</div>
+</section>
+<section id="qualified-name">
+<h3>qualified_name()<a class="headerlink" href="#qualified-name" title="此标题的永久链接">¶</a></h3>
+<p>一个装饰器函数，会返回一个描述请求名称和请求内元素路径的以点号作为分隔符的字符串。</p>
+<p>字符串的值由 <code class="docutils literal notranslate"><span class="pre">_context_path</span></code> 和 <code class="docutils literal notranslate"><span class="pre">name</span></code>
+组成，通过点号连接起来。例如，如果 <code class="docutils literal notranslate"><span class="pre">_context_path</span></code>
+为“request1.block1.block2”，<code class="docutils literal notranslate"><span class="pre">name</span></code>
+为“node1”，则返回的字符串将是“request1.block1.block2.node1”。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">qualified_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_context_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="context-path">
+<h3>context_path()<a class="headerlink" href="#context-path" title="此标题的永久链接">¶</a></h3>
+<p>context_path 是一个装饰器函数，由 getter 和 setter
+方法组成，用于描述到达当前元素的路径的点分隔字符串。</p>
+<p><strong>实现思路：</strong></p>
+<ul>
+<li><p>在 getter
+方法中，首先检查是否存在<code class="docutils literal notranslate"><span class="pre">_context_path</span></code>属性。如果不存在，则将其设置为<code class="docutils literal notranslate"><span class="pre">None</span></code>。然后返回
+<code class="docutils literal notranslate"><span class="pre">_context_path</span></code> 的值。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@property</span>
+ <span class="k">def</span> <span class="nf">context_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_context_path&quot;</span><span class="p">):</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">_context_path</span> <span class="o">=</span> <span class="kc">None</span>
+     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_context_path</span>
+</pre></div>
+</div>
+</li>
+<li><p>在 setter 方法中，将传入的值赋给 <code class="docutils literal notranslate"><span class="pre">_context_path</span></code> 属性。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@context_path</span><span class="o">.</span><span class="n">setter</span>
+ <span class="k">def</span> <span class="nf">context_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">_context_path</span> <span class="o">=</span> <span class="n">x</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="request">
+<h3>request<a class="headerlink" href="#request" title="此标题的永久链接">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference to the Request to which this object is attached.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_request&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_request</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request</span>
+
+<span class="nd">@request</span><span class="o">.</span><span class="n">setter</span>
+<span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_request</span> <span class="o">=</span> <span class="n">x</span>
+</pre></div>
+</div>
+</section>
+<section id="stop-mutations">
+<h3>stop_mutations()<a class="headerlink" href="#stop-mutations" title="此标题的永久链接">¶</a></h3>
+<p>该方法用于停止当前运行的<code class="docutils literal notranslate"><span class="pre">mutations</span></code>调用中的突变生成。在当一个元素已经导致了多个失败时，boofuzz使用这个方法来停止对该元素进行模糊化。</p>
+<p>方法内部将属性<code class="docutils literal notranslate"><span class="pre">_halt_mutations</span></code>设置为<code class="docutils literal notranslate"><span class="pre">True</span></code>，表示停止突变生成。</p>
+<p>该方法不返回任何值，返回类型为<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p>
+<p>通过调用<code class="docutils literal notranslate"><span class="pre">stop_mutations()</span></code>方法，可以在需要的时候停止对元素进行模糊化。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">stop_mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stop yielding mutations on the currently running :py:meth:`mutations` call.</span>
+
+<span class="sd">    Used by boofuzz to stop fuzzing an element when it&#39;s already caused several failures.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NoneType: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_halt_mutations</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="fuzzableblock">
+<h2>FuzzableBlock<a class="headerlink" href="#fuzzableblock" title="此标题的永久链接">¶</a></h2>
+<p>待定。</p>
+</section>
+<section id="request-1">
+<span id="id4"></span><h2>Request<a class="headerlink" href="#request-1" title="此标题的永久链接">¶</a></h2>
+<p>顶级容器，可以包含任何 block structure 和 primitive。如前所述，Request
+实际上代表着要发送的消息，该消息可由许多 blocks 组成，所以可以将 Request
+看作是一个超级块、根块等等。</p>
+<p>Request 对应着 Request 类，该类继承自 <code class="docutils literal notranslate"><span class="pre">FuzzableBlock</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Node</span></code>
+，下面对 Request 类的具体实现展开分析与说明。</p>
+<section id="init-1">
+<span id="id5"></span><h3>__init__<a class="headerlink" href="#init-1" title="此标题的永久链接">¶</a></h3>
+<p><strong>参数：</strong></p>
+<ul class="simple">
+<li><p>name（str，可选）- 当前 request 的名称</p></li>
+<li><p>children（Fuzzable，可选）- 当前 request 的子节点，默认为 None</p></li>
+</ul>
+<p><strong>返回值：</strong></p>
+<ul class="simple">
+<li><p>一个 Request 对象</p></li>
+</ul>
+<p><strong>实现思路：</strong></p>
+<ul>
+<li><p>调用两个父类的构造函数进行初始化，注意到这里并没有用 super 实例化
+Request 对象。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="n">FuzzableBlock</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">Node</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>成员变量赋值，label 是节点标签，stack 是请求栈（request
+stack），block_stack 是由 open blocks 组成的列表。callbacks
+是一个字典，通过使用<code class="docutils literal notranslate"><span class="pre">self.callbacks[key]</span></code>，可以使用<code class="docutils literal notranslate"><span class="pre">key</span></code>来访问<code class="docutils literal notranslate"><span class="pre">self.callbacks</span></code>中对应的值，如果该键不存在，则会返回一个空列表。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">name</span>  <span class="c1"># node label for graph rendering.</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># the request stack.</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">block_stack</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># list of open blocks, -1 is last open block.</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="bp">self</span><span class="p">}</span>  <span class="c1"># dictionary of directly accessible primitives.</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">_rendered</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>  <span class="c1"># rendered block structure.</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">_mutant_index</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># current mutation index.</span>
+<span class="c1">#当前的变异索引是什么？</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">_element_mutant_index</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># index of current mutant element within self.stack</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">mutant</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># current primitive being mutated.</span>
+</pre></div>
+</div>
+</li>
+<li><p>如果子节点不是 None，则对子节点进行初始化</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">children</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="n">Fuzzable</span><span class="p">):</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">children</span><span class="p">]</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">_initialize_children</span><span class="p">(</span><span class="n">child_nodes</span><span class="o">=</span><span class="n">children</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="initialize-children">
+<h3>_initialize_children<a class="headerlink" href="#initialize-children" title="此标题的永久链接">¶</a></h3>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">rainfuzz</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../test.html">环境搭建</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">boofuzz分析</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../session/session.html">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../target/target.html">Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../connections/connections.html">Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../logging/logging.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/examples.html">样例分析</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Protocol Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_modules/other_modules.html">Other Modules</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">boofuzz分析</a><ul>
+      <li>Previous: <a href="../examples/examples.html" title="上一章">样例分析</a></li>
+      <li>Next: <a href="../other_modules/other_modules.html" title="下一章">Other Modules</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="提交" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;一袭青衣尽长安.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../../_sources/boofuzz1/protocol_definition/protocol_definition.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
