@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>boofuzz.monitors.base_monitor &mdash; rainfuzz 0.0 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=16727793"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/protocol-definition.html">Protocol Definition</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">boofuzz.monitors.base_monitor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>boofuzz.monitors.base_monitor 源代码</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="BaseMonitor"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor">[文档]</a><span></span><span class="k">class</span> <span class="nc">BaseMonitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interface for Target monitors. All Monitors must adhere</span>
+<span class="sd">    to this specification.</span>
+
+<span class="sd">    .. versionadded:: 0.2.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span>
+
+<div class="viewcode-block" id="BaseMonitor.alive"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor.alive">[文档]</a>    <span class="k">def</span> <span class="nf">alive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when a Target containing this Monitor is added to a session.</span>
+<span class="sd">        Use this function to connect to e.g. RPC hosts if your target lives</span>
+<span class="sd">        on another machine.</span>
+
+<span class="sd">        You MUST return True if the monitor is alive. You MUST return False</span>
+<span class="sd">        otherwise. If a Monitor is not alive, this method will be called</span>
+<span class="sd">        until it becomes alive or throws an exception. You SHOULD handle</span>
+<span class="sd">        timeouts / connection retry limits in the monitor implementation.</span>
+
+<span class="sd">        Defaults to return True.</span>
+
+<span class="sd">        :returns: Bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseMonitor.pre_send"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor.pre_send">[文档]</a>    <span class="k">def</span> <span class="nf">pre_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fuzz_data_logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called before the current fuzz node is transmitted.</span>
+
+<span class="sd">        Defaults to no effect.</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="BaseMonitor.post_send"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor.post_send">[文档]</a>    <span class="k">def</span> <span class="nf">post_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fuzz_data_logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called after the current fuzz node is transmitted. Use it to collect</span>
+<span class="sd">        data about a target and decide whether it crashed.</span>
+
+<span class="sd">        You MUST return True if the Target is still alive. You MUST return False</span>
+<span class="sd">        if the Target crashed. If one Monitor reports a crash, the whole testcase</span>
+<span class="sd">        will be marked as crashing.</span>
+
+<span class="sd">        Defaults to return True.</span>
+
+<span class="sd">        :returns: Bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseMonitor.post_start_target"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor.post_start_target">[文档]</a>    <span class="k">def</span> <span class="nf">post_start_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fuzz_data_logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called after a target is started or restarted.&quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="BaseMonitor.retrieve_data"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor.retrieve_data">[文档]</a>    <span class="k">def</span> <span class="nf">retrieve_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called to retrieve data independent of whether the current fuzz node crashed</span>
+<span class="sd">        the target or not. Called before the fuzzer proceeds to a new testcase.</span>
+
+<span class="sd">        You SHOULD return any auxiliary data that should be recorded. The data MUST</span>
+<span class="sd">        be serializable, e.g. bytestring.</span>
+
+<span class="sd">        Defaults to return None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BaseMonitor.set_options"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor.set_options">[文档]</a>    <span class="k">def</span> <span class="nf">set_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called to set options for your monitor (e.g. local crash dump storage).</span>
+<span class="sd">        \\*args and \\*\\*kwargs can be explicitly specified by implementing classes,</span>
+<span class="sd">        however you SHOULD ignore any kwargs you do not recognize.</span>
+
+<span class="sd">        Defaults to no effect.</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="BaseMonitor.get_crash_synopsis"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor.get_crash_synopsis">[文档]</a>    <span class="k">def</span> <span class="nf">get_crash_synopsis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called if any monitor indicates that the current testcase has failed,</span>
+<span class="sd">        even if this monitor did not detect a crash. You SHOULD return a human-</span>
+<span class="sd">        readable representation of the crash synopsis (e.g. hexdump). You MAY</span>
+<span class="sd">        save the full crashdump somewhere.</span>
+
+<span class="sd">        :returns: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="BaseMonitor.start_target"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor.start_target">[文档]</a>    <span class="k">def</span> <span class="nf">start_target</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts a target. You MUST return True if the start was successful. You</span>
+<span class="sd">        MUST return False if not. Monitors will be tried to start the target</span>
+<span class="sd">        in the order they were added to the Target; the first Monitor to succeed</span>
+<span class="sd">        breaks iterating.</span>
+
+<span class="sd">        :returns: Bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BaseMonitor.stop_target"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor.stop_target">[文档]</a>    <span class="k">def</span> <span class="nf">stop_target</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stops a target. You MUST return True if the stop was successful. You</span>
+<span class="sd">        MUST return False if not. Monitors will be tried to stop the target</span>
+<span class="sd">        in the order they were added to the Target; the first Monitor to succeed</span>
+<span class="sd">        breaks iterating.</span>
+
+<span class="sd">        :returns: Bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="BaseMonitor.restart_target"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.BaseMonitor.restart_target">[文档]</a>    <span class="k">def</span> <span class="nf">restart_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fuzz_data_logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Restart a target. Must return True if restart was successful, False if it was unsuccessful</span>
+<span class="sd">        or this monitor cannot restart a Target, which causes the next monitor in the chain</span>
+<span class="sd">        to try to restart.</span>
+
+<span class="sd">        The first successful monitor causes the restart chain to stop applying.</span>
+
+<span class="sd">        Defaults to call stop and start, return True if successful.</span>
+
+<span class="sd">        :returns: Bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_target</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_target</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 boofuzz。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

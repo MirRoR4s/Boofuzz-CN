@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>boofuzz.connections.ssl_socket_connection &mdash; rainfuzz 0.0 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=16727793"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/protocol-definition.html">Protocol Definition</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">boofuzz.connections.ssl_socket_connection</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>boofuzz.connections.ssl_socket_connection 源代码</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ssl</span>
+
+<span class="kn">from</span> <span class="nn">boofuzz</span> <span class="kn">import</span> <span class="n">exception</span>
+<span class="kn">from</span> <span class="nn">boofuzz.connections</span> <span class="kn">import</span> <span class="n">tcp_socket_connection</span>
+
+
+<div class="viewcode-block" id="SSLSocketConnection"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.SSLSocketConnection">[文档]</a><span class="k">class</span> <span class="nc">SSLSocketConnection</span><span class="p">(</span><span class="n">tcp_socket_connection</span><span class="o">.</span><span class="n">TCPSocketConnection</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BaseSocketConnection implementation for use with SSL Sockets.</span>
+
+<span class="sd">    .. versionadded:: 0.2.0</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        host (str): Hostname or IP adress of target system.</span>
+<span class="sd">        port (int): Port of target service.</span>
+<span class="sd">        send_timeout (float): Seconds to wait for send before timing out. Default 5.0.</span>
+<span class="sd">        recv_timeout (float): Seconds to wait for recv before timing out. Default 5.0.</span>
+<span class="sd">        server (bool): Set to True to enable server side fuzzing.</span>
+<span class="sd">        sslcontext (ssl.SSLContext): Python SSL context to be used. Required if server=True or server_hostname=None.</span>
+<span class="sd">        server_hostname (string): server_hostname, required for verifying identity of remote SSL/TLS server</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">send_timeout</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">recv_timeout</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sslcontext</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">server_hostname</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SSLSocketConnection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">send_timeout</span><span class="p">,</span> <span class="n">recv_timeout</span><span class="p">,</span> <span class="n">server</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sslcontext</span> <span class="o">=</span> <span class="n">sslcontext</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server_hostname</span> <span class="o">=</span> <span class="n">server_hostname</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sslcontext</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Parameter sslcontext is required when server=True.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sslcontext</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_hostname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;SSL/TLS requires either sslcontext or server_hostname to be set.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SSLSocketConnection.open"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.SSLSocketConnection.open">[文档]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># If boofuzz is the SSL client and user did not give us a SSLContext,</span>
+        <span class="c1"># then we just use a default one.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sslcontext</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sslcontext</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">create_default_context</span><span class="p">(</span><span class="n">ssl</span><span class="o">.</span><span class="n">Purpose</span><span class="o">.</span><span class="n">SERVER_AUTH</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sslcontext</span><span class="o">.</span><span class="n">check_hostname</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sslcontext</span><span class="o">.</span><span class="n">verify_mode</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">CERT_REQUIRED</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">SSLSocketConnection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_open_socket</span><span class="p">()</span>
+
+        <span class="c1"># Create SSL socket</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sslcontext</span><span class="o">.</span><span class="n">wrap_socket</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="p">,</span> <span class="n">server_side</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">server_hostname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">server_hostname</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">ssl</span><span class="o">.</span><span class="n">SSLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">BoofuzzTargetConnectionFailedError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># No SSL context set</span>
+            <span class="k">pass</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">SSLSocketConnection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_connect_socket</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SSLSocketConnection.recv"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.SSLSocketConnection.recv">[文档]</a>    <span class="k">def</span> <span class="nf">recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_bytes</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Receive up to max_bytes data from the target.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            max_bytes (int): Maximum number of bytes to receive.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Received data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">SSLSocketConnection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">max_bytes</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ssl</span><span class="o">.</span><span class="n">SSLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># If an SSL error is thrown the connection should be treated as lost</span>
+            <span class="c1"># All other exceptions should be handled / raised / re-raised by the parent class.</span>
+            <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">BoofuzzSSLError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="SSLSocketConnection.send"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.SSLSocketConnection.send">[文档]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send data to the target. Only valid after calling open!</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: Data to send.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Number of bytes actually sent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_sent</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">num_sent</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">SSLSocketConnection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">ssl</span><span class="o">.</span><span class="n">SSLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># If an SSL error is thrown the connection should be treated as lost.</span>
+                <span class="c1"># All other exceptions should be handled / raised / re-raised by the parent class.</span>
+                <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">BoofuzzSSLError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">num_sent</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 boofuzz。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

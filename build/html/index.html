@@ -1,131 +1,307 @@
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Welcome to MirRoR4s’s documentation! &#8212; rainfuzz 0.0 文档</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=16727793"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="_static/translations.js?v=beaddf03"></script>
-    <link rel="index" title="索引" href="genindex.html" />
-    <link rel="search" title="搜索" href="search.html" />
-    <link rel="next" title="环境搭建" href="test.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>boofuzz: Network Protocol Fuzzing for Humans-中文版 &mdash; rainfuzz 0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=44496db0"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installing boofuzz" href="user/install.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
           
-
-          <div class="body" role="main">
-            
-  <section id="welcome-to-mirror4s-s-documentation">
-<h1>Welcome to MirRoR4s’s documentation!<a class="headerlink" href="#welcome-to-mirror4s-s-documentation" title="此标题的永久链接">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+          
+          <a href="#" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="test.html">环境搭建</a></li>
-<li class="toctree-l1"><a class="reference internal" href="boofuzz1/index.html">boofuzz分析</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="boofuzz1/session/session.html">Session</a></li>
-<li class="toctree-l2"><a class="reference internal" href="boofuzz1/target/target.html">Target</a></li>
-<li class="toctree-l2"><a class="reference internal" href="boofuzz1/connections/connections.html">Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="boofuzz1/logging/logging.html">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="boofuzz1/examples/examples.html">样例分析</a></li>
-<li class="toctree-l2"><a class="reference internal" href="boofuzz1/protocol_definition/protocol_definition.html">Protocol Definition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="boofuzz1/other_modules/other_modules.html">Other Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/Session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/Target.html">Target</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/static-protocol-definition.html">Static Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/other-modules.html">Other Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user/changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">boofuzz: Network Protocol Fuzzing for Humans-中文版</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="boofuzz-network-protocol-fuzzing-for-humans">
+<h1>boofuzz: Network Protocol Fuzzing for Humans-中文版<a class="headerlink" href="#boofuzz-network-protocol-fuzzing-for-humans" title="Permalink to this heading"></a></h1>
+<a class="reference external image-reference" href="https://github.com/jtpereyda/boofuzz/actions?query=workflow%3ATest+branch%3Amaster"><img alt="https://github.com/jtpereyda/boofuzz/workflows/Test/badge.svg?branch=master" src="https://github.com/jtpereyda/boofuzz/workflows/Test/badge.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://boofuzz.readthedocs.io/"><img alt="Documentation Status" src="https://readthedocs.org/projects/boofuzz/badge/?version=latest" /></a>
+<a class="reference external image-reference" href="https://pypi.org/project/boofuzz/"><img alt="https://img.shields.io/pypi/v/boofuzz.svg" src="https://img.shields.io/pypi/v/boofuzz.svg" /></a>
+<a class="reference external image-reference" href="https://gitter.im/jtpereyda/boofuzz"><img alt="Join the chat at https://gitter.im/jtpereyda/boofuzz" src="https://badges.gitter.im/jtpereyda/boofuzz.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/psf/black"><img alt="https://img.shields.io/badge/code%20style-black-000000.svg" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
+<p>Boofuzz is a fork of and the successor to the venerable <a class="reference external" href="https://github.com/OpenRCE/sulley">Sulley</a> fuzzing
+framework. Besides numerous bug fixes, boofuzz aims for extensibility.
+The goal: fuzz everything.</p>
+<section id="why">
+<h2>Why?<a class="headerlink" href="#why" title="Permalink to this heading"></a></h2>
+<p>Sulley has been the preeminent open source fuzzer for some time, but has
+fallen out of maintenance.</p>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<p>Like Sulley, boofuzz incorporates all the critical elements of a fuzzer:</p>
+<ul class="simple">
+<li><p>Easy and quick data generation.</p></li>
+<li><p>Instrumentation – AKA failure detection.</p></li>
+<li><p>Target reset after failure.</p></li>
+<li><p>Recording of test data.</p></li>
+</ul>
+<p>Unlike Sulley, boofuzz also features:</p>
+<ul class="simple">
+<li><p>Much easier install experience!</p></li>
+<li><p>Support for arbitrary communications mediums.</p></li>
+<li><p>Built-in support for serial fuzzing, ethernet- and IP-layer, UDP broadcast.</p></li>
+<li><p>Better recording of test data – consistent, thorough, clear.</p></li>
+<li><p>Test result CSV export.</p></li>
+<li><p><em>Extensible</em> instrumentation/failure detection.</p></li>
+<li><p>Far fewer bugs.</p></li>
+</ul>
+<p>Sulley is affectionately named after the giant teal and purple creature
+from Monsters Inc. due to his fuzziness. Boofuzz is likewise named after
+the only creature known to have scared Sulley himself: Boo!</p>
+<figure class="align-default" id="id2">
+<img alt="Boo from Monsters Inc" src="https://github.com/jtpereyda/boofuzz/raw/master/_static/boo.png" />
+<figcaption>
+<p><span class="caption-text">Boo from Monsters Inc</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">boofuzz</span>
+</pre></div>
+</div>
+<p>Boofuzz installs as a Python library used to build fuzzer scripts. See
+<span class="xref std std-ref">install</span> for advanced and detailed instructions.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user/install.html">Installing boofuzz</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/install.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/install.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/install.html#from-source">From Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/install.html#extras">Extras</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user/quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/quickstart.html#more-examples">More examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user/contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/contributing.html#issues-and-bugs">Issues and Bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/contributing.html#code-reviews">Code Reviews</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/contributing.html#contributors">Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/contributing.html#maintainers">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="此标题的永久链接">¶</a></h1>
+<section id="public-protocol-libraries">
+<h2>Public Protocol Libraries<a class="headerlink" href="#public-protocol-libraries" title="Permalink to this heading"></a></h2>
+<p>The following protocol libraries are free and open source, but the implementations are not at all close to full protocol
+coverage:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">索引</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">模块索引</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">搜索页面</span></a></p></li>
+<li><p><a class="reference external" href="https://github.com/jtpereyda/boofuzz-ftp">boofuzz-ftp</a></p></li>
+<li><p><a class="reference external" href="https://github.com/jtpereyda/boofuzz-http">boofuzz-http</a></p></li>
 </ul>
+<p>If you have an open source boofuzz protocol suite to share, please <a class="reference internal" href="#community"><span class="std std-ref">let us know</span></a>!</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/Session.html">Session</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="source/Session.html#boofuzz.Session"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="source/Session.html#request-graph-visualisation-options">Request-Graph visualisation options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="source/Target.html">Target</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="source/Target.html#boofuzz.Target"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="source/Target.html#repeater">Repeater</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source/Target.html#timerepeater">TimeRepeater</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source/Target.html#countrepeater">CountRepeater</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user/connections.html">Connections</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/connections.html#itargetconnection">ITargetConnection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/connections.html#basesocketconnection">BaseSocketConnection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/connections.html#tcpsocketconnection">TCPSocketConnection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/connections.html#udpsocketconnection">UDPSocketConnection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/connections.html#sslsocketconnection">SSLSocketConnection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/connections.html#rawl2socketconnection">RawL2SocketConnection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/connections.html#rawl3socketconnection">RawL3SocketConnection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/connections.html#socketconnection">SocketConnection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/connections.html#serialconnection">SerialConnection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user/monitors.html">Monitors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/monitors.html#monitor-interface-basemonitor">Monitor Interface (BaseMonitor)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/monitors.html#processmonitor">ProcessMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/monitors.html#networkmonitor">NetworkMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/monitors.html#callbackmonitor">CallbackMonitor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user/logging.html">Logging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/logging.html#logging-interface-ifuzzlogger">Logging Interface (IFuzzLogger)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/logging.html#text-logging">Text Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/logging.html#csv-logging">CSV Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/logging.html#console-gui-logging">Console-GUI Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/logging.html#fuzzlogger-object">FuzzLogger Object</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user/protocol-definition.html">Protocol Definition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/protocol-definition.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/protocol-definition.html#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/protocol-definition.html#request">Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/protocol-definition.html#blocks">Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/protocol-definition.html#primitives">Primitives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/protocol-definition.html#making-your-own-block-primitive">Making Your Own Block/Primitive</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user/static-protocol-definition.html">Static Protocol Definition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/static-protocol-definition.html#request-manipulation">Request Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/static-protocol-definition.html#block-manipulation">Block Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/static-protocol-definition.html#primitive-definition">Primitive Definition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user/other-modules.html">Other Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/other-modules.html#test-case-session-reference">Test Case Session Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/other-modules.html#test-case-context">Test Case Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/other-modules.html#module-boofuzz.helpers">Helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/other-modules.html#module-boofuzz.connections.ip_constants">IP Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/other-modules.html#ped-rpc">PED-RPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/other-modules.html#module-boofuzz.utils.dcerpc">DCE-RPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/other-modules.html#module-boofuzz.utils.crash_binning">Crash binning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/other-modules.html#module-boofuzz.event_hook">EventHook</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user/changelog.html">Changelog</a></li>
+</ul>
+</div>
+</section>
+<section id="contributions">
+<h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this heading"></a></h2>
+<p>Pull requests are welcome, as boofuzz is actively maintained (at the
+time of this writing ;)). See <span class="xref std std-ref">contributing</span>.</p>
+</section>
+<section id="community">
+<span id="id1"></span><h2>Community<a class="headerlink" href="#community" title="Permalink to this heading"></a></h2>
+<p>For questions that take the form of “How do I… with boofuzz?” or “I got
+this error with boofuzz, why?”, consider posting your question on Stack
+Overflow. Make sure to use the <code class="docutils literal notranslate"><span class="pre">fuzzing</span></code> tag.</p>
+<p>If you’ve found a bug, or have an idea/suggestion/request, file an issue
+here on GitHub.</p>
+<p>For other questions, check out boofuzz on <a class="reference external" href="https://gitter.im/jtpereyda/boofuzz">gitter</a> or <a class="reference external" href="https://groups.google.com/d/forum/boofuzz">Google Groups</a>.</p>
+<p>For updates, follow <a class="reference external" href="https://twitter.com/b00fuzz">&#64;b00fuzz</a> on Twitter.</p>
+</section>
+<section id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
 </section>
 
 
+           </div>
           </div>
-          
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="user/install.html" class="btn btn-neutral float-right" title="Installing boofuzz" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright boofuzz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="#">rainfuzz</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>导航</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="test.html">环境搭建</a></li>
-<li class="toctree-l1"><a class="reference internal" href="boofuzz1/index.html">boofuzz分析</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="test.html" title="下一章">环境搭建</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">快速搜索</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="提交" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;一袭青衣尽长安.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
-      
-      |
-      <a href="_sources/index.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

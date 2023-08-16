@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>boofuzz.utils.crash_binning &mdash; rainfuzz 0.0 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=16727793"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/other-modules.html">Other Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../../boofuzz.html">boofuzz</a></li>
+      <li class="breadcrumb-item active">boofuzz.utils.crash_binning</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>boofuzz.utils.crash_binning 源代码</h1><div class="highlight"><pre>
+<span></span><span class="c1">#</span>
+<span class="c1"># Crash Binning</span>
+<span class="c1"># Copyright (C) 2006 Pedram Amini &lt;pedram.amini@gmail.com&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># $Id: crash_binning.py 193 2007-04-05 13:30:01Z cameron $</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public</span>
+<span class="c1"># License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later</span>
+<span class="c1"># version.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied</span>
+<span class="c1"># warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License along with this program; if not, write to the Free</span>
+<span class="c1"># Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">@author:       Pedram Amini</span>
+<span class="sd">@license:      GNU General Public License 2.0 or later</span>
+<span class="sd">@contact:      pedram.amini@gmail.com</span>
+<span class="sd">@organization: www.openrce.org</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="nb">open</span>
+
+
+<div class="viewcode-block" id="CrashBinStruct"><a class="viewcode-back" href="../../../user/other-modules.html#boofuzz.utils.crash_binning.CrashBinStruct">[文档]</a><span class="k">class</span> <span class="nc">CrashBinStruct</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exception_module</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exception_address</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_violation</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">violation_address</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">violation_thread_id</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context_dump</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disasm</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disasm_around</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack_unwind</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seh_unwind</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="CrashBinning"><a class="viewcode-back" href="../../../user/other-modules.html#boofuzz.utils.crash_binning.CrashBinning">[文档]</a><span class="k">class</span> <span class="nc">CrashBinning</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    @todo: Add MySQL import/export.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bins</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">last_crash</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pydbg</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bins</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pydbg</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="CrashBinning.record_crash"><a class="viewcode-back" href="../../../user/other-modules.html#boofuzz.utils.crash_binning.CrashBinning.record_crash">[文档]</a>    <span class="k">def</span> <span class="nf">record_crash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pydbg</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a PyDbg instantiation that at the current time is assumed to have &quot;crashed&quot; (access violation for example)</span>
+<span class="sd">        record various details such as the disassemly around the violating address, the ID of the offending thread, the</span>
+<span class="sd">        call stack and the SEH unwind. Store the recorded data in an internal dictionary, binning them by the exception</span>
+<span class="sd">        address.</span>
+
+<span class="sd">        @type  pydbg: pydbg</span>
+<span class="sd">        @param pydbg: Instance of pydbg</span>
+<span class="sd">        @type  extra: Mixed</span>
+<span class="sd">        @param extra: (Optional, Def=None) Whatever extra data you want to store with this bin</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pydbg</span> <span class="o">=</span> <span class="n">pydbg</span>
+        <span class="n">crash</span> <span class="o">=</span> <span class="n">CrashBinStruct</span><span class="p">()</span>
+
+        <span class="c1"># add module name to the exception address.</span>
+        <span class="n">exception_module</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">addr_to_module</span><span class="p">(</span><span class="n">pydbg</span><span class="o">.</span><span class="n">dbg</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">Exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionAddress</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">exception_module</span><span class="p">:</span>
+            <span class="n">exception_module</span> <span class="o">=</span> <span class="n">exception_module</span><span class="o">.</span><span class="n">szModule</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">exception_module</span> <span class="o">=</span> <span class="s2">&quot;[INVALID]&quot;</span>
+
+        <span class="n">crash</span><span class="o">.</span><span class="n">exception_module</span> <span class="o">=</span> <span class="n">exception_module</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">exception_address</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">dbg</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">Exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionAddress</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">write_violation</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">dbg</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">Exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionInformation</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">violation_address</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">dbg</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">Exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionInformation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">violation_thread_id</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">dbg</span><span class="o">.</span><span class="n">dwThreadId</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">context</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">context_dump</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">dump_context</span><span class="p">(</span><span class="n">pydbg</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">print_dots</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">disasm</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">disasm</span><span class="p">(</span><span class="n">crash</span><span class="o">.</span><span class="n">exception_address</span><span class="p">)</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">disasm_around</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">disasm_around</span><span class="p">(</span><span class="n">crash</span><span class="o">.</span><span class="n">exception_address</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">stack_unwind</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">stack_unwind</span><span class="p">()</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">seh_unwind</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">seh_unwind</span><span class="p">()</span>
+        <span class="n">crash</span><span class="o">.</span><span class="n">extra</span> <span class="o">=</span> <span class="n">extra</span>
+
+        <span class="c1"># add module names to the stack unwind.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">crash</span><span class="o">.</span><span class="n">stack_unwind</span><span class="p">)):</span>
+            <span class="n">addr</span> <span class="o">=</span> <span class="n">crash</span><span class="o">.</span><span class="n">stack_unwind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">module</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">addr_to_module</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">module</span><span class="p">:</span>
+                <span class="n">module</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">szModule</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">module</span> <span class="o">=</span> <span class="s2">&quot;[INVALID]&quot;</span>
+
+            <span class="n">crash</span><span class="o">.</span><span class="n">stack_unwind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%08x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
+
+        <span class="c1"># add module names to the SEH unwind.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">crash</span><span class="o">.</span><span class="n">seh_unwind</span><span class="p">)):</span>
+            <span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span> <span class="o">=</span> <span class="n">crash</span><span class="o">.</span><span class="n">seh_unwind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="n">module</span> <span class="o">=</span> <span class="n">pydbg</span><span class="o">.</span><span class="n">addr_to_module</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">module</span><span class="p">:</span>
+                <span class="n">module</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">szModule</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">module</span> <span class="o">=</span> <span class="s2">&quot;[INVALID]&quot;</span>
+
+            <span class="n">crash</span><span class="o">.</span><span class="n">seh_unwind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%08x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">handler</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">crash</span><span class="o">.</span><span class="n">exception_address</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">[</span><span class="n">crash</span><span class="o">.</span><span class="n">exception_address</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">[</span><span class="n">crash</span><span class="o">.</span><span class="n">exception_address</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">crash</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span> <span class="o">=</span> <span class="n">crash</span></div>
+
+<div class="viewcode-block" id="CrashBinning.crash_synopsis"><a class="viewcode-back" href="../../../user/other-modules.html#boofuzz.utils.crash_binning.CrashBinning.crash_synopsis">[文档]</a>    <span class="k">def</span> <span class="nf">crash_synopsis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crash</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For the supplied crash, generate and return a report containing the disassemly around the violating address,</span>
+<span class="sd">        the ID of the offending thread, the call stack and the SEH unwind. If not crash is specified, then call through</span>
+<span class="sd">        to last_crash_synopsis() which returns the same information for the last recorded crash.</span>
+
+<span class="sd">        @see: crash_synopsis()</span>
+
+<span class="sd">        @type  crash: CrashBinStruct</span>
+<span class="sd">        @param crash: (Optional, def=None) Crash object to generate report on</span>
+
+<span class="sd">        @rtype:  str</span>
+<span class="sd">        @return: Crash report</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">crash</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_crash_synopsis</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">crash</span><span class="o">.</span><span class="n">write_violation</span><span class="p">:</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;write to&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;read from&quot;</span>
+
+        <span class="n">synopsis</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%08x</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> from thread </span><span class="si">%d</span><span class="s2"> caused access violation</span><span class="se">\n</span><span class="s2">when attempting to </span><span class="si">%s</span><span class="s2"> 0x</span><span class="si">%08x</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">crash</span><span class="o">.</span><span class="n">exception_module</span><span class="p">,</span>
+            <span class="n">crash</span><span class="o">.</span><span class="n">exception_address</span><span class="p">,</span>
+            <span class="n">crash</span><span class="o">.</span><span class="n">disasm</span><span class="p">,</span>
+            <span class="n">crash</span><span class="o">.</span><span class="n">violation_thread_id</span><span class="p">,</span>
+            <span class="n">direction</span><span class="p">,</span>
+            <span class="n">crash</span><span class="o">.</span><span class="n">violation_address</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">synopsis</span> <span class="o">+=</span> <span class="n">crash</span><span class="o">.</span><span class="n">context_dump</span>
+
+        <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">disasm around:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">inst</span><span class="p">)</span> <span class="ow">in</span> <span class="n">crash</span><span class="o">.</span><span class="n">disasm_around</span><span class="p">:</span>
+            <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">0x</span><span class="si">%08x</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">inst</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">crash</span><span class="o">.</span><span class="n">stack_unwind</span><span class="p">):</span>
+            <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">stack unwind:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">crash</span><span class="o">.</span><span class="n">stack_unwind</span><span class="p">:</span>
+                <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">entry</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">crash</span><span class="o">.</span><span class="n">seh_unwind</span><span class="p">):</span>
+            <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">SEH unwind:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">handler_str</span><span class="p">)</span> <span class="ow">in</span> <span class="n">crash</span><span class="o">.</span><span class="n">seh_unwind</span><span class="p">:</span>
+                <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="si">%08x</span><span class="s2"> -&gt; </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">handler_str</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">synopsis</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span></div>
+
+<div class="viewcode-block" id="CrashBinning.export_file"><a class="viewcode-back" href="../../../user/other-modules.html#boofuzz.utils.crash_binning.CrashBinning.export_file">[文档]</a>    <span class="k">def</span> <span class="nf">export_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dump the entire object structure to disk.</span>
+
+<span class="sd">        @see: import_file()</span>
+
+<span class="sd">        @type  file_name:   str</span>
+<span class="sd">        @param file_name:   File name to export to</span>
+
+<span class="sd">        @rtype:             CrashBinning</span>
+<span class="sd">        @return:            self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># null out what we don&#39;t serialize but save copies to restore after dumping to disk.</span>
+        <span class="n">last_crash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span>
+        <span class="n">pydbg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pydbg</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pydbg</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s2">&quot;wb+&quot;</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span> <span class="n">o</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span> <span class="o">=</span> <span class="n">last_crash</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pydbg</span> <span class="o">=</span> <span class="n">pydbg</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="CrashBinning.import_file"><a class="viewcode-back" href="../../../user/other-modules.html#boofuzz.utils.crash_binning.CrashBinning.import_file">[文档]</a>    <span class="k">def</span> <span class="nf">import_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the entire object structure from disk.</span>
+
+<span class="sd">        @see: export_file()</span>
+
+<span class="sd">        @type  file_name:   str</span>
+<span class="sd">        @param file_name:   File name to import from</span>
+
+<span class="sd">        @rtype:             CrashBinning</span>
+<span class="sd">        @return:            self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bins</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">bin_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">crash_address</span><span class="p">,</span> <span class="n">bin_list</span><span class="p">)</span> <span class="ow">in</span> <span class="n">bin_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">[</span><span class="n">crash_address</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">single_bin</span> <span class="ow">in</span> <span class="n">bin_list</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">CrashBinStruct</span><span class="p">()</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">single_bin</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">[</span><span class="n">crash_address</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="CrashBinning.last_crash_synopsis"><a class="viewcode-back" href="../../../user/other-modules.html#boofuzz.utils.crash_binning.CrashBinning.last_crash_synopsis">[文档]</a>    <span class="k">def</span> <span class="nf">last_crash_synopsis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For the last recorded crash, generate and return a report containing the disassemly around the violating</span>
+<span class="sd">        address, the ID of the offending thread, the call stack and the SEH unwind.</span>
+
+<span class="sd">        @see: crash_synopsis()</span>
+
+<span class="sd">        @rtype:  String</span>
+<span class="sd">        @return: Crash report</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">write_violation</span><span class="p">:</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;write to&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;read from&quot;</span>
+
+        <span class="n">synopsis</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%08x</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> from thread </span><span class="si">%d</span><span class="s2"> caused access violation</span><span class="se">\n</span><span class="s2">when attempting to </span><span class="si">%s</span><span class="s2"> 0x</span><span class="si">%08x</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">exception_module</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">exception_address</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">disasm</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">violation_thread_id</span><span class="p">,</span>
+            <span class="n">direction</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">violation_address</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">synopsis</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">context_dump</span>
+
+        <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">disasm around:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">inst</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">disasm_around</span><span class="p">:</span>
+            <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">0x</span><span class="si">%08x</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">inst</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">stack_unwind</span><span class="p">):</span>
+            <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">stack unwind:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">stack_unwind</span><span class="p">:</span>
+                <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">entry</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">seh_unwind</span><span class="p">):</span>
+            <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">SEH unwind:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">handler_str</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_crash</span><span class="o">.</span><span class="n">seh_unwind</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">disasm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pydbg</span><span class="o">.</span><span class="n">disasm</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">disasm</span> <span class="o">=</span> <span class="s2">&quot;[INVALID]&quot;</span>
+
+                <span class="n">synopsis</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="si">%08x</span><span class="s2"> -&gt; </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">handler_str</span><span class="p">,</span> <span class="n">disasm</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">synopsis</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 boofuzz。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

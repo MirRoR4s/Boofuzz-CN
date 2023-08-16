@@ -1,102 +1,994 @@
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>&lt;no title&gt; &#8212; rainfuzz 0.0 文档</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=039e1c02" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=16727793"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="../_static/translations.js?v=beaddf03"></script>
-    <link rel="index" title="索引" href="../genindex.html" />
-    <link rel="search" title="搜索" href="../search.html" />
-   
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog &mdash; rainfuzz 0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=44496db0"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Other Modules" href="other-modules.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
           
+          
+          <a href="../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../source/Session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/Target.html">Target</a></li>
+<li class="toctree-l1"><a class="reference internal" href="connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static-protocol-definition.html">Static Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other-modules.html">Other Modules</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#upcoming">Upcoming</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fixes">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-4-1">v0.4.1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-4-0">v0.4.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-3-0">v0.3.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-2-1">v0.2.1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-2-0">v0.2.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-6">v0.1.6</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-5">v0.1.5</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-4">v0.1.4</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id15">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-3">v0.1.3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id17">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-2">v0.1.2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id19">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-1">v0.1.1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id22">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-0">v0.1.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id23">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id24">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-0-13">v0.0.13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id25">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id26">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#development">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id27">0.0.12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id28">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id29">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id30">0.0.11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id31">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id32">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id33">0.0.10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id34">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id35">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id36">0.0.9</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id37">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id38">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id39">0.0.8</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id40">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id41">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id42">0.0.7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id43">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id44">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id45">0.0.6</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id46">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id47">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id48">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id49">0.0.5</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id50">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id51">0.0.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id52">0.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id53">0.0.2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id54">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dev5">0.0.1-dev5</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id55">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dev4">0.0.1-dev4</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id56">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dev3">0.0.1-dev3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id57">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dev2">0.0.1-dev2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#new-features">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#backwards-incompatible">Backwards-incompatible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id58">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#back-end-improvements">Back-end Improvements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#initial-development-release-0-0-1-dev1">Initial Development Release - 0.0.1-dev1</a></li>
+</ul>
+</li>
+</ul>
 
-          <div class="body" role="main">
-            
-  <span class="target" id="changelog"></span>
+        </div>
+      </div>
+    </nav>
 
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changelog</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/user/changelog.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading"></a></h1>
+<section id="upcoming">
+<h2>Upcoming<a class="headerlink" href="#upcoming" title="Permalink to this heading"></a></h2>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Remove six compatibility module</p></li>
+<li><p>Remove Python 2 compatibility code.</p></li>
+<li><p>Remove specifying object inheritance in classes</p></li>
+<li><p>Added Web UI listening on specific IP address</p></li>
+<li><p>Added Python 3.11 compatibility.</p></li>
+</ul>
+</section>
+<section id="fixes">
+<h3>Fixes<a class="headerlink" href="#fixes" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Specified encoding on file write rather than assuming default encoding</p></li>
+<li><p>Changed type of <cite>default_value</cite> from string to bytes for <cite>FromFile</cite>.</p></li>
+<li><p><cite>s_update</cite> primitive was out of date.</p></li>
+<li><p>The minimum supported Python version is now 3.7.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-1">
+<h2>v0.4.1<a class="headerlink" href="#v0-4-1" title="Permalink to this heading"></a></h2>
+<section id="id1">
+<h3>Features<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Added support for fuzzing NETCONF servers with the <cite>NETCONFConnection</cite> class.</p></li>
+<li><p>Add support and tests for Python 3.10.</p></li>
+<li><p>Added <cite>Session</cite> arg <cite>db_filename</cite> to modify the location of the log database.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h3>Fixes<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fixed check for when to enable the web app.</p></li>
+<li><p>Documented the possibility to disable the web app.</p></li>
+<li><p>Correctly initialize all children of a request which inherits from <cite>FuzzableBlock</cite>.</p></li>
+<li><p>Added type checking for arguments of <cite>Bytes</cite> primitive to prevent incorrect use.</p></li>
+<li><p>Fixed TypeError in <cite>s_binary</cite> initialization.</p></li>
+<li><p>Remove redundant unicode strings.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-0">
+<h2>v0.4.0<a class="headerlink" href="#v0-4-0" title="Permalink to this heading"></a></h2>
+<section id="id3">
+<h3>Features<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fuzzing CLI – Use main_helper() to use boofuzz’s generic fuzzing CLI with your script.</p></li>
+<li><p>Combinatorial fuzzing – now fuzzes multiple mutations at once by default.</p></li>
+<li><p>Test cases can now be specified and re-run by name.</p></li>
+<li><p>Implemented visual request-graph rendering functions for Session.</p></li>
+<li><p>Added to web UIL: runtime, exec speed, current test case name.</p></li>
+<li><p>Added simple custom checksum and example usage.</p></li>
+<li><p>Added <cite>Simple</cite> primitive that uses only the specified values for fuzzing.</p></li>
+<li><p>Added <cite>Float</cite> primitive with support for IEEE 754 encoding.</p></li>
+<li><p>Added an example for s_float/Float usage.</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Fixes<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Clarified documentation of custom checksum function for <cite>Checksum</cite> primitive.</p></li>
+<li><p>String and RandomData primitives now use a local and independent instance of <cite>random</cite>.</p></li>
+<li><p>The minimum supported Python version is now 3.6.</p></li>
+<li><p>Fixed two memory leaks in the fuzz logger.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-0">
+<h2>v0.3.0<a class="headerlink" href="#v0-3-0" title="Permalink to this heading"></a></h2>
+<section id="id5">
+<h3>Features<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Memory optimization: Efficient mutation generation and smarter string reuse – decrease memory consumption by orders of magnitude.</p></li>
+<li><p><cite>Aligned</cite> block: Aligns content length to multiple of certain number of bytes.</p></li>
+<li><p>Relative names: Name references for <cite>Checksum</cite>, <cite>Size</cite>, etc. now resolve absolute and relative names. Block and primitive
+names no longer need to be globally unique within a message, they only need to be locally unique within a block.</p></li>
+<li><p>Passing data between messages: Callbacks now have a <cite>TestCaseContext</cite> object to which one can save data to be used
+later in the test case. <cite>TestCaseSessionReference</cite> can be passed as a default value in a protocol definition. The name
+it references must have been saved by the time that message in the protocol is reached.</p></li>
+<li><p><cite>Fuzzable</cite> rewrite: Simpler definitions for new fuzz primitives. See <cite>static.py</cite> for an example of a very simple primitive.</p></li>
+<li><p>Protocol definition: Protocols can now be defined with an object oriented rather than static approach.</p></li>
+<li><p>Independent mutation and encoding steps: Will enable multiple mutations and code coverage feedback.</p></li>
+<li><p>Procmon: Additional debug steps. Partial backwards compatibility for old interface.</p></li>
+<li><p><cite>ProcessMonitorLocal</cite> allows running procmon as part of fuzzer process.</p></li>
+<li><p>Network monitor: improved network interface discovery (Linux support).</p></li>
+<li><p>Added support for fuzzing Unix sockets with the <cite>UnixSocketConnection</cite> class.</p></li>
+<li><p>Added metadata to ProtocolSession to support callbacks – <cite>current_message</cite>, <cite>previous_message</cite>.</p></li>
+<li><p>All primitive arguments are now optional keyword arguments.</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>Fixes<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Various web interface fixes.</p></li>
+<li><p>Various refactors and simplifications.</p></li>
+<li><p>Fewer duplicates from <cite>Group</cite> primitives.</p></li>
+<li><p>Network monitor: fixed data_bytes calculation and PcapThread synchronization.</p></li>
+<li><p>Fixed a crash when using the network monitor.</p></li>
+<li><p>Session can now be “quiet” by passing an empty list of loggers.</p></li>
+<li><p>Process Monitor: fixed Thread.isAlive for Python 3.9 compatibility.</p></li>
+<li><p>Correctly truncate values of the string primitive when max_len or size is set.</p></li>
+<li><p>The string primitive will no longer generate duplicates when max_len or size is set.</p></li>
+<li><p>Greatly improved string to bytes conversion speed.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-2-1">
+<h2>v0.2.1<a class="headerlink" href="#v0-2-1" title="Permalink to this heading"></a></h2>
+<section id="id7">
+<h3>Features<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Added simple TFTP fuzzer example.</p></li>
+</ul>
+</section>
+<section id="id8">
+<h3>Fixes<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fixed UDPSocketConnection data truncation when sending more data than the socket supports.</p></li>
+<li><p>Fixed execution of procmon stop_commands.</p></li>
+<li><p>Fixed TCP and SSL server connections.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-2-0">
+<h2>v0.2.0<a class="headerlink" href="#v0-2-0" title="Permalink to this heading"></a></h2>
+<section id="id9">
+<h3>Features<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Rewrote and split the SocketConnection class into individual classes per socket type.</p></li>
+<li><p><cite>SocketConnection</cite> is now deprecated. Use the classes derived from <cite>BaseSocketConnection</cite> instead.</p></li>
+<li><p>Added support for receiving on raw Layer 2 and Layer 3 connections.</p></li>
+<li><p>Layer 2 and Layer 3 connections may now use arbitrary payload / MTU sizes.</p></li>
+<li><p>Moved connection related modules into new <cite>connections</cite> submodule.</p></li>
+<li><p>Added the ability to repeat sending of packages within a given time or count.</p></li>
+<li><p>Added optional timeout and threshold to quit infinite connection retries.</p></li>
+<li><p>Reworked Monitors, consolidated interface. Breaking change: session no longer has netmon_options and procmon_options.</p></li>
+<li><p><cite>SessionInfo</cite> has had attributes renamed; procmon_results and netmon_results are deprecated and now aliases for monitor_results and monitor_data respectively.</p></li>
+<li><p>New <cite>BoofuzzFailure</cite> exception type allows callback methods to signal a failure that should halt the current test case.</p></li>
+<li><p>Added <cite>capture_output</cite> option to process monitor to capture target process stderr/stdout .</p></li>
+<li><p>Added post-start-target callbacks (called every time a target is started or restarted).</p></li>
+<li><p>Added method to gracefully stop PED-RPC Server.</p></li>
+<li><p>Added new boofuzz logo and favicon to docs and webinterface.</p></li>
+<li><p>Added <cite>FileConnection</cite> to dump messages to files.</p></li>
+<li><p>Removed deprecated session arguments <cite>fuzz_data_logger</cite>, <cite>log_level</cite>, <cite>logfile</cite>, <cite>logfile_level</cite> and <cite>log()</cite>.</p></li>
+<li><p>Removed deprecated logger <cite>FuzzLoggerFile</cite>.</p></li>
+<li><p><cite>crc32c</cite> is no longer a required package. Install manually if needed.</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Fixes<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fixed size of s_size block when output is ascii.</p></li>
+<li><p>Fixed issue with tornado on Python 3.8 and Windows.</p></li>
+<li><p>Fixed various potential type errors.</p></li>
+<li><p>Renamed <cite>requests</cite> folder to <cite>request_definitions</cite> because it shadowed the name of the <cite>requests</cite> python module.</p></li>
+<li><p>Examples are up to date with current Boofuzz version.</p></li>
+<li><p>Modified timings on serial_connection unit tests to improve test reliability.</p></li>
+<li><p>Refactored old unit-tests.</p></li>
+<li><p>Fixed network monitor compatibility with Python 3.</p></li>
+<li><p>Minor console GUI optimizations.</p></li>
+<li><p>Fixed crash_threshold_element handling if blocks are used.</p></li>
+<li><p>Fixed many bugs in which a failure would not stop the test case evaluation.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-6">
+<h2>v0.1.6<a class="headerlink" href="#v0-1-6" title="Permalink to this heading"></a></h2>
+<section id="id11">
+<h3>Features<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>New primitive <cite>s_bytes</cite> which fuzzes an arbitrary length binary value (similiar to <cite>s_string</cite>).</p></li>
+<li><p>We are now using <cite>Black</cite> for code style standardization.</p></li>
+<li><p>Compatibility for Python 3.8</p></li>
+<li><p>Added crc32c as checksum algorithm (Castagnoli).</p></li>
+<li><p>Added favicon for web interface.</p></li>
+<li><p>Pushed Tornado to 5.x and unpinned Flask.</p></li>
+</ul>
+</section>
+<section id="id12">
+<h3>Fixes<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Test cases were not being properly closed when using the check_message() functionality.</p></li>
+<li><p>Some code style changes to meet PEP8.</p></li>
+<li><p><cite>s_group</cite> primitive was not accepting empty default value.</p></li>
+<li><p>Timeout during opening TCP connection now raises BoofuzzTargetConnectionFailedError exception.</p></li>
+<li><p>SSL/TLS works again. See <cite>examples/fuzz-ssl-server.py</cite> and <cite>examples/fuzz-ssl-client.py</cite>.</p></li>
+<li><p>Dropped six.binary_type in favor of b”” format.</p></li>
+<li><p>Fixed process monitor handling of backslashes in Windows start commands.</p></li>
+<li><p>Fixed and documented <cite>boo open</cite>.</p></li>
+<li><p>Fixed receive function in <cite>fuzz_logger_curses</cite>.</p></li>
+<li><p>Installing boofuzz with <cite>sudo</cite> is no longer recommended, use the <cite>–user</cite> option of pip instead.</p></li>
+<li><p>Fixed setting socket timeout options on Windows.</p></li>
+<li><p>If all sockets are exhausted, repeatedly try fuzzing for 4 minutes before failing.</p></li>
+<li><p>Fixed CSV logger send and receive data decoding.</p></li>
+<li><p>Handle SSL-related exception. Added <cite>ignore_connection_ssl_errors</cite> session attribute that can
+be set to True to ignore SSL-related error on a test case.</p></li>
+<li><p>Fixed <cite>s_from_file</cite> decoding in Python 2 (the encoding parameter is now depreciated).</p></li>
+<li><p>Updated documentation of <cite>s_checksum</cite>. It is possible to use a custom algorithm with this block.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-5">
+<h2>v0.1.5<a class="headerlink" href="#v0-1-5" title="Permalink to this heading"></a></h2>
+<section id="id13">
+<h3>Features<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>New curses logger class to provide a console gui similar to the webinterface. Use the session option <cite>console_gui</cite> to enable it.
+This has not been tested under Windows!</p></li>
+<li><p>Compatibility for Python 3</p></li>
+<li><p>Large test cases are now truncated, unless a failure is detected.</p></li>
+<li><p>When a target fails to respond after restart, boofuzz will now continue to restart instead of crashing.</p></li>
+<li><p>New Session option <cite>keep_web_open</cite> to allow analyzing the test results after test completion.</p></li>
+<li><p>Process monitor creates new crash file for each run by default.</p></li>
+<li><p>Long lines now wrap in web view; longer lines no longer need to be truncated.</p></li>
+<li><p>Process monitor now stores crash bins in JSON format instead of pickled format.</p></li>
+<li><p>Process monitor in Windows will use <cite>taskkill -F</cite> if <cite>taskkill</cite> fails.</p></li>
+</ul>
+</section>
+<section id="id14">
+<h3>Fixes<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Web server no longer crashes when asked for a non-existing test case.</p></li>
+<li><p>EINPROGRESS socket error is now handled while opening a socket (note: this sometimes-transient error motivated the move to retry upon connection failure)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-4">
+<h2>v0.1.4<a class="headerlink" href="#v0-1-4" title="Permalink to this heading"></a></h2>
+<section id="id15">
+<h3>Features<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>New Session options <cite>restart_callbacks</cite>, <cite>pre_send_callbacks</cite>, and <cite>post_test_case_callbacks</cite> to hand over custom callback functions.</p></li>
+<li><p>New Session option <cite>fuzz_db_keep_only_n_pass_cases</cite>. This allowes saving only n test cases preceding a failure or error to the database.</p></li>
+<li><p>Added logic to find next available port for web interface or disable the web interface.</p></li>
+<li><p>Removed sleep logs when sleep time is zero.</p></li>
+<li><p>Added option to reuse the connection to the target.</p></li>
+</ul>
+</section>
+<section id="id16">
+<h3>Fixes<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Windows process monitor now handles combination of proc_name and/or start_commands more reasonably</p></li>
+<li><p>Windows process monitor handles certain errors more gracefully</p></li>
+<li><p>Fixed target close behavior so post send callbacks can use the target.</p></li>
+<li><p>Fixed a dependency issue in installation.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-3">
+<h2>v0.1.3<a class="headerlink" href="#v0-1-3" title="Permalink to this heading"></a></h2>
+<section id="id17">
+<h3>Features<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Socket Connections now allow client fuzzing.</p></li>
+<li><p>Log only the data actually sent, when sending is truncated. Helps reduce database size, especially when fuzzing layer 2 or 3.</p></li>
+<li><p><cite>Target</cite> <cite>recv</cite> function now accepts a <cite>max_recv_bytes</cite> argument.</p></li>
+</ul>
+</section>
+<section id="id18">
+<h3>Fixes<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fixed install package – now includes JavaScript files.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-2">
+<h2>v0.1.2<a class="headerlink" href="#v0-1-2" title="Permalink to this heading"></a></h2>
+<section id="id19">
+<h3>Features<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Clearer error message when procmon is unavailable at fuzz start.</p></li>
+<li><p>Web UI now refreshes current case even when snap-to-current-test-case is disabled.</p></li>
+</ul>
+</section>
+<section id="id20">
+<h3>Fixes<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Web UI no longer permits negative test cases.</p></li>
+<li><p>Fix Windows procmon regression.</p></li>
+<li><p>Minor fixes and UI tweaks.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-1">
+<h2>v0.1.1<a class="headerlink" href="#v0-1-1" title="Permalink to this heading"></a></h2>
+<section id="id21">
+<h3>Features<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>New <cite>boo open</cite> command can open and inspect saved database log files.</p></li>
+<li><p>Unix procmon now saves coredumps by default.</p></li>
+<li><p>Improved “Cannot connect to target” error message.</p></li>
+<li><p>Improved API for registering callbacks.</p></li>
+<li><p>Made the global <cite>REQUESTS</cite> map available in top level boofuzz package.</p></li>
+</ul>
+</section>
+<section id="id22">
+<h3>Fixes<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Handle exceptions when opening crash bin files in process monitor.</p></li>
+<li><p>Fix Block.__len__ to account for custom encoder.</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-0">
+<h2>v0.1.0<a class="headerlink" href="#v0-1-0" title="Permalink to this heading"></a></h2>
+<section id="id23">
+<h3>Features<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Web UI</dt><dd><ul>
+<li><p>Statistics now auto-update.</p></li>
+<li><p>Test case logs now stream on the main page.</p></li>
+<li><p>Cool left &amp; right arrow buttons to move through test case</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>New <code class="docutils literal notranslate"><span class="pre">Session</span></code> parameter <code class="docutils literal notranslate"><span class="pre">receive_data_after_fuzz</span></code>. Controls whether to execute a receive step after sending
+fuzz messages. Defaults to False. This significantly speeds up tests in which the target tends not to respond to
+invalid messages.</p></li>
+</ul>
+</section>
+<section id="id24">
+<h3>Fixes<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Text log output would include double titles, e.g. “Test Step: Test Step: …”</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-0-13">
+<h2>v0.0.13<a class="headerlink" href="#v0-0-13" title="Permalink to this heading"></a></h2>
+<section id="id25">
+<h3>Features<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Web UI</dt><dd><ul>
+<li><p>Test case numbers are now clickable and link to test case detail view.</p></li>
+<li><p>Test case details now in color!</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">FuzzLoggerDB</span></code></dt><dd><ul>
+<li><p>Added FuzzLoggerDB to allow querying of test results during and after test run. Saves results in a SQLite file.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">Session.open_test_run()</span></code> to read test results database from previous test run.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>New <code class="docutils literal notranslate"><span class="pre">Session.feature_check()</span></code> method to verify protocol functionality before fuzzing.</p></li>
+<li><dl class="simple">
+<dt>Process Monitor</dt><dd><ul>
+<li><p>Unify process monitor command line interface between Unix and Windows.</p></li>
+<li><p>Added procmon option <code class="docutils literal notranslate"><span class="pre">proc_name</span></code> to support asynchronously started target processes.</p></li>
+<li><p>procmon is now checked for errors before user <code class="docutils literal notranslate"><span class="pre">post_send()</span></code> is called, reducing redundant error messages.</p></li>
+<li><p>Improved procmon logging.</p></li>
+<li><p>Process monitor gives more helpful error messages when running 64-bit application (unsupported) or when a process is
+killed before being attached</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Logging Improvements</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Target</span></code> <code class="docutils literal notranslate"><span class="pre">open()</span></code> and <code class="docutils literal notranslate"><span class="pre">close()</span></code> operations are now logged.</p></li>
+<li><p>Added some optional debug output from boofuzz runtime.</p></li>
+<li><p>Improve capability and logging of messages’ <code class="docutils literal notranslate"><span class="pre">callback</span></code> methods.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>New <code class="docutils literal notranslate"><span class="pre">Session</span></code> &amp; Connection Options</dt><dd><ul>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Session</span></code> <code class="docutils literal notranslate"><span class="pre">receive_data_after_each_request</span></code> option to enable disabling of data receipt after messages are sent.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Session</span></code> <code class="docutils literal notranslate"><span class="pre">skip</span></code> argument replaced with <code class="docutils literal notranslate"><span class="pre">index_start</span></code> and <code class="docutils literal notranslate"><span class="pre">index_end</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Session</span></code> now has separate crash thresholds for elements/blocks and nodes/messages.</p></li>
+<li><p>Give <code class="docutils literal notranslate"><span class="pre">SocketConnection</span></code> separate timeouts for <code class="docutils literal notranslate"><span class="pre">send()</span></code>/<code class="docutils literal notranslate"><span class="pre">recv()</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Ease of Use</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Target.recv()</span></code> now has a default <code class="docutils literal notranslate"><span class="pre">max_bytes</span></code> value.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">DEFAULT_PROCMON_PORT</span></code> constant.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Session.post_send()</span></code>’s <code class="docutils literal notranslate"><span class="pre">sock</span></code> parameter now deprecated (use <code class="docutils literal notranslate"><span class="pre">target</span></code> instead).</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id26">
+<h3>Fixes<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fixed bug in which failures were not recognized.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BitField</span></code> blocks with ASCII format reported incorrect sizes.</p></li>
+<li><p>Fixed bug in <code class="docutils literal notranslate"><span class="pre">s_update</span></code>.</p></li>
+<li><p>Handle socket errors that were getting missed.</p></li>
+<li><p>Fixed process monitor logging when providing more or less than 1 stop/start commands.</p></li>
+<li><p>Show graceful error on web requests for non-existent test cases.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_max_udp_size()</span></code> was crashing in Windows.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">String</span></code> padding was not always being applied.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">String</span></code> was not accepting unicode strings in <code class="docutils literal notranslate"><span class="pre">value</span></code> parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">String</span></code> was skipping valid mutations and reporting wrong <code class="docutils literal notranslate"><span class="pre">num_mutations()</span></code> when <code class="docutils literal notranslate"><span class="pre">size</span></code> parameter was used.</p></li>
+<li><p>Unix and Windows process monitors now share much more code.</p></li>
+</ul>
+</section>
+<section id="development">
+<h3>Development<a class="headerlink" href="#development" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Added unit tests for <code class="docutils literal notranslate"><span class="pre">BitField</span></code>.</p></li>
+<li><p>Cleaned up CSS on web pages.</p></li>
+<li><p>Added a unit test to verify restart on failure behavior</p></li>
+</ul>
+</section>
+</section>
+<section id="id27">
+<h2>0.0.12<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h2>
+<section id="id28">
+<h3>Features<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Test cases now have descriptive names</p></li>
+<li><p>Added Session methods to fuzz a test cae by name: <code class="docutils literal notranslate"><span class="pre">fuzz_by_name</span></code> and <code class="docutils literal notranslate"><span class="pre">fuzz_single_node_by_path</span></code></p></li>
+</ul>
+</section>
+<section id="id29">
+<h3>Fixes<a class="headerlink" href="#id29" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fixed test case numbers when using <code class="docutils literal notranslate"><span class="pre">fuzz_single_case</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="id30">
+<h2>0.0.11<a class="headerlink" href="#id30" title="Permalink to this heading"></a></h2>
+<section id="id31">
+<h3>Features<a class="headerlink" href="#id31" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Set Session <code class="docutils literal notranslate"><span class="pre">check_data_received_each_request</span></code> to False to disable receive after send.</p></li>
+</ul>
+</section>
+<section id="id32">
+<h3>Fixes<a class="headerlink" href="#id32" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Dosctring format fixes.</p></li>
+</ul>
+</section>
+</section>
+<section id="id33">
+<h2>0.0.10<a class="headerlink" href="#id33" title="Permalink to this heading"></a></h2>
+<section id="id34">
+<h3>Features<a class="headerlink" href="#id34" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add Session ignore_connection_reset parameter to suppress ECONNRESET errors.</p></li>
+<li><p>Add Session ignore_connection_aborted parameter to suppress ECONNABORTED errors.</p></li>
+</ul>
+</section>
+<section id="id35">
+<h3>Fixes<a class="headerlink" href="#id35" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fix Session class docstring formats.</p></li>
+</ul>
+</section>
+</section>
+<section id="id36">
+<h2>0.0.9<a class="headerlink" href="#id36" title="Permalink to this heading"></a></h2>
+<section id="id37">
+<h3>Features<a class="headerlink" href="#id37" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">s_size</span></code> is now fuzzable by default.</p></li>
+<li><p>Add new s_fuzz_list primitive to read fuzz value from files.</p></li>
+<li><p>Add new FuzzLoggerCsv to write log in CSV format</p></li>
+</ul>
+</section>
+<section id="id38">
+<h3>Fixes<a class="headerlink" href="#id38" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fixed: Add missing dummy value for custom checksum, allowing recursive uses of length/checksum (issue #107)</p></li>
+</ul>
+</section>
+</section>
+<section id="id39">
+<h2>0.0.8<a class="headerlink" href="#id39" title="Permalink to this heading"></a></h2>
+<section id="id40">
+<h3>Features<a class="headerlink" href="#id40" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Console output - now with colors!</p></li>
+<li><p>process_monitor_unix.py: added option to move coredumps for later analysis.</p></li>
+<li><p>The process monitor (procmon) now tracks processes by PID by default rather than searching by name. Therefore,
+stop_commands and proc_name are no longer required.</p></li>
+<li><p>SIGINT (AKA Ctrl+C) now works to close both boofuzz and process_monitor.py (usually).</p></li>
+<li><p>Made Unix procmon more compatible with Windows.</p></li>
+<li><p>Improved procmon debugger error handling, e.g., when running 64-bit apps.</p></li>
+<li><p>Windows procmon now runs even if pydbg fails.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">--help</span></code> parameter to process monitor.</p></li>
+<li><p>Target class now takes <code class="docutils literal notranslate"><span class="pre">procmon</span></code> and <code class="docutils literal notranslate"><span class="pre">procmon_options</span></code> in constructor.</p></li>
+<li><p>Added example fuzz scripts.</p></li>
+</ul>
+</section>
+<section id="id41">
+<h3>Fixes<a class="headerlink" href="#id41" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>SIGINT (AKA Ctrl+C) now works to close both boofuzz and process_monitor.py (usually).</p></li>
+<li><p>Fixed: The pedrpc module was not being properly included in imports.</p></li>
+<li><p>Made process_monitor.py <code class="docutils literal notranslate"><span class="pre">--crash_bin</span></code> optional (as documented).</p></li>
+<li><p>Improved procmon behavior when certain parameters aren’t given.</p></li>
+<li><p>Improved procmon error handling.</p></li>
+<li><p>Fixed a bug in which the procmon would not properly restart a target that had failed without crashing.</p></li>
+</ul>
+</section>
+</section>
+<section id="id42">
+<h2>0.0.7<a class="headerlink" href="#id42" title="Permalink to this heading"></a></h2>
+<section id="id43">
+<h3>Features<a class="headerlink" href="#id43" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Added several command injection strings from fuzzdb.</p></li>
+<li><p>Blocks can now be created and nested using <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">s_block(&quot;my-block&quot;):</span></code></p></li>
+</ul>
+</section>
+<section id="id44">
+<h3>Fixes<a class="headerlink" href="#id44" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fixed pydot import error message</p></li>
+</ul>
+</section>
+</section>
+<section id="id45">
+<h2>0.0.6<a class="headerlink" href="#id45" title="Permalink to this heading"></a></h2>
+<section id="id46">
+<h3>Features<a class="headerlink" href="#id46" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">Request.original_value()</span></code> function to render the request as if it were not fuzzed.
+This will help enable reuse of a fuzz definition to generate valid requests.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SocketConnection</span></code> can now send and receive UDP broadcast packets using the <code class="docutils literal notranslate"><span class="pre">udp_broadcast</span></code> constructor
+parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Target.recv()</span></code> now logs an entry before receiving data, in order to help debug receiving issues.</p></li>
+</ul>
+</section>
+<section id="id47">
+<h3>Fixes<a class="headerlink" href="#id47" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Maximum UDP payload value was incorrect, causing crashes for tests running over UDP. It now works on some systems,
+but the maximum value may be too high for systems that set it lower than the maximum possible value, 65507.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SocketConnection</span></code> class now handles more send and receive errors:  <code class="docutils literal notranslate"><span class="pre">ECONNABORTED</span></code>, <code class="docutils literal notranslate"><span class="pre">ECONNRESET</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ENETRESET</span></code>, and <code class="docutils literal notranslate"><span class="pre">ETIMEDOUT</span></code>.</p></li>
+<li><p>Fixed setup.py to not include superfluous packages.</p></li>
+</ul>
+</section>
+<section id="id48">
+<h3>Development<a class="headerlink" href="#id48" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Added two exceptions: <code class="docutils literal notranslate"><span class="pre">BoofuzzTargetConnectionReset</span></code> and <code class="docutils literal notranslate"><span class="pre">BoofuzzTargetConnectionAborted</span></code>.</p></li>
+<li><p>These two exceptions are handled in <code class="docutils literal notranslate"><span class="pre">sessions.py</span></code> and may be thrown by any <code class="docutils literal notranslate"><span class="pre">ITargetConnection</span></code> implementation.</p></li>
+</ul>
+</section>
+</section>
+<section id="id49">
+<h2>0.0.5<a class="headerlink" href="#id49" title="Permalink to this heading"></a></h2>
+<section id="id50">
+<h3>Fixes<a class="headerlink" href="#id50" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Boofuzz now properly reports crashes detected by the process monitor. It was calling log_info instead of log_fail.</p></li>
+<li><p>Boofuzz will no longer crash, but will rather give a helpful error message, if the target refuses socket connections.</p></li>
+<li><p>Add utils/crash_binning.py to boofuzz/utils, avoiding import errors.</p></li>
+<li><p>Fix procmon argument processing bug.</p></li>
+<li><p>Fix typos in INSTALL.rst.</p></li>
+</ul>
+</section>
+</section>
+<section id="id51">
+<h2>0.0.4<a class="headerlink" href="#id51" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Add Gitter badge to README.</p></li>
+<li><p>Add default sleep_time and fuzz_data_logger for Session to simplify boilerplate.</p></li>
+</ul>
+</section>
+<section id="id52">
+<h2>0.0.3<a class="headerlink" href="#id52" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fixed deployment from 0.0.2.</p></li>
+<li><p>Simplify CONTRIBUTING.rst for automated deployment.</p></li>
+<li><p>tox no longer runs entirely as sudo. The sudo has been moved into tox.ini and is more fine-grained.</p></li>
+<li><p>Reduced default <code class="docutils literal notranslate"><span class="pre">Session.__init__</span></code> <code class="docutils literal notranslate"><span class="pre">restart_sleep_time</span></code> from 5 minutes to 5 seconds.</p></li>
+</ul>
+</section>
+<section id="id53">
+<h2>0.0.2<a class="headerlink" href="#id53" title="Permalink to this heading"></a></h2>
+<p>Continuous deployment with Travis.</p>
+<section id="id54">
+<h3>Development<a class="headerlink" href="#id54" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Added build and PyPI badges.</p></li>
+<li><p>Added CONTRIBUTING.rst.</p></li>
+<li><p>check-manifest now runs in automated build.</p></li>
+<li><p>Travis now deploys to PyPI!</p></li>
+</ul>
+</section>
+</section>
+<section id="dev5">
+<h2>0.0.1-dev5<a class="headerlink" href="#dev5" title="Permalink to this heading"></a></h2>
+<section id="id55">
+<h3>Development<a class="headerlink" href="#id55" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Tests now run on tox.</p></li>
+<li><p>Added Google Groups and Twitter link.</p></li>
+</ul>
+</section>
+</section>
+<section id="dev4">
+<h2>0.0.1-dev4<a class="headerlink" href="#dev4" title="Permalink to this heading"></a></h2>
+<section id="id56">
+<h3>Fixes<a class="headerlink" href="#id56" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Missing property setters in <code class="docutils literal notranslate"><span class="pre">boofuzz.request.Request</span></code> now implemented.</p></li>
+<li><p>Unit tests now pass on Windows.</p></li>
+<li><p>Fixed wheel build issue; boofuzz subpackages were missing.</p></li>
+</ul>
+</section>
+</section>
+<section id="dev3">
+<h2>0.0.1-dev3<a class="headerlink" href="#dev3" title="Permalink to this heading"></a></h2>
+<section id="id57">
+<h3>Fixes<a class="headerlink" href="#id57" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Session constructor param <code class="docutils literal notranslate"><span class="pre">session_filename</span></code> is now optional.</p></li>
+</ul>
+</section>
+</section>
+<section id="dev2">
+<h2>0.0.1-dev2<a class="headerlink" href="#dev2" title="Permalink to this heading"></a></h2>
+<section id="new-features">
+<h3>New features<a class="headerlink" href="#new-features" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Now on PyPI! <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">boofuzz</span></code></p></li>
+<li><p>API is now centralized so all classes are available at top level
+<code class="docutils literal notranslate"><span class="pre">boofuzz.*</span></code></p>
+<ul>
+<li><p>This makes it way easier to use. Everything can be used like
+<code class="docutils literal notranslate"><span class="pre">boofuzz.MyClass</span></code> instead of <code class="docutils literal notranslate"><span class="pre">boofuzz.my_file.MyClass</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">EzOutletReset</span></code> class to support restarting devices using an
+ezOutlet EZ-11b.</p></li>
+</ul>
+</section>
+<section id="backwards-incompatible">
+<h3>Backwards-incompatible<a class="headerlink" href="#backwards-incompatible" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Target now only takes an <code class="docutils literal notranslate"><span class="pre">ITargetConnection</span></code>. This separates
+responsibilities and makes our code more flexible with different
+kinds of connections.</p></li>
+</ul>
+</section>
+<section id="id58">
+<h3>Fixes<a class="headerlink" href="#id58" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Bugs fixed:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">helpers.udp_checksum</span></code> was failing with oversized messages.</p></li>
+<li><p>Missing install requirements.</p></li>
+<li><p>Grammar and spelling.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code> was previously installing around five mostly unwanted
+packages. Fixed.</p></li>
+<li><p>Removed deprecated unit tests.</p></li>
+<li><p>Removed overly broad exception handling in Session.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Checksum.render()</span></code> for UDP was not handling dependencies
+properly.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="back-end-improvements">
+<h3>Back-end Improvements<a class="headerlink" href="#back-end-improvements" title="Permalink to this heading"></a></h3>
+<p>This section took the most work. It has the least visible impact, but
+all of the refactors enable new features, fixes, and unit tests.</p>
+<ul class="simple">
+<li><p>Primitives and Blocks:</p>
+<ul>
+<li><p>Created <code class="docutils literal notranslate"><span class="pre">IFuzzable</span></code> which properly defines interface for
+<code class="docutils literal notranslate"><span class="pre">Block</span></code>, <code class="docutils literal notranslate"><span class="pre">Request</span></code>, and all <code class="docutils literal notranslate"><span class="pre">BasePrimitive</span></code> classes.</p></li>
+<li><p>Made effectively private members actually private.</p></li>
+<li><p>Eliminated <code class="docutils literal notranslate"><span class="pre">exhaust()</span></code> function. It was used only once and was
+primarily a convoluted break statement. Now it’s gone. :)</p></li>
+<li><p>Split all block and primitive classes into separate files.</p></li>
+</ul>
+</li>
+<li><p>Many Unit tests added.</p></li>
+</ul>
+</section>
+<section id="other">
+<h3>Other<a class="headerlink" href="#other" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Continuous integration with Travis is running!</p></li>
+<li><p>Doc organization improvements.</p></li>
+<li><p>Can now install with extras <code class="docutils literal notranslate"><span class="pre">[dev]</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="initial-development-release-0-0-1-dev1">
+<h2>Initial Development Release - 0.0.1-dev1<a class="headerlink" href="#initial-development-release-0-0-1-dev1" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Much easier install experience!</p></li>
+<li><p>Support for arbitrary communications mediums.</p>
+<ul>
+<li><p>Added serial communications support.</p></li>
+<li><p>Improved sockets to fuzz at Ethernet and IP layers.</p></li>
+</ul>
+</li>
+<li><p>Extensible instrumentation/failure detection.</p></li>
+<li><p>Better recording of test data.</p>
+<ul>
+<li><p>Records all sent and received data</p></li>
+<li><p>Records errors in human-readable format, in same place as
+sent/received data.</p></li>
+</ul>
+</li>
+<li><p>Improved functionality in checksum blocks.</p></li>
+<li><p>Self-referential size and checksum blocks now work.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">post_send</span></code> callbacks can now check replies and log failures.</p></li>
+<li><p>Far fewer bugs.</p></li>
+<li><p>Numerous refactors within framework code.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
           </div>
-          
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="other-modules.html" class="btn btn-neutral float-left" title="Other Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright boofuzz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">rainfuzz</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>导航</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../test.html">环境搭建</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../boofuzz1/index.html">boofuzz分析</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">快速搜索</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="提交" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;一袭青衣尽长安.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
-      
-      |
-      <a href="../_sources/user/changelog.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

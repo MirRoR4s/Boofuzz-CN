@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session &mdash; rainfuzz 0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=44496db0"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Connections" href="../user/connections.html" />
+    <link rel="prev" title="Contributing" href="../user/contributing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Session</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#boofuzz.Session"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.add_node"><code class="docutils literal notranslate"><span class="pre">Session.add_node()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.add_target"><code class="docutils literal notranslate"><span class="pre">Session.add_target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.build_webapp_thread"><code class="docutils literal notranslate"><span class="pre">Session.build_webapp_thread()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.connect"><code class="docutils literal notranslate"><span class="pre">Session.connect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.example_test_case_callback"><code class="docutils literal notranslate"><span class="pre">Session.example_test_case_callback()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.exec_speed"><code class="docutils literal notranslate"><span class="pre">Session.exec_speed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.export_file"><code class="docutils literal notranslate"><span class="pre">Session.export_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.feature_check"><code class="docutils literal notranslate"><span class="pre">Session.feature_check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.fuzz"><code class="docutils literal notranslate"><span class="pre">Session.fuzz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.fuzz_by_name"><code class="docutils literal notranslate"><span class="pre">Session.fuzz_by_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.fuzz_single_case"><code class="docutils literal notranslate"><span class="pre">Session.fuzz_single_case()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.import_file"><code class="docutils literal notranslate"><span class="pre">Session.import_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.netmon_results"><code class="docutils literal notranslate"><span class="pre">Session.netmon_results</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.num_mutations"><code class="docutils literal notranslate"><span class="pre">Session.num_mutations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.register_post_test_case_callback"><code class="docutils literal notranslate"><span class="pre">Session.register_post_test_case_callback()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.runtime"><code class="docutils literal notranslate"><span class="pre">Session.runtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.server_init"><code class="docutils literal notranslate"><span class="pre">Session.server_init()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.test_case_data"><code class="docutils literal notranslate"><span class="pre">Session.test_case_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.transmit_fuzz"><code class="docutils literal notranslate"><span class="pre">Session.transmit_fuzz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.transmit_normal"><code class="docutils literal notranslate"><span class="pre">Session.transmit_normal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#request-graph-visualisation-options">Request-Graph visualisation options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.render_graph_gml"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_gml()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.render_graph_graphviz"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_graphviz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.render_graph_udraw"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_udraw()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.render_graph_udraw_update"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_udraw_update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/static-protocol-definition.html">Static Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/other-modules.html">Other Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Session</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/Session.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="session">
+<h1>Session<a class="headerlink" href="#session" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="boofuzz.Session">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">web_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">26000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_web_open</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crash_threshold_request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crash_threshold_element</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_sleep_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_send_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_test_case_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_start_target_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_loggers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_db_keep_only_n_pass_cases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receive_data_after_each_request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_data_received_each_request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receive_data_after_fuzz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_aborted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_issues_when_sending_fuzz_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_ssl_errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse_target_connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">web_address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'localhost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></p>
+<p>Extends pgraph.graph and provides a container for architecting protocol dialogs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session_filename</strong> (<em>str</em>) – Filename to serialize persistent data to. Default None.</p></li>
+<li><p><strong>index_start</strong> (<em>int</em>) – </p></li>
+<li><p><strong>index_end</strong> (<em>int</em>) – </p></li>
+<li><p><strong>sleep_time</strong> (<em>float</em>) – Time in seconds to sleep in between tests. Default 0.</p></li>
+<li><p><strong>restart_interval</strong> (<em>int</em>) – Restart the target after n test cases, disable by setting to 0 (default).</p></li>
+<li><p><strong>console_gui</strong> (<em>bool</em>) – Use curses to generate a static console screen similar to the webinterface. Has not been
+tested under Windows. Default False.</p></li>
+<li><p><strong>crash_threshold_request</strong> (<em>int</em>) – Maximum number of crashes allowed before a request is exhausted. Default 12.</p></li>
+<li><p><strong>crash_threshold_element</strong> (<em>int</em>) – Maximum number of crashes allowed before an element is exhausted. Default 3.</p></li>
+<li><p><strong>restart_sleep_time</strong> (<em>int</em>) – Time in seconds to sleep when target can’t be restarted. Default 5.</p></li>
+<li><p><strong>restart_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – The registered method will be called after a failed post_test_case_callback
+Default None.</p></li>
+<li><p><strong>restart_threshold</strong> (<em>int</em>) – Maximum number of retries on lost target connection. Default None (indefinitely).</p></li>
+<li><p><strong>restart_timeout</strong> (<em>float</em>) – Time in seconds for that a connection attempt should be retried. Default None
+(indefinitely).</p></li>
+<li><p><strong>pre_send_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – The registered method will be called prior to each fuzz request.
+Default None.</p></li>
+<li><p><strong>post_test_case_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – The registered method will be called after each fuzz test case.
+Default None.</p></li>
+<li><p><strong>post_start_target_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – Method(s) will be called after the target is started or restarted,
+say, by a process monitor.</p></li>
+<li><p><strong>web_port</strong> (<em>int</em><em> or </em><em>None</em>) – Port for monitoring fuzzing campaign via a web browser. Set to None to disable the web
+app. Default 26000.</p></li>
+<li><p><strong>keep_web_open</strong> (<em>bool</em>) – Keep the webinterface open after session completion. Default True.</p></li>
+<li><p><strong>fuzz_loggers</strong> (<em>list</em><em> of </em><a class="reference internal" href="../user/logging.html#boofuzz.IFuzzLogger" title="boofuzz.ifuzz_logger.IFuzzLogger"><em>ifuzz_logger.IFuzzLogger</em></a>) – For saving test data and results.. Default Log to STDOUT.</p></li>
+<li><p><strong>fuzz_db_keep_only_n_pass_cases</strong> (<em>int</em>) – Minimize disk usage by only saving passing test cases
+if they are in the n test cases preceding a failure or error.
+Set to 0 to save after every test case (high disk I/O!). Default 0.</p></li>
+<li><p><strong>receive_data_after_each_request</strong> (<em>bool</em>) – If True, Session will attempt to receive a reply after transmitting
+each non-fuzzed node. Default True.</p></li>
+<li><p><strong>check_data_received_each_request</strong> (<em>bool</em>) – If True, Session will verify that some data has
+been received after transmitting each non-fuzzed node, and if not,
+register a failure. If False, this check will not be performed. Default
+False. A receive attempt is still made unless
+receive_data_after_each_request is False.</p></li>
+<li><p><strong>receive_data_after_fuzz</strong> (<em>bool</em>) – If True, Session will attempt to receive a reply after transmitting
+a fuzzed message. Default False.</p></li>
+<li><p><strong>ignore_connection_reset</strong> (<em>bool</em>) – Log ECONNRESET errors (“Target connection reset”) as “info” instead of
+failures.</p></li>
+<li><p><strong>ignore_connection_aborted</strong> (<em>bool</em>) – Log ECONNABORTED errors as “info” instead of failures.</p></li>
+<li><p><strong>ignore_connection_issues_when_sending_fuzz_data</strong> (<em>bool</em>) – Ignore fuzz data transmission failures. Default True.
+This is usually a helpful setting to enable, as targets may drop connections once a
+message is clearly invalid.</p></li>
+<li><p><strong>ignore_connection_ssl_errors</strong> (<em>bool</em>) – Log SSL related errors as “info” instead of failures. Default False.</p></li>
+<li><p><strong>reuse_target_connection</strong> (<em>bool</em>) – If True, only use one target connection instead of reconnecting each test case.
+Default False.</p></li>
+<li><p><strong>target</strong> (<em>Target</em>) – Target for fuzz session. Target must be fully initialized. Default None.</p></li>
+<li><p><strong>db_filename</strong> (<em>str</em>) – Filename to store sqlite db for test results and case information.
+Defaults to ./boofuzz-results/{uniq_timestamp}.db</p></li>
+<li><p><strong>web_address</strong> – Address where’s Boofuzz logger exposed. Default ‘localhost’</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.add_node">
+<span class="sig-name descname"><span class="pre">add_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.add_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.add_node" title="Permalink to this definition"></a></dt>
+<dd><p>Add a pgraph node to the graph. We overload this routine to automatically generate and assign an ID whenever a
+node is added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>node</strong> (<em>pgraph.Node</em>) – Node to add to session graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.add_target">
+<span class="sig-name descname"><span class="pre">add_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.add_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.add_target" title="Permalink to this definition"></a></dt>
+<dd><p>Add a target to the session. Multiple targets can be added for parallel fuzzing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target</strong> (<em>Target</em>) – Target to add to session</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.build_webapp_thread">
+<span class="sig-name descname"><span class="pre">build_webapp_thread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">26000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'localhost'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.build_webapp_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.build_webapp_thread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.connect" title="Permalink to this definition"></a></dt>
+<dd><p>Create a connection between the two requests (nodes) and register an optional callback to process in between
+transmissions of the source and destination request. The session class maintains a top level node that all
+initial requests must be connected to. Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sess</span> <span class="o">=</span> <span class="n">sessions</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
+<span class="n">sess</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">s_get</span><span class="p">(</span><span class="s2">&quot;HTTP&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.
+This is a convenient alias. The following line is identical to the second line from the above example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sess</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">s_get</span><span class="p">(</span><span class="s2">&quot;HTTP&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Leverage callback methods to handle situations such as challenge response systems.
+A callback method must follow the message signature of <a class="reference internal" href="#boofuzz.Session.example_test_case_callback" title="boofuzz.Session.example_test_case_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.example_test_case_callback()</span></code></a>.
+Remember to include **kwargs for forward-compatibility.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>str</em><em> or </em><em>Request</em><em> (</em><em>pgrah.Node</em><em>)</em>) – Source request name or request node</p></li>
+<li><p><strong>dst</strong> (<em>str</em><em> or </em><em>Request</em><em> (</em><em>pgrah.Node</em><em>)</em><em>, </em><em>optional</em>) – Destination request name or request node</p></li>
+<li><p><strong>callback</strong> (<em>def</em><em>, </em><em>optional</em>) – Callback function to pass received data to between node xmits. Default None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The edge between the src and dst.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pgraph.Edge</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.example_test_case_callback">
+<span class="sig-name descname"><span class="pre">example_test_case_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_data_logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_case_context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.example_test_case_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.example_test_case_callback" title="Permalink to this definition"></a></dt>
+<dd><p>Example call signature for methods given to <a class="reference internal" href="#boofuzz.Session.connect" title="boofuzz.Session.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></a> or
+<a class="reference internal" href="#boofuzz.Session.register_post_test_case_callback" title="boofuzz.Session.register_post_test_case_callback"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_post_test_case_callback()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<em>Target</em>) – Target with sock-like interface.</p></li>
+<li><p><strong>fuzz_data_logger</strong> (<a class="reference internal" href="../user/logging.html#boofuzz.IFuzzLogger" title="boofuzz.ifuzz_logger.IFuzzLogger"><em>ifuzz_logger.IFuzzLogger</em></a>) – Allows logging of test checks and passes/failures.
+Provided with a test case and test step already opened.</p></li>
+<li><p><strong>session</strong> (<a class="reference internal" href="#boofuzz.Session" title="boofuzz.Session"><em>Session</em></a>) – Session object calling post_send.
+Useful properties include last_send and last_recv.</p></li>
+<li><p><strong>test_case_context</strong> (<a class="reference internal" href="../user/other-modules.html#boofuzz.ProtocolSession" title="boofuzz.ProtocolSession"><em>ProtocolSession</em></a>) – Context for test case-scoped data.
+<a class="reference internal" href="../user/other-modules.html#boofuzz.ProtocolSession" title="boofuzz.ProtocolSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolSession</span></code></a> <code class="xref py py-attr docutils literal notranslate"><span class="pre">session_variables</span></code>
+values are generally set within a callback and referenced in elements via default values of type
+<a class="reference internal" href="../user/other-modules.html#boofuzz.ProtocolSessionReference" title="boofuzz.ProtocolSessionReference"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolSessionReference</span></code></a>.</p></li>
+<li><p><strong>args</strong> – Implementations should include *args and **kwargs for forward-compatibility.</p></li>
+<li><p><strong>kwargs</strong> – Implementations should include *args and **kwargs for forward-compatibility.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="boofuzz.Session.exec_speed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exec_speed</span></span><a class="headerlink" href="#boofuzz.Session.exec_speed" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.export_file">
+<span class="sig-name descname"><span class="pre">export_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.export_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.export_file" title="Permalink to this definition"></a></dt>
+<dd><p>Dump various object values to disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See<span class="colon">:</span></dt>
+<dd class="field-odd"><p>import_file()</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.feature_check">
+<span class="sig-name descname"><span class="pre">feature_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.feature_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.feature_check" title="Permalink to this definition"></a></dt>
+<dd><p>Check all messages/features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.fuzz">
+<span class="sig-name descname"><span class="pre">fuzz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.fuzz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.fuzz" title="Permalink to this definition"></a></dt>
+<dd><p>Fuzz the entire protocol tree.</p>
+<p>Iterates through and fuzzes all fuzz cases, skipping according to
+self.skip and restarting based on self.restart_interval.</p>
+<p>If you want the web server to be available, your program must persist
+after calling this method. helpers.pause_for_signal() is
+available to this end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Pass in a Request name to fuzz only a single request message. Pass in a test case name to fuzz
+only a single test case.</p></li>
+<li><p><strong>max_depth</strong> (<em>int</em>) – Maximum combinatorial depth; set to 1 for “simple” fuzzing.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.fuzz_by_name">
+<span class="sig-name descname"><span class="pre">fuzz_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.fuzz_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.fuzz_by_name" title="Permalink to this definition"></a></dt>
+<dd><p>Fuzz a particular test case or node by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of node.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.fuzz_single_case">
+<span class="sig-name descname"><span class="pre">fuzz_single_case</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mutant_index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.fuzz_single_case"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.fuzz_single_case" title="Permalink to this definition"></a></dt>
+<dd><p>Deprecated: Fuzz a test case by mutant_index.</p>
+<p>Deprecation note: The new approach is to set Session’s start and end indices to the same value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mutant_index</strong> (<em>int</em>) – Positive non-zero integer.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sex.SulleyRuntimeError</strong> – If any error is encountered while executing the test case.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.import_file">
+<span class="sig-name descname"><span class="pre">import_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.import_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.import_file" title="Permalink to this definition"></a></dt>
+<dd><p>Load various object values from disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See<span class="colon">:</span></dt>
+<dd class="field-odd"><p>export_file()</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="boofuzz.Session.netmon_results">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">netmon_results</span></span><a class="headerlink" href="#boofuzz.Session.netmon_results" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.num_mutations">
+<span class="sig-name descname"><span class="pre">num_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.num_mutations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.num_mutations" title="Permalink to this definition"></a></dt>
+<dd><p>Number of total mutations in the graph. The logic of this routine is identical to that of fuzz(). See fuzz()
+for inline comments. The member variable self.total_num_mutations is updated appropriately by this routine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_depth</strong> (<em>int</em>) – Maximum combinatorial depth used for fuzzing. num_mutations returns None if this value is</p></li>
+<li><p><strong>1</strong> (<em>None</em><em> or </em><em>greater than</em>) – </p></li>
+<li><p><strong>fuzzing.</strong> (<em>as the number</em><em> of </em><em>mutations is typically very large when using combinatorial</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Total number of mutations in this session.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.register_post_test_case_callback">
+<span class="sig-name descname"><span class="pre">register_post_test_case_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.register_post_test_case_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.register_post_test_case_callback" title="Permalink to this definition"></a></dt>
+<dd><p>Register a post- test case method.</p>
+<p>The registered method will be called after each fuzz test case.</p>
+<dl class="simple">
+<dt>Potential uses:</dt><dd><ul class="simple">
+<li><p>Closing down a connection.</p></li>
+<li><p>Checking for expected responses.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The order of callback events is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pre_send</span><span class="p">()</span> <span class="o">-</span> <span class="n">req</span> <span class="o">-</span> <span class="n">callback</span> <span class="o">...</span> <span class="n">req</span> <span class="o">-</span> <span class="n">callback</span> <span class="o">-</span> <span class="n">post</span><span class="o">-</span><span class="n">test</span><span class="o">-</span><span class="n">case</span><span class="o">-</span><span class="n">callback</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>method</strong> (<em>function</em>) – A method with the same parameters as <code class="xref py py-func docutils literal notranslate"><span class="pre">post_send()</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="boofuzz.Session.runtime">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">runtime</span></span><a class="headerlink" href="#boofuzz.Session.runtime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.server_init">
+<span class="sig-name descname"><span class="pre">server_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.server_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.server_init" title="Permalink to this definition"></a></dt>
+<dd><p>Called by fuzz() to initialize variables, web interface, etc.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.test_case_data">
+<span class="sig-name descname"><span class="pre">test_case_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.test_case_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.test_case_data" title="Permalink to this definition"></a></dt>
+<dd><p>Return test case data object (for use by web server)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – Test case index</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Test case data object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataTestCase</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.transmit_fuzz">
+<span class="sig-name descname"><span class="pre">transmit_fuzz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.transmit_fuzz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.transmit_fuzz" title="Permalink to this definition"></a></dt>
+<dd><p>Render and transmit a fuzzed node, process callbacks accordingly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sock</strong> (<em>Target</em><em>, </em><em>optional</em>) – Socket-like object on which to transmit node</p></li>
+<li><p><strong>node</strong> (<em>pgraph.node.node</em><em> (</em><em>Node</em><em>)</em><em>, </em><em>optional</em>) – Request/Node to transmit</p></li>
+<li><p><strong>edge</strong> (<em>pgraph.edge.edge</em><em> (</em><em>pgraph.edge</em><em>)</em><em>, </em><em>optional</em>) – Edge along the current fuzz path from “node” to next node.</p></li>
+<li><p><strong>callback_data</strong> (<em>bytes</em>) – Data from previous callback.</p></li>
+<li><p><strong>mutation_context</strong> (<em>MutationContext</em>) – Current mutation context.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.transmit_normal">
+<span class="sig-name descname"><span class="pre">transmit_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.transmit_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.transmit_normal" title="Permalink to this definition"></a></dt>
+<dd><p>Render and transmit a non-fuzzed node, process callbacks accordingly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sock</strong> (<em>Target</em><em>, </em><em>optional</em>) – Socket-like object on which to transmit node</p></li>
+<li><p><strong>node</strong> (<em>pgraph.node.node</em><em> (</em><em>Node</em><em>)</em><em>, </em><em>optional</em>) – Request/Node to transmit</p></li>
+<li><p><strong>edge</strong> (<em>pgraph.edge.edge</em><em> (</em><em>pgraph.edge</em><em>)</em><em>, </em><em>optional</em>) – Edge along the current fuzz path from “node” to next node.</p></li>
+<li><p><strong>callback_data</strong> (<em>bytes</em>) – Data from previous callback.</p></li>
+<li><p><strong>mutation_context</strong> (<em>MutationContext</em>) – active mutation context</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<section id="request-graph-visualisation-options">
+<h2>Request-Graph visualisation options<a class="headerlink" href="#request-graph-visualisation-options" title="Permalink to this heading"></a></h2>
+<p>The following methods are available to render data, which can then be used to visualise the request structure.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.render_graph_gml">
+<span class="sig-prename descclassname"><span class="pre">Session.</span></span><span class="sig-name descname"><span class="pre">render_graph_gml</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Session.render_graph_gml" title="Permalink to this definition"></a></dt>
+<dd><p>Render the GML graph description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>GML graph description.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.render_graph_graphviz">
+<span class="sig-prename descclassname"><span class="pre">Session.</span></span><span class="sig-name descname"><span class="pre">render_graph_graphviz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Session.render_graph_graphviz" title="Permalink to this definition"></a></dt>
+<dd><p>Render the graphviz graph structure.</p>
+<p>Example to create a png:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;somefile.png&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">render_graph_graphviz</span><span class="p">()</span><span class="o">.</span><span class="n">create_png</span><span class="p">())</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pydot object representing entire graph</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pydot.Dot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.render_graph_udraw">
+<span class="sig-prename descclassname"><span class="pre">Session.</span></span><span class="sig-name descname"><span class="pre">render_graph_udraw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Session.render_graph_udraw" title="Permalink to this definition"></a></dt>
+<dd><p>Render the uDraw graph description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>uDraw graph description.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session.render_graph_udraw_update">
+<span class="sig-prename descclassname"><span class="pre">Session.</span></span><span class="sig-name descname"><span class="pre">render_graph_udraw_update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Session.render_graph_udraw_update" title="Permalink to this definition"></a></dt>
+<dd><p>Render the uDraw graph update description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>uDraw graph description.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../user/contributing.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../user/connections.html" class="btn btn-neutral float-right" title="Connections" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright boofuzz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

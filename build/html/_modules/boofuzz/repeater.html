@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>boofuzz.repeater &mdash; rainfuzz 0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=44496db0"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/Session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/Target.html">Target</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/other-modules.html">Other Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../boofuzz.html">boofuzz</a></li>
+      <li class="breadcrumb-item active">boofuzz.repeater</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for boofuzz.repeater</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+
+<div class="viewcode-block" id="Repeater"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.Repeater">[docs]</a><span class="k">class</span> <span class="nc">Repeater</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base Repeater class.</span>
+
+<span class="sd">    :param sleep_time: Time to sleep between repetitions.</span>
+<span class="sd">    :type sleep_time: float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sleep_time</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span> <span class="o">=</span> <span class="n">sleep_time</span>
+
+<div class="viewcode-block" id="Repeater.start"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.Repeater.start">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Starts the repeater.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Repeater.repeat"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.Repeater.repeat">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decides whether the operation should repeat.</span>
+
+<span class="sd">        :return: True if the operation should repeat, False otherwise.</span>
+<span class="sd">        :rtype: Bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Repeater.reset"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.Repeater.reset">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets the internal state of the repeater.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Repeater.log_message"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.Repeater.log_message">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">log_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Formats a message to output in a log file. It should contain info about your repetition.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="TimeRepeater"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.TimeRepeater">[docs]</a><span class="k">class</span> <span class="nc">TimeRepeater</span><span class="p">(</span><span class="n">Repeater</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time-based repeater class. Starts a timer, and repeats until `duration` seconds have passed.</span>
+
+<span class="sd">    :raises ValueError: Raised if a time &lt;= 0 is specified.</span>
+
+<span class="sd">    :param duration: The duration of the repitition.</span>
+<span class="sd">    :type duration: float</span>
+<span class="sd">    :param sleep_time: Time to sleep between repetitions.</span>
+<span class="sd">    :type sleep_time: float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">sleep_time</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TimeRepeater</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">sleep_time</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Time must be a non-negative non-zero value&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_starttime</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="TimeRepeater.start"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.TimeRepeater.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Starts the timer.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_starttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TimeRepeater.repeat"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.TimeRepeater.repeat">[docs]</a>    <span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TimeRepeater</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_starttime</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span></div>
+
+<div class="viewcode-block" id="TimeRepeater.reset"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.TimeRepeater.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets the timer.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_starttime</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="TimeRepeater.log_message"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.TimeRepeater.log_message">[docs]</a>    <span class="k">def</span> <span class="nf">log_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;repeat for </span><span class="si">{}</span><span class="s2">s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CountRepeater"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.CountRepeater">[docs]</a><span class="k">class</span> <span class="nc">CountRepeater</span><span class="p">(</span><span class="n">Repeater</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Count-Based repeater class. Repeats a fixed number of times.</span>
+
+<span class="sd">    :raises ValueError: Raised if a count &lt; 1 is specified.</span>
+
+<span class="sd">    :param count: Total amount of packets to be sent. **Important**: Do not</span>
+<span class="sd">                  confuse this parameter with the amount of repetitions.</span>
+<span class="sd">                  Specifying 1 would send exactly one packet.</span>
+<span class="sd">    :type count: int</span>
+<span class="sd">    :param sleep_time: Time to sleep between repetitions.</span>
+<span class="sd">    :type sleep_time: float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">sleep_time</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CountRepeater</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">sleep_time</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Count must be greater or equal to 1&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reps</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="CountRepeater.start"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.CountRepeater.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="CountRepeater.repeat"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.CountRepeater.repeat">[docs]</a>    <span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CountRepeater</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reps</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reps</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span></div>
+
+<div class="viewcode-block" id="CountRepeater.reset"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.CountRepeater.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reps</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="CountRepeater.log_message"><a class="viewcode-back" href="../../source/Target.html#boofuzz.repeater.CountRepeater.log_message">[docs]</a>    <span class="k">def</span> <span class="nf">log_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;repeat </span><span class="si">{}</span><span class="s2"> times&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright boofuzz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

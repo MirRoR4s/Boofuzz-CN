@@ -1,41 +1,92 @@
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Session &#8212; rainfuzz 0.0 文档</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=4f649999" />
-    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=039e1c02" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=16727793"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="../../_static/translations.js?v=beaddf03"></script>
-    <link rel="index" title="索引" href="../../genindex.html" />
-    <link rel="search" title="搜索" href="../../search.html" />
-    <link rel="next" title="Target" href="../target/target.html" />
-    <link rel="prev" title="boofuzz分析" href="../index.html" />
-   
-  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session &mdash; rainfuzz 0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=44496db0"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
           
+          
+          <a href="../../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/other-modules.html">Other Modules</a></li>
+</ul>
 
-          <div class="body" role="main">
-            
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Session</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/boofuzz1/session/session.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="session">
-<h1>Session<a class="headerlink" href="#session" title="此标题的永久链接">¶</a></h1>
+<h1>Session<a class="headerlink" href="#session" title="Permalink to this heading"></a></h1>
 <section id="id1">
-<h2>前言<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h2>
+<h2>前言<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <p>Session 类即会话类是 boofuzz
 中的重要组成部分，主要负责发送和接收模糊测试数据包等。Session类继承自
 Graph 类，所以 Session 对象相当于一个<strong>图</strong>。</p>
@@ -50,9 +101,9 @@ id，键值则是对应的节点</p></li>
 </ul>
 </section>
 <section id="id2">
-<h2>成员变量和方法<a class="headerlink" href="#id2" title="此标题的永久链接">¶</a></h2>
+<h2>成员变量和方法<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
 <section id="init">
-<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session">__init__</a><a class="headerlink" href="#init" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session">__init__</a><a class="headerlink" href="#init" title="Permalink to this heading"></a></h3>
 <p><strong>参数：</strong></p>
 <table class="docutils align-default">
 <thead>
@@ -270,7 +321,7 @@ None。</p></td>
 </div>
 </section>
 <section id="add-node-node">
-<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_node">add_node(node)</a><a class="headerlink" href="#add-node-node" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_node">add_node(node)</a><a class="headerlink" href="#add-node-node" title="Permalink to this heading"></a></h3>
 <p><strong>参数：</strong></p>
 <ul class="simple">
 <li><p>node（pgraph.Node）- 要加入会话图的节点</p></li>
@@ -286,7 +337,7 @@ None。</p></td>
 </ul>
 </section>
 <section id="add-target">
-<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_target">add_target</a><a class="headerlink" href="#add-target" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_target">add_target</a><a class="headerlink" href="#add-target" title="Permalink to this heading"></a></h3>
 <p>向 session 中添加一个目标，可以同时对多个目标进行模糊测试</p>
 <p><strong>参数：</strong></p>
 <ul class="simple">
@@ -305,7 +356,7 @@ None。</p></td>
 </ul>
 </section>
 <section id="build-webapp-thread">
-<h3>build_webapp_thread<a class="headerlink" href="#build-webapp-thread" title="此标题的永久链接">¶</a></h3>
+<h3>build_webapp_thread<a class="headerlink" href="#build-webapp-thread" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">build_webapp_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">DEFAULT_WEB_UI_PORT</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">DEFAULT_WEB_UI_ADDRESS</span><span class="p">):</span>
     <span class="n">app</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="bp">self</span>
     <span class="n">http_server</span> <span class="o">=</span> <span class="n">HTTPServer</span><span class="p">(</span><span class="n">WSGIContainer</span><span class="p">(</span><span class="n">app</span><span class="p">))</span>
@@ -363,7 +414,7 @@ Tornado 的 I/O 循环实例，<code class="docutils literal notranslate"><span 
 应用程序，并监听指定的地址和端口。</p>
 </section>
 <section id="connect">
-<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.connect">connect</a><a class="headerlink" href="#connect" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.connect">connect</a><a class="headerlink" href="#connect" title="Permalink to this heading"></a></h3>
 <p>建立两个请求（即两个节点）之间的连接。</p>
 <p><strong>参数：</strong></p>
 <ul class="simple">
@@ -401,7 +452,7 @@ Tornado 的 I/O 循环实例，<code class="docutils literal notranslate"><span 
 </ol>
 </section>
 <section id="example-test-case-callback">
-<h3>example_test_case_callback<a class="headerlink" href="#example-test-case-callback" title="此标题的永久链接">¶</a></h3>
+<h3>example_test_case_callback<a class="headerlink" href="#example-test-case-callback" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">example_test_case_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">fuzz_data_logger</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">test_case_context</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="c1"># default to doing nothing.</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;No post_send callback registered.&quot;</span><span class="p">)</span>
@@ -409,7 +460,7 @@ Tornado 的 I/O 循环实例，<code class="docutils literal notranslate"><span 
 </div>
 </section>
 <section id="export-file">
-<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.export_file">export_file</a><a class="headerlink" href="#export-file" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.export_file">export_file</a><a class="headerlink" href="#export-file" title="Permalink to this heading"></a></h3>
 <p>将对象值导出到磁盘中。</p>
 <p>参数：</p>
 <ul class="simple">
@@ -430,7 +481,7 @@ session_filename、total_mutant_index、sleep_time 等 session
 </ol>
 </section>
 <section id="num-mutations-recursive">
-<h3>_num_mutations_recursive<a class="headerlink" href="#num-mutations-recursive" title="此标题的永久链接">¶</a></h3>
+<h3>_num_mutations_recursive<a class="headerlink" href="#num-mutations-recursive" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_num_mutations_recursive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this_node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">this_node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">this_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span>
@@ -462,7 +513,7 @@ session_filename、total_mutant_index、sleep_time 等 session
 </ul>
 </section>
 <section id="num-mutations">
-<h3>num_mutations<a class="headerlink" href="#num-mutations" title="此标题的永久链接">¶</a></h3>
+<h3>num_mutations<a class="headerlink" href="#num-mutations" title="Permalink to this heading"></a></h3>
 <p>graph中的总变异数。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">num_mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">max_depth</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">max_depth</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -480,7 +531,7 @@ session_filename、total_mutant_index、sleep_time 等 session
 <p>本次会话变异总数（int）</p>
 </section>
 <section id="feature-check">
-<h3>feature_check<a class="headerlink" href="#feature-check" title="此标题的永久链接">¶</a></h3>
+<h3>feature_check<a class="headerlink" href="#feature-check" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">feature_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check all messages/features.</span>
 
@@ -496,7 +547,7 @@ session_filename、total_mutant_index、sleep_time 等 session
 </div>
 </section>
 <section id="fuzz">
-<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.fuzz">fuzz</a><a class="headerlink" href="#fuzz" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.fuzz">fuzz</a><a class="headerlink" href="#fuzz" title="Permalink to this heading"></a></h3>
 <p>对整个协议树进行模糊测试</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fuzz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">total_mutant_index</span> <span class="o">=</span> <span class="mi">0</span>
@@ -527,7 +578,7 @@ case进行模糊测试</p></li>
 </ol>
 </section>
 <section id="fuzz-by-name">
-<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.fuzz_by_name">fuzz_by_name</a><a class="headerlink" href="#fuzz-by-name" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.fuzz_by_name">fuzz_by_name</a><a class="headerlink" href="#fuzz-by-name" title="Permalink to this heading"></a></h3>
 <p>该方法通过名字对特定的测试案例或节点进行模糊测试，目前已<strong>弃用</strong>，使用
 fuzz 方法并传入 name 参数即可。</p>
 <p>参数：</p>
@@ -540,90 +591,37 @@ fuzz 方法并传入 name 参数即可。</p>
 </ul>
 </section>
 <section id="fuzz-single-case">
-<h3>fuzz_single_case<a class="headerlink" href="#fuzz-single-case" title="此标题的永久链接">¶</a></h3>
+<h3>fuzz_single_case<a class="headerlink" href="#fuzz-single-case" title="Permalink to this heading"></a></h3>
 </section>
 </section>
 </section>
 
 
+           </div>
           </div>
-          
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright boofuzz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../index.html">rainfuzz</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>导航</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../test.html">环境搭建</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">boofuzz分析</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Session</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../target/target.html">Target</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../connections/connections.html">Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../logging/logging.html">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../examples/examples.html">样例分析</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../protocol_definition/protocol_definition.html">Protocol Definition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../other_modules/other_modules.html">Other Modules</a></li>
-</ul>
-</li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">boofuzz分析</a><ul>
-      <li>Previous: <a href="../index.html" title="上一章">boofuzz分析</a></li>
-      <li>Next: <a href="../target/target.html" title="下一章">Target</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">快速搜索</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="提交" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;一袭青衣尽长安.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
-      
-      |
-      <a href="../../_sources/boofuzz1/session/session.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

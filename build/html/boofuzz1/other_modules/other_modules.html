@@ -1,48 +1,100 @@
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Other Modules &#8212; rainfuzz 0.0 文档</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=4f649999" />
-    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=039e1c02" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=16727793"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="../../_static/translations.js?v=beaddf03"></script>
-    <link rel="index" title="索引" href="../../genindex.html" />
-    <link rel="search" title="搜索" href="../../search.html" />
-    <link rel="prev" title="Protocol Definition" href="../protocol_definition/protocol_definition.html" />
-   
-  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Other Modules &mdash; rainfuzz 0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=44496db0"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
           
+          
+          <a href="../../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/other-modules.html">Other Modules</a></li>
+</ul>
 
-          <div class="body" role="main">
-            
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Other Modules</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/boofuzz1/other_modules/other_modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="other-modules">
-<h1><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/user/other-modules.html#module-boofuzz.helpers">Other Modules</a><a class="headerlink" href="#other-modules" title="此标题的永久链接">¶</a></h1>
+<h1><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/user/other-modules.html#module-boofuzz.helpers">Other Modules</a><a class="headerlink" href="#other-modules" title="Permalink to this heading"></a></h1>
 <section id="test-case-session-reference">
-<h2>Test Case Session Reference<a class="headerlink" href="#test-case-session-reference" title="此标题的永久链接">¶</a></h2>
+<h2>Test Case Session Reference<a class="headerlink" href="#test-case-session-reference" title="Permalink to this heading"></a></h2>
 </section>
 <section id="helpers">
-<h2>Helpers<a class="headerlink" href="#helpers" title="此标题的永久链接">¶</a></h2>
+<h2>Helpers<a class="headerlink" href="#helpers" title="Permalink to this heading"></a></h2>
 <p>在 Helpers 中有许多的帮助函数。</p>
 <section id="id1">
-<h3>分析<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h3>
+<h3>分析<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <section id="get-boofuzz-version-boofuzz-class">
-<h4>get_boofuzz_version(boofuzz_class)<a class="headerlink" href="#get-boofuzz-version-boofuzz-class" title="此标题的永久链接">¶</a></h4>
+<h4>get_boofuzz_version(boofuzz_class)<a class="headerlink" href="#get-boofuzz-version-boofuzz-class" title="Permalink to this heading"></a></h4>
 <p>该函数的作用是解析 boofuzz 库中的 <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>
 文件，从中提取版本号，并以字符串形式返回。</p>
 <p><strong>参数：</strong></p>
@@ -73,7 +125,7 @@
 </ol>
 </section>
 <section id="hex-to-hexstr-input-bytes">
-<h4>hex_to_hexstr(input_bytes)<a class="headerlink" href="#hex-to-hexstr-input-bytes" title="此标题的永久链接">¶</a></h4>
+<h4>hex_to_hexstr(input_bytes)<a class="headerlink" href="#hex-to-hexstr-input-bytes" title="Permalink to this heading"></a></h4>
 <p>该函数用于将字节数据转换为 ASCII 编码的十六进制字节字符串，然后附加一个
 UTF-8 解码的字符串。</p>
 <p><strong>参数：</strong></p>
@@ -95,7 +147,7 @@ Python 表示形式的字符串。</p></li>
 <p>例如，如果<code class="docutils literal notranslate"><span class="pre">input_bytes</span></code>的值为<code class="docutils literal notranslate"><span class="pre">b'Hello'</span></code>，则函数将返回字符串<code class="docutils literal notranslate"><span class="pre">&quot;48</span> <span class="pre">65</span> <span class="pre">6c</span> <span class="pre">6c</span> <span class="pre">6f</span> <span class="pre">b'Hello'&quot;</span></code>，其中<code class="docutils literal notranslate"><span class="pre">48</span> <span class="pre">65</span> <span class="pre">6c</span> <span class="pre">6c</span> <span class="pre">6f</span></code>是字节数据<code class="docutils literal notranslate"><span class="pre">b'Hello'</span></code>的ASCII编码的十六进制表示，<code class="docutils literal notranslate"><span class="pre">b'Hello'</span></code>是对字节数据的Python表示。</p>
 </section>
 <section id="hex-str-s">
-<h4>hex_str(s)<a class="headerlink" href="#hex-str-s" title="此标题的永久链接">¶</a></h4>
+<h4>hex_str(s)<a class="headerlink" href="#hex-str-s" title="Permalink to this heading"></a></h4>
 <p>该函数用于将字节数据转换为十六进制格式的字符串。</p>
 <p><strong>实现思路：</strong></p>
 <ol class="arabic simple">
@@ -112,83 +164,31 @@ Python 表示形式的字符串。</p></li>
 </section>
 
 
+           </div>
           </div>
-          
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright boofuzz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../index.html">rainfuzz</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>导航</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../test.html">环境搭建</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">boofuzz分析</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../session/session.html">Session</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../target/target.html">Target</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../connections/connections.html">Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../logging/logging.html">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../examples/examples.html">样例分析</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../protocol_definition/protocol_definition.html">Protocol Definition</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Other Modules</a></li>
-</ul>
-</li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">boofuzz分析</a><ul>
-      <li>Previous: <a href="../protocol_definition/protocol_definition.html" title="上一章">Protocol Definition</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">快速搜索</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="提交" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;一袭青衣尽长安.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
-      
-      |
-      <a href="../../_sources/boofuzz1/other_modules/other_modules.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

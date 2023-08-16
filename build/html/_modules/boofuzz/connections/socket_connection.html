@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>boofuzz.connections.socket_connection &mdash; rainfuzz 0.0 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=16727793"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/protocol-definition.html">Protocol Definition</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">boofuzz.connections.socket_connection</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>boofuzz.connections.socket_connection 源代码</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">boofuzz</span> <span class="kn">import</span> <span class="n">exception</span>
+<span class="kn">from</span> <span class="nn">boofuzz.connections</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">raw_l2_socket_connection</span><span class="p">,</span>
+    <span class="n">raw_l3_socket_connection</span><span class="p">,</span>
+    <span class="n">ssl_socket_connection</span><span class="p">,</span>
+    <span class="n">tcp_socket_connection</span><span class="p">,</span>
+    <span class="n">udp_socket_connection</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">_PROTOCOLS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tcp&quot;</span><span class="p">,</span> <span class="s2">&quot;ssl&quot;</span><span class="p">,</span> <span class="s2">&quot;udp&quot;</span><span class="p">,</span> <span class="s2">&quot;raw-l2&quot;</span><span class="p">,</span> <span class="s2">&quot;raw-l3&quot;</span><span class="p">]</span>
+<span class="n">_PROTOCOLS_PORT_REQUIRED</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tcp&quot;</span><span class="p">,</span> <span class="s2">&quot;ssl&quot;</span><span class="p">,</span> <span class="s2">&quot;udp&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="SocketConnection"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.SocketConnection">[文档]</a><span class="k">def</span> <span class="nf">SocketConnection</span><span class="p">(</span>
+    <span class="n">host</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">proto</span><span class="o">=</span><span class="s2">&quot;tcp&quot;</span><span class="p">,</span>
+    <span class="n">bind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">send_timeout</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+    <span class="n">recv_timeout</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+    <span class="n">ethernet_proto</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">l2_dst</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xFF</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">udp_broadcast</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">server</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">sslcontext</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">server_hostname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ITargetConnection implementation using sockets.</span>
+
+<span class="sd">    Supports UDP, TCP, SSL, raw layer 2 and raw layer 3 packets.</span>
+
+<span class="sd">    .. note:: SocketConnection is deprecated and will be removed in a future version of Boofuzz.</span>
+<span class="sd">        Use the classes derived from :class:`BaseSocketConnection &lt;boofuzz.connections.BaseSocketConnection&gt;` instead.</span>
+
+<span class="sd">    .. versionchanged:: 0.2.0</span>
+<span class="sd">        SocketConnection has been moved into the connections subpackage.</span>
+<span class="sd">        The full path is now boofuzz.connections.socket_connection.SocketConnection</span>
+
+<span class="sd">    .. deprecated:: 0.2.0</span>
+<span class="sd">        Use the classes derived from :class:`BaseSocketConnection &lt;boofuzz.connections.BaseSocketConnection&gt;` instead.</span>
+
+<span class="sd">    Examples::</span>
+
+<span class="sd">        tcp_connection = SocketConnection(host=&#39;127.0.0.1&#39;, port=17971)</span>
+<span class="sd">        udp_connection = SocketConnection(host=&#39;127.0.0.1&#39;, port=17971, proto=&#39;udp&#39;)</span>
+<span class="sd">        udp_connection_2_way = SocketConnection(host=&#39;127.0.0.1&#39;, port=17971, proto=&#39;udp&#39;, bind=(&#39;127.0.0.1&#39;, 17972)</span>
+<span class="sd">        udp_broadcast = SocketConnection(host=&#39;127.0.0.1&#39;, port=17971, proto=&#39;udp&#39;, bind=(&#39;127.0.0.1&#39;, 17972),</span>
+<span class="sd">                                         udp_broadcast=True)</span>
+<span class="sd">        raw_layer_2 = (host=&#39;lo&#39;, proto=&#39;raw-l2&#39;)</span>
+<span class="sd">        raw_layer_2 = (host=&#39;lo&#39;, proto=&#39;raw-l2&#39;,</span>
+<span class="sd">                       l2_dst=&#39;\\xFF\\xFF\\xFF\\xFF\\xFF\\xFF&#39;, ethernet_proto=socket_connection.ETH_P_IP)</span>
+<span class="sd">        raw_layer_3 = (host=&#39;lo&#39;, proto=&#39;raw-l3&#39;)</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        host (str): Hostname or IP address of target system, or network interface string if using raw-l2 or raw-l3.</span>
+<span class="sd">        port (int): Port of target service. Required for proto values &#39;tcp&#39;, &#39;udp&#39;, &#39;ssl&#39;.</span>
+<span class="sd">        proto (str): Communication protocol (&quot;tcp&quot;, &quot;udp&quot;, &quot;ssl&quot;, &quot;raw-l2&quot;, &quot;raw-l3&quot;). Default &quot;tcp&quot;.</span>
+<span class="sd">            raw-l2: Send packets at layer 2. Must include link layer header (e.g. Ethernet frame).</span>
+<span class="sd">            raw-l3: Send packets at layer 3. Must include network protocol header (e.g. IPv4).</span>
+<span class="sd">        bind (tuple (host, port)): Socket bind address and port. Required if using recv() with &#39;udp&#39; protocol.</span>
+<span class="sd">        send_timeout (float): Seconds to wait for send before timing out. Default 5.0.</span>
+<span class="sd">        recv_timeout (float): Seconds to wait for recv before timing out. Default 5.0.</span>
+<span class="sd">        ethernet_proto (int): Ethernet protocol when using &#39;raw-l3&#39;. 16 bit integer.</span>
+<span class="sd">            Default ETH_P_IP (0x0800) when using &#39;raw-l3&#39;. See &quot;if_ether.h&quot; in Linux documentation for more options.</span>
+<span class="sd">        l2_dst (str): Layer 2 destination address (e.g. MAC address). Used only by &#39;raw-l3&#39;.</span>
+<span class="sd">            Default &#39;\xFF\xFF\xFF\xFF\xFF\xFF&#39; (broadcast).</span>
+<span class="sd">        udp_broadcast (bool): Set to True to enable UDP broadcast. Must supply appropriate broadcast address for send()</span>
+<span class="sd">            to work, and &#39;&#39; for bind host for recv() to work.</span>
+<span class="sd">        server (bool): Set to True to enable server side fuzzing.</span>
+<span class="sd">        sslcontext (ssl.SSLContext): Python SSL context to be used. Required if server=True or server_hostname=None.</span>
+<span class="sd">        server_hostname (string): server_hostname, required for verifying identity of remote SSL/TLS server.</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;SocketConnection is deprecated and will be removed in a future version of Boofuzz. &quot;</span>
+        <span class="s2">&quot;Use the classes derived from BaseSocketConnection instead.&quot;</span><span class="p">,</span>
+        <span class="ne">FutureWarning</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">proto</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_PROTOCOLS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">SullyRuntimeError</span><span class="p">(</span><span class="s2">&quot;INVALID PROTOCOL SPECIFIED: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">proto</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">proto</span> <span class="ow">in</span> <span class="n">_PROTOCOLS_PORT_REQUIRED</span> <span class="ow">and</span> <span class="n">port</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;__init__() argument port required for protocol </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proto</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">proto</span> <span class="o">==</span> <span class="s2">&quot;udp&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">udp_socket_connection</span><span class="o">.</span><span class="n">UDPSocketConnection</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">send_timeout</span><span class="p">,</span> <span class="n">recv_timeout</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">bind</span><span class="p">,</span> <span class="n">udp_broadcast</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">proto</span> <span class="o">==</span> <span class="s2">&quot;tcp&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tcp_socket_connection</span><span class="o">.</span><span class="n">TCPSocketConnection</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">send_timeout</span><span class="p">,</span> <span class="n">recv_timeout</span><span class="p">,</span> <span class="n">server</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">proto</span> <span class="o">==</span> <span class="s2">&quot;ssl&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ssl_socket_connection</span><span class="o">.</span><span class="n">SSLSocketConnection</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">send_timeout</span><span class="p">,</span> <span class="n">recv_timeout</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">sslcontext</span><span class="p">,</span> <span class="n">server_hostname</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">proto</span> <span class="o">==</span> <span class="s2">&quot;raw-l2&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">raw_l2_socket_connection</span><span class="o">.</span><span class="n">RawL2SocketConnection</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">send_timeout</span><span class="p">,</span> <span class="n">recv_timeout</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">proto</span> <span class="o">==</span> <span class="s2">&quot;raw-l3&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ethernet_proto</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ethernet_proto</span> <span class="o">=</span> <span class="n">raw_l3_socket_connection</span><span class="o">.</span><span class="n">ETH_P_IP</span>
+
+        <span class="k">return</span> <span class="n">raw_l3_socket_connection</span><span class="o">.</span><span class="n">RawL3SocketConnection</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">send_timeout</span><span class="p">,</span> <span class="n">recv_timeout</span><span class="p">,</span> <span class="n">ethernet_proto</span><span class="p">,</span> <span class="n">l2_dst</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 boofuzz。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

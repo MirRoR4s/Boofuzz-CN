@@ -7,13 +7,13 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import os
 import sys
-#sys.path.insert(0,os.path.abspath('.'))
+sys.path.insert(0,os.path.abspath('.'))
 project = 'rainfuzz'
-copyright = '一袭青衣尽长安'
+copyright = 'boofuzz'
 author = 'MirRoR4s'
 version = "0.0"
 release = '0.0'
-language = "zh_CN"
+language = "en"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -30,5 +30,5 @@ extensions = [
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-#html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_rtd_theme' # 到时候上传记得注释掉这个
 #html_static_path = ['_static']

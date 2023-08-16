@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>boofuzz &mdash; rainfuzz 0.0 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=16727793"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/static-protocol-definition.html">Static Protocol Definition</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">boofuzz</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>boofuzz 源代码</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">exception</span><span class="p">,</span> <span class="n">legos</span><span class="p">,</span> <span class="n">primitives</span>
+<span class="kn">from</span> <span class="nn">.blocks</span> <span class="kn">import</span> <span class="n">Aligned</span><span class="p">,</span> <span class="n">Block</span><span class="p">,</span> <span class="n">Checksum</span><span class="p">,</span> <span class="n">Repeat</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">REQUESTS</span><span class="p">,</span> <span class="n">Size</span>
+<span class="kn">from</span> <span class="nn">.cli</span> <span class="kn">import</span> <span class="n">main_helper</span>
+<span class="kn">from</span> <span class="nn">.connections</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BaseSocketConnection</span><span class="p">,</span>
+    <span class="n">FileConnection</span><span class="p">,</span>
+    <span class="n">ip_constants</span><span class="p">,</span>
+    <span class="n">ISerialLike</span><span class="p">,</span>
+    <span class="n">ITargetConnection</span><span class="p">,</span>
+    <span class="n">NETCONFConnection</span><span class="p">,</span>
+    <span class="n">RawL2SocketConnection</span><span class="p">,</span>
+    <span class="n">RawL3SocketConnection</span><span class="p">,</span>
+    <span class="n">SerialConnection</span><span class="p">,</span>
+    <span class="n">SerialConnectionLowLevel</span><span class="p">,</span>
+    <span class="n">SocketConnection</span><span class="p">,</span>
+    <span class="n">SSLSocketConnection</span><span class="p">,</span>
+    <span class="n">TCPSocketConnection</span><span class="p">,</span>
+    <span class="n">UDPSocketConnection</span><span class="p">,</span>
+    <span class="n">UnixSocketConnection</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">BIG_ENDIAN</span><span class="p">,</span> <span class="n">DEFAULT_PROCMON_PORT</span><span class="p">,</span> <span class="n">LITTLE_ENDIAN</span>
+<span class="kn">from</span> <span class="nn">.event_hook</span> <span class="kn">import</span> <span class="n">EventHook</span>
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">BoofuzzFailure</span><span class="p">,</span> <span class="n">MustImplementException</span><span class="p">,</span> <span class="n">SizerNotUtilizedError</span><span class="p">,</span> <span class="n">SullyRuntimeError</span>
+<span class="kn">from</span> <span class="nn">.fuzz_logger</span> <span class="kn">import</span> <span class="n">FuzzLogger</span>
+<span class="kn">from</span> <span class="nn">.fuzz_logger_csv</span> <span class="kn">import</span> <span class="n">FuzzLoggerCsv</span>
+<span class="kn">from</span> <span class="nn">.fuzz_logger_curses</span> <span class="kn">import</span> <span class="n">FuzzLoggerCurses</span>
+<span class="kn">from</span> <span class="nn">.fuzz_logger_text</span> <span class="kn">import</span> <span class="n">FuzzLoggerText</span>
+<span class="kn">from</span> <span class="nn">.fuzzable</span> <span class="kn">import</span> <span class="n">Fuzzable</span>
+<span class="kn">from</span> <span class="nn">.fuzzable_block</span> <span class="kn">import</span> <span class="n">FuzzableBlock</span>
+<span class="kn">from</span> <span class="nn">.ifuzz_logger</span> <span class="kn">import</span> <span class="n">IFuzzLogger</span>
+<span class="kn">from</span> <span class="nn">.ifuzz_logger_backend</span> <span class="kn">import</span> <span class="n">IFuzzLoggerBackend</span>
+<span class="kn">from</span> <span class="nn">.monitors</span> <span class="kn">import</span> <span class="n">BaseMonitor</span><span class="p">,</span> <span class="n">CallbackMonitor</span><span class="p">,</span> <span class="n">NetworkMonitor</span><span class="p">,</span> <span class="n">pedrpc</span><span class="p">,</span> <span class="n">ProcessMonitor</span>
+<span class="kn">from</span> <span class="nn">.utils.process_monitor_local</span> <span class="kn">import</span> <span class="n">ProcessMonitorLocal</span>
+<span class="kn">from</span> <span class="nn">.primitives</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BasePrimitive</span><span class="p">,</span>
+    <span class="n">BitField</span><span class="p">,</span>
+    <span class="n">Byte</span><span class="p">,</span>
+    <span class="n">Bytes</span><span class="p">,</span>
+    <span class="n">Delim</span><span class="p">,</span>
+    <span class="n">DWord</span><span class="p">,</span>
+    <span class="n">Float</span><span class="p">,</span>
+    <span class="n">FromFile</span><span class="p">,</span>
+    <span class="n">Group</span><span class="p">,</span>
+    <span class="n">Mirror</span><span class="p">,</span>
+    <span class="n">QWord</span><span class="p">,</span>
+    <span class="n">RandomData</span><span class="p">,</span>
+    <span class="n">Simple</span><span class="p">,</span>
+    <span class="n">Static</span><span class="p">,</span>
+    <span class="n">String</span><span class="p">,</span>
+    <span class="n">Word</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.repeater</span> <span class="kn">import</span> <span class="n">CountRepeater</span><span class="p">,</span> <span class="n">Repeater</span><span class="p">,</span> <span class="n">TimeRepeater</span>
+<span class="kn">from</span> <span class="nn">.sessions</span> <span class="kn">import</span> <span class="n">open_test_run</span><span class="p">,</span> <span class="n">Session</span><span class="p">,</span> <span class="n">Target</span>
+<span class="kn">from</span> <span class="nn">.protocol_session</span> <span class="kn">import</span> <span class="n">ProtocolSession</span>
+<span class="kn">from</span> <span class="nn">.protocol_session_reference</span> <span class="kn">import</span> <span class="n">ProtocolSessionReference</span>
+
+<span class="c1"># workaround to make Tornado work in Python 3.8</span>
+<span class="c1"># https://github.com/tornadoweb/tornado/issues/2608</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">asyncio</span>
+
+    <span class="c1"># noinspection PyUnresolvedReferences</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop_policy</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">WindowsSelectorEventLoopPolicy</span><span class="p">())</span>  <span class="c1"># pytype: disable=module-attr</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Aligned&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BaseMonitor&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BasePrimitive&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BaseSocketConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BIG_ENDIAN&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BitField&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Block&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;blocks&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BoofuzzFailure&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Byte&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Bytes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CallbackMonitor&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Checksum&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CountRepeater&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_PROCMON_PORT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Delim&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DWord&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EventHook&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;exception&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FileConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Float&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FromFile&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Fuzzable&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FuzzableBlock&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FuzzLogger&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FuzzLoggerCsv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FuzzLoggerCurses&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FuzzLoggerText&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IFuzzLogger&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IFuzzLoggerBackend&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ip_constants&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ISerialLike&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ITargetConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NETCONFConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;legos&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LITTLE_ENDIAN&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;main_helper&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Mirror&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MustImplementException&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NetworkMonitor&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;open_test_run&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pedrpc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;primitives&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ProcessMonitor&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ProcessMonitorLocal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;QWord&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RandomData&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RawL2SocketConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RawL3SocketConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Repeat&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Repeater&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Request&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;REQUESTS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_aligned&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_bigword&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_binary&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_bit&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_bit_field&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_bits&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_block&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_block_end&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_block_start&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_byte&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_bytes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_char&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_checksum&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_cstring&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_delim&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_double&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_dunno&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_dword&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_float&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_from_file&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_get&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_group&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_hex_dump&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_initialize&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_int&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_intelword&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_lego&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_long&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_mirror&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_num_mutations&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_qword&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_random&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_raw&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_repeat&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_repeater&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_short&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_size&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_sizer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_static&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_simple&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_string&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_switch&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_unknown&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_update&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s_word&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SerialConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SerialConnectionLowLevel&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Session&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Size&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SizerNotUtilizedError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SocketConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SSLSocketConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Simple&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Static&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SullyRuntimeError&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Target&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TCPSocketConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ProtocolSession&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ProtocolSessionReference&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TimeRepeater&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;UDPSocketConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;UnixSocketConnection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Word&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.4.1&quot;</span>
+
+
+<span class="c1"># REQUEST MANAGEMENT</span>
+<div class="viewcode-block" id="s_get"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_get">[文档]</a><span class="k">def</span> <span class="nf">s_get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the request with the specified name or the current request if name is not specified. Use this to switch from</span>
+<span class="sd">    global function style request manipulation to direct object manipulation. Example::</span>
+
+<span class="sd">        req = s_get(&quot;HTTP BASIC&quot;)</span>
+<span class="sd">        print(req.num_mutations())</span>
+
+<span class="sd">    The selected request is also set as the default current. (ie: s_switch(name) is implied).</span>
+
+<span class="sd">    :type  name: str</span>
+<span class="sd">    :param name: (Optional, def=None) Name of request to return or current request if name is None.</span>
+
+<span class="sd">    :rtype:  blocks.Request</span>
+<span class="sd">    :return: The requested request.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span>
+
+    <span class="c1"># ensure this gotten request is the new current.</span>
+    <span class="n">s_switch</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">blocks</span><span class="o">.</span><span class="n">REQUESTS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">SullyRuntimeError</span><span class="p">(</span><span class="s2">&quot;blocks.REQUESTS NOT FOUND: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">blocks</span><span class="o">.</span><span class="n">REQUESTS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="s_initialize"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_initialize">[文档]</a><span class="k">def</span> <span class="nf">s_initialize</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize a new block request. All blocks / primitives generated after this call apply to the named request.</span>
+<span class="sd">    Use s_switch() to jump between factories.</span>
+
+<span class="sd">    :type  name: str</span>
+<span class="sd">    :param name: Name of request</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">blocks</span><span class="o">.</span><span class="n">REQUESTS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">SullyRuntimeError</span><span class="p">(</span><span class="s2">&quot;blocks.REQUESTS ALREADY EXISTS: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">REQUESTS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">REQUESTS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="s_num_mutations"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_num_mutations">[文档]</a><span class="k">def</span> <span class="nf">s_num_mutations</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine the number of repetitions we will be making.</span>
+
+<span class="sd">    :rtype:  int</span>
+<span class="sd">    :return: Number of mutated forms this primitive can take.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">get_num_mutations</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="s_switch"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_switch">[文档]</a><span class="k">def</span> <span class="nf">s_switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Change the current request to the one specified by &quot;name&quot;.</span>
+
+<span class="sd">    :type  name: str</span>
+<span class="sd">    :param name: Name of request</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">blocks</span><span class="o">.</span><span class="n">REQUESTS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">SullyRuntimeError</span><span class="p">(</span><span class="s2">&quot;blocks.REQUESTS NOT FOUND: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">REQUESTS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
+
+
+<span class="c1"># ## BLOCK MANAGEMENT</span>
+
+
+<div class="viewcode-block" id="s_block"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_block">[文档]</a><span class="k">def</span> <span class="nf">s_block</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dep</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dep_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dep_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dep_compare</span><span class="o">=</span><span class="s2">&quot;==&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Open a new block under the current request. The returned instance supports the &quot;with&quot; interface so it will</span>
+<span class="sd">    be automatically closed for you::</span>
+
+<span class="sd">        with s_block(&quot;header&quot;):</span>
+<span class="sd">            s_static(&quot;\\x00\\x01&quot;)</span>
+<span class="sd">            if s_block_start(&quot;body&quot;):</span>
+<span class="sd">                ...</span>
+
+<span class="sd">    :type  name:        str, optional</span>
+<span class="sd">    :param name:        Name of block being opened</span>
+<span class="sd">    :type  group:       str, optional</span>
+<span class="sd">    :param group:       (Optional, def=None) Name of group to associate this block with</span>
+<span class="sd">    :type  encoder:     Function Pointer, optional</span>
+<span class="sd">    :param encoder:     (Optional, def=None) Optional pointer to a function to pass rendered data to prior to return</span>
+<span class="sd">    :type  dep:         str, optional</span>
+<span class="sd">    :param dep:         (Optional, def=None) Optional primitive whose specific value this block is dependant on</span>
+<span class="sd">    :type  dep_value:   Mixed, optional</span>
+<span class="sd">    :param dep_value:   (Optional, def=None) Value that field &quot;dep&quot; must contain for block to be rendered</span>
+<span class="sd">    :type  dep_values:  List of Mixed Types, optional</span>
+<span class="sd">    :param dep_values:  (Optional, def=None) Values that field &quot;dep&quot; may contain for block to be rendered</span>
+<span class="sd">    :type  dep_compare: str, optional</span>
+<span class="sd">    :param dep_compare: (Optional, def=&quot;==&quot;) Comparison method to use on dependency (==, !=, &gt;, &gt;=, &lt;, &lt;=)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">class</span> <span class="nc">ScopedBlock</span><span class="p">:</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="n">block</span>
+
+        <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Setup before entering the &quot;with&quot; statement body</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block</span>
+
+        <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Cleanup after executing the &quot;with&quot; statement body</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># Automagically close the block when exiting the &quot;with&quot; statement</span>
+            <span class="n">s_block_end</span><span class="p">()</span>
+
+    <span class="n">block</span> <span class="o">=</span> <span class="n">s_block_start</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">request</span><span class="o">=</span><span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">,</span>
+        <span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span>
+        <span class="n">encoder</span><span class="o">=</span><span class="n">encoder</span><span class="p">,</span>
+        <span class="n">dep</span><span class="o">=</span><span class="n">dep</span><span class="p">,</span>
+        <span class="n">dep_value</span><span class="o">=</span><span class="n">dep_value</span><span class="p">,</span>
+        <span class="n">dep_values</span><span class="o">=</span><span class="n">dep_values</span><span class="p">,</span>
+        <span class="n">dep_compare</span><span class="o">=</span><span class="n">dep_compare</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ScopedBlock</span><span class="p">(</span><span class="n">block</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">s_aligned</span><span class="p">(</span><span class="n">modulus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;FuzzableBlock that aligns its contents to a certain number of bytes</span>
+
+<span class="sd">    :type  modulus:     int, optional</span>
+<span class="sd">    :param modulus:     Pad length of child content to this many bytes, defaults to 1</span>
+<span class="sd">    :type  pattern:     bytes, optional</span>
+<span class="sd">    :param pattern:     Pad using these byte(s)</span>
+<span class="sd">    :type  name:        str, optional</span>
+<span class="sd">    :param name:        Name, for referencing later. Names should always be provided, but if not, a default name will</span>
+<span class="sd">                        be given, defaults to None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">class</span> <span class="nc">ScopedAligned</span><span class="p">:</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aligned</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aligned</span> <span class="o">=</span> <span class="n">aligned</span>
+
+        <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Setup before entering the &quot;with&quot; statement body</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aligned</span>
+
+        <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Cleanup after executing the &quot;with&quot; statement body</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+    <span class="n">aligned</span> <span class="o">=</span> <span class="n">Aligned</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">modulus</span><span class="o">=</span><span class="n">modulus</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">pattern</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">aligned</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ScopedAligned</span><span class="p">(</span><span class="n">aligned</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="s_block_start"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_block_start">[文档]</a><span class="k">def</span> <span class="nf">s_block_start</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Open a new block under the current request. This routine always returns an instance so you can make your fuzzer</span>
+<span class="sd">    pretty with indenting::</span>
+
+<span class="sd">        if s_block_start(&quot;header&quot;):</span>
+<span class="sd">            s_static(&quot;\\x00\\x01&quot;)</span>
+<span class="sd">            if s_block_start(&quot;body&quot;):</span>
+<span class="sd">                ...</span>
+<span class="sd">        s_block_close()</span>
+
+<span class="sd">    :note Prefer using s_block to this function directly</span>
+<span class="sd">    :see s_block</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">block</span> <span class="o">=</span> <span class="n">Block</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">block</span></div>
+
+
+<span class="c1"># noinspection PyUnusedLocal</span>
+<div class="viewcode-block" id="s_block_end"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_block_end">[文档]</a><span class="k">def</span> <span class="nf">s_block_end</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Close the last opened block. Optionally specify the name of the block being closed (purely for aesthetic purposes).</span>
+
+<span class="sd">    :type  name: str</span>
+<span class="sd">    :param name: (Optional, def=None) Name of block to closed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="s_checksum"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_checksum">[文档]</a><span class="k">def</span> <span class="nf">s_checksum</span><span class="p">(</span>
+    <span class="n">block_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;crc32&quot;</span><span class="p">,</span>
+    <span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">endian</span><span class="o">=</span><span class="n">LITTLE_ENDIAN</span><span class="p">,</span>
+    <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ipv4_src_block_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ipv4_dst_block_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checksum bound to the block with the specified name.</span>
+
+<span class="sd">    The algorithm may be chosen by name with the algorithm parameter, or a custom function may be specified with</span>
+<span class="sd">    the algorithm parameter.</span>
+
+<span class="sd">    The length field is only necessary for custom algorithms.</span>
+
+<span class="sd">    Recursive checksums are supported; the checksum field itself will render as all zeros for the sake of checksum</span>
+<span class="sd">    or length calculations.</span>
+
+<span class="sd">    :type  block_name: str, optional</span>
+<span class="sd">    :param block_name: Name of target block for checksum calculations.</span>
+<span class="sd">    :type  algorithm: str, function, optional</span>
+<span class="sd">    :param algorithm: Checksum algorithm to use. (crc32, crc32c, adler32, md5, sha1, ipv4, udp)</span>
+<span class="sd">        Pass a function to use a custom algorithm. This function has to take and return byte-type data,</span>
+<span class="sd">        defaults to crc32</span>
+<span class="sd">    :type  length: int, optional</span>
+<span class="sd">    :param length: Length of checksum, auto-calculated by default. Must be specified manually when using custom</span>
+<span class="sd">        algorithm, defaults to 0</span>
+<span class="sd">    :type  endian: chr, optional</span>
+<span class="sd">    :param endian: Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</span>
+<span class="sd">    :type  fuzzable:   bool, optional</span>
+<span class="sd">    :param fuzzable:   Enable/disable fuzzing.</span>
+<span class="sd">    :type  name: str, optional</span>
+<span class="sd">    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,</span>
+<span class="sd">        defaults to None</span>
+<span class="sd">    :type  ipv4_src_block_name: str, optional</span>
+<span class="sd">    :param ipv4_src_block_name: Required for &#39;udp&#39; algorithm. Name of block yielding IPv4 source address,</span>
+<span class="sd">        defaults to None</span>
+<span class="sd">    :type  ipv4_dst_block_name: str, optional</span>
+<span class="sd">    :param ipv4_dst_block_name: Required for &#39;udp&#39; algorithm. Name of block yielding IPv4 destination address,</span>
+<span class="sd">        defaults to None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># you can&#39;t add a checksum for a block currently in the stack.</span>
+    <span class="k">if</span> <span class="n">block_name</span> <span class="ow">in</span> <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">block_stack</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">SullyRuntimeError</span><span class="p">(</span><span class="s2">&quot;CAN N0T ADD A CHECKSUM FOR A BLOCK CURRENTLY IN THE STACK&quot;</span><span class="p">)</span>
+
+    <span class="n">checksum</span> <span class="o">=</span> <span class="n">Checksum</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">block_name</span><span class="o">=</span><span class="n">block_name</span><span class="p">,</span>
+        <span class="n">request</span><span class="o">=</span><span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">,</span>
+        <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span>
+        <span class="n">length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span>
+        <span class="n">endian</span><span class="o">=</span><span class="n">endian</span><span class="p">,</span>
+        <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+        <span class="n">ipv4_src_block_name</span><span class="o">=</span><span class="n">ipv4_src_block_name</span><span class="p">,</span>
+        <span class="n">ipv4_dst_block_name</span><span class="o">=</span><span class="n">ipv4_dst_block_name</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">checksum</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="s_repeat"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_repeat">[文档]</a><span class="k">def</span> <span class="nf">s_repeat</span><span class="p">(</span><span class="n">block_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_reps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_reps</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Repeat the rendered contents of the specified block cycling from min_reps to max_reps counting by step. By</span>
+<span class="sd">    default renders to nothing. This block modifier is useful for fuzzing overflows in table entries. This block</span>
+<span class="sd">    modifier MUST come after the block it is being applied to.</span>
+
+<span class="sd">    :see: Aliases: s_repeater()</span>
+
+<span class="sd">    :type  block_name: str</span>
+<span class="sd">    :param block_name: (Optional, def=None) Name of block to repeat</span>
+<span class="sd">    :type  min_reps:   int</span>
+<span class="sd">    :param min_reps:   (Optional, def=0) Minimum number of block repetitions</span>
+<span class="sd">    :type  max_reps:   int</span>
+<span class="sd">    :param max_reps:   (Optional, def=25) Maximum number of block repetitions</span>
+<span class="sd">    :type  step:       int</span>
+<span class="sd">    :param step:       (Optional, def=1) Step count between min and max reps</span>
+<span class="sd">    :type  variable:   Sulley Integer Primitive</span>
+<span class="sd">    :param variable:   (Optional, def=None) An integer primitive which will specify the number of repitions</span>
+<span class="sd">    :type  fuzzable:   bool</span>
+<span class="sd">    :param fuzzable:   (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  name:       str</span>
+<span class="sd">    :param name:       (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">Repeat</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">block_name</span><span class="o">=</span><span class="n">block_name</span><span class="p">,</span>
+            <span class="n">request</span><span class="o">=</span><span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">,</span>
+            <span class="n">min_reps</span><span class="o">=</span><span class="n">min_reps</span><span class="p">,</span>
+            <span class="n">max_reps</span><span class="o">=</span><span class="n">max_reps</span><span class="p">,</span>
+            <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
+            <span class="n">variable</span><span class="o">=</span><span class="n">variable</span><span class="p">,</span>
+            <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="s_size"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_size">[文档]</a><span class="k">def</span> <span class="nf">s_size</span><span class="p">(</span>
+    <span class="n">block_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">endian</span><span class="o">=</span><span class="n">LITTLE_ENDIAN</span><span class="p">,</span>
+    <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">signed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">math</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a sizer block bound to the block with the specified name. You *can not* create a sizer for any</span>
+<span class="sd">    currently open blocks.</span>
+
+<span class="sd">    :see: Aliases: s_sizer()</span>
+
+<span class="sd">    :type  block_name:    str, optional</span>
+<span class="sd">    :param block_name:    Name of block to apply sizer to.</span>
+<span class="sd">    :type  offset:        int, optional</span>
+<span class="sd">    :param offset:        Offset for calculated size value, defaults to 0</span>
+<span class="sd">    :type  length:        int, optional</span>
+<span class="sd">    :param length:        Length of sizer, defaults to 4</span>
+<span class="sd">    :type  endian:        chr, optional</span>
+<span class="sd">    :param endian:        Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</span>
+<span class="sd">    :type  output_format: str, optional</span>
+<span class="sd">    :param output_format: Output format, &quot;binary&quot; or &quot;ascii&quot;, defaults to binary</span>
+<span class="sd">    :type  inclusive:     bool, optional</span>
+<span class="sd">    :param inclusive:     Should the sizer count its own length? Defaults to False</span>
+<span class="sd">    :type  signed:        bool, optional</span>
+<span class="sd">    :param signed:        Make size signed vs. unsigned (applicable only with format=&quot;ascii&quot;), defaults to False</span>
+<span class="sd">    :type  math:          def, optional</span>
+<span class="sd">    :param math:          Apply the mathematical op defined in this function to the size, defaults to None</span>
+<span class="sd">    :type  fuzzable:      bool</span>
+<span class="sd">    :param fuzzable:      (Optional, def=True) Enable/disable fuzzing of this sizer</span>
+<span class="sd">    :type  name:          str</span>
+<span class="sd">    :param name:          Name of this sizer field</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">Size</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">block_name</span><span class="o">=</span><span class="n">block_name</span><span class="p">,</span>
+            <span class="n">request</span><span class="o">=</span><span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">,</span>
+            <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+            <span class="n">length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span>
+            <span class="n">endian</span><span class="o">=</span><span class="n">endian</span><span class="p">,</span>
+            <span class="n">output_format</span><span class="o">=</span><span class="n">output_format</span><span class="p">,</span>
+            <span class="n">inclusive</span><span class="o">=</span><span class="n">inclusive</span><span class="p">,</span>
+            <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+            <span class="n">math</span><span class="o">=</span><span class="n">math</span><span class="p">,</span>
+            <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="s_update"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_update">[文档]</a><span class="k">def</span> <span class="nf">s_update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the value of the named primitive in the currently open request.</span>
+
+<span class="sd">    :type  name:  str</span>
+<span class="sd">    :param name:  Name of object whose value we wish to update</span>
+<span class="sd">    :type  value: Mixed</span>
+<span class="sd">    :param value: Updated value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span> <span class="n">o</span><span class="o">.</span><span class="n">qualified_name</span><span class="p">,</span> <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">walk</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">SullyRuntimeError</span><span class="p">(</span><span class="s2">&quot;NO OBJECT WITH NAME &#39;</span><span class="si">%s</span><span class="s2">&#39; FOUND IN CURRENT REQUEST&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">_default_value</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+<span class="c1"># PRIMITIVES</span>
+
+
+<div class="viewcode-block" id="s_binary"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_binary">[文档]</a><span class="k">def</span> <span class="nf">s_binary</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse a variable format binary string into a static value and push it onto the current block stack.</span>
+
+<span class="sd">    :type  value: str</span>
+<span class="sd">    :param value: Variable format binary string</span>
+<span class="sd">    :type  name:  str</span>
+<span class="sd">    :param name:  (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># parse the binary string into.</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;0x&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">x&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">value</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+    <span class="k">while</span> <span class="n">parsed</span><span class="p">:</span>
+        <span class="n">pair</span> <span class="o">=</span> <span class="n">parsed</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">parsed</span> <span class="o">=</span> <span class="n">parsed</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+        <span class="n">value</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pair</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">)</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">Static</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">parsed</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="s_delim"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_delim">[文档]</a><span class="k">def</span> <span class="nf">s_delim</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a delimiter onto the current block stack.</span>
+
+<span class="sd">    :type  value:    Character</span>
+<span class="sd">    :param value:    (Optional, def=&quot; &quot;)Original value</span>
+<span class="sd">    :type  fuzzable: bool</span>
+<span class="sd">    :param fuzzable: (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  name:     str</span>
+<span class="sd">    :param name:     (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">Delim</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="s_group"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_group">[文档]</a><span class="k">def</span> <span class="nf">s_group</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This primitive represents a list of static values, stepping through each one on mutation. You can tie a block</span>
+<span class="sd">    to a group primitive to specify that the block should cycle through all possible mutations for *each* value</span>
+<span class="sd">    within the group. The group primitive is useful for example for representing a list of valid opcodes.</span>
+
+<span class="sd">    :type  name:            str</span>
+<span class="sd">    :param name:            (Optional, def=None) Name of group</span>
+<span class="sd">    :type  values:          List or raw data</span>
+<span class="sd">    :param values:          (Optional, def=None) List of possible raw values this group can take.</span>
+<span class="sd">    :type  default_value:   str or bytes</span>
+<span class="sd">    :param default_value:   (Optional, def=None) Specifying a value when fuzzing() is complete</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">default_value</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">))</span></div>
+
+
+<span class="c1"># noinspection PyCallingNonCallable</span>
+<div class="viewcode-block" id="s_lego"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_lego">[文档]</a><span class="k">def</span> <span class="nf">s_lego</span><span class="p">(</span><span class="n">lego_type</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">()):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Legos are pre-built blocks... TODO: finish this doc</span>
+
+<span class="sd">    :type  lego_type:   str</span>
+<span class="sd">    :param lego_type:   Function that represents a lego</span>
+
+<span class="sd">    :param value:       Original value</span>
+
+<span class="sd">    :param options:     Options to pass to lego.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># as legos are blocks they must have a name.</span>
+    <span class="c1"># generate a unique name for this lego.</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;LEGO_</span><span class="si">%08x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">names</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">lego_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">legos</span><span class="o">.</span><span class="n">BIN</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">SullyRuntimeError</span><span class="p">(</span><span class="s2">&quot;INVALID LEGO TYPE SPECIFIED: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">lego_type</span><span class="p">)</span>
+    <span class="n">lego</span> <span class="o">=</span> <span class="n">legos</span><span class="o">.</span><span class="n">BIN</span><span class="p">[</span><span class="n">lego_type</span><span class="p">](</span><span class="n">name</span><span class="p">,</span> <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+    <span class="c1"># push the lego onto the stack and immediately pop to close the block.</span>
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">lego</span><span class="p">)</span>
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="s_random"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_random">[文档]</a><span class="k">def</span> <span class="nf">s_random</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_mutations</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a random chunk of data while maintaining a copy of the original. A random length range can be specified.</span>
+<span class="sd">    For a static length, set min/max length to be the same.</span>
+
+<span class="sd">    :type  value:         str or bytes</span>
+<span class="sd">    :param value:         (Optional, def=&quot;&quot;) Original value</span>
+<span class="sd">    :type  min_length:    int</span>
+<span class="sd">    :param min_length:    (Optional, def=0) Minimum length of random block</span>
+<span class="sd">    :type  max_length:    int</span>
+<span class="sd">    :param max_length:    (Optional, def=1) Maximum length of random block</span>
+<span class="sd">    :type  num_mutations: int</span>
+<span class="sd">    :param num_mutations: (Optional, def=25) Number of mutations to make before reverting to default</span>
+<span class="sd">    :type  fuzzable:      bool</span>
+<span class="sd">    :param fuzzable:      (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  step:          int</span>
+<span class="sd">    :param step:          (Optional, def=None) If not null, step count between min and max reps, otherwise random</span>
+<span class="sd">    :type  name:          str</span>
+<span class="sd">    :param name:          (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">RandomData</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">min_length</span><span class="o">=</span><span class="n">min_length</span><span class="p">,</span>
+            <span class="n">max_length</span><span class="o">=</span><span class="n">max_length</span><span class="p">,</span>
+            <span class="n">max_mutations</span><span class="o">=</span><span class="n">num_mutations</span><span class="p">,</span>
+            <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
+            <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="s_static"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_static">[文档]</a><span class="k">def</span> <span class="nf">s_static</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a static value onto the current block stack.</span>
+
+<span class="sd">    :see: Aliases: s_dunno(), s_raw(), s_unknown()</span>
+
+<span class="sd">    :type  value: Raw</span>
+<span class="sd">    :param value: Raw static data</span>
+<span class="sd">    :type  name:  str</span>
+<span class="sd">    :param name:  (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">Static</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">s_simple</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fuzz_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a &quot;Simple&quot; primitive onto the current block stack. The only mutations will be those specified  in fuzz_values.</span>
+
+<span class="sd">    :see: Aliases: s_dunno(), s_raw(), s_unknown()</span>
+
+<span class="sd">    :type  value: Raw</span>
+<span class="sd">    :param value: Raw static data</span>
+<span class="sd">    :type  name:  str</span>
+<span class="sd">    :param name:  (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    :type  fuzz_values:  list</span>
+<span class="sd">    :param fuzz_values:  (Optional, def=None) List of fuzz values.</span>
+<span class="sd">    :type  fuzzable: bool</span>
+<span class="sd">    :param fuzzable: (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">Simple</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">fuzz_values</span><span class="o">=</span><span class="n">fuzz_values</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">s_mirror</span><span class="p">(</span><span class="n">primitive_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a mirror of another primitive onto the current block stack.</span>
+
+<span class="sd">    :type primitive_name:   str</span>
+<span class="sd">    :param primitive_name:  (Optional, def=None) Name of target primitive</span>
+<span class="sd">    :type name:             str</span>
+<span class="sd">    :param name:            (Optional, def=None) Name of current primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">Mirror</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">primitive_name</span><span class="o">=</span><span class="n">primitive_name</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="s_string"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_string">[文档]</a><span class="k">def</span> <span class="nf">s_string</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;ascii&quot;</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a string onto the current block stack.</span>
+
+<span class="sd">    :type  value:    str</span>
+<span class="sd">    :param value:    (Optional, def=&quot;&quot;)Default string value</span>
+<span class="sd">    :type  size:     int</span>
+<span class="sd">    :param size:     (Optional, def=None) Static size of this field, leave None for dynamic.</span>
+<span class="sd">    :type  padding:  Character</span>
+<span class="sd">    :param padding:  (Optional, def=&quot;\\x00&quot;) Value to use as padding to fill static field size.</span>
+<span class="sd">    :type  encoding: str</span>
+<span class="sd">    :param encoding: (Optional, def=&quot;ascii&quot;) String encoding, ex: utf_16_le for Microsoft Unicode.</span>
+<span class="sd">    :type  fuzzable: bool</span>
+<span class="sd">    :param fuzzable: (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  max_len:  int</span>
+<span class="sd">    :param max_len:  (Optional, def=None) Maximum string length</span>
+<span class="sd">    :type  name:     str</span>
+<span class="sd">    :param name:     (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># support old interface where default was -1 instead of None</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">max_len</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">max_len</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">String</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="n">padding</span><span class="p">,</span>
+            <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
+            <span class="n">max_len</span><span class="o">=</span><span class="n">max_len</span><span class="p">,</span>
+            <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="s_from_file"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_from_file">[文档]</a><span class="k">def</span> <span class="nf">s_from_file</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;ascii&quot;</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a value from file onto the current block stack.</span>
+
+<span class="sd">    :type  value:    bytes</span>
+<span class="sd">    :param value:    (Optional, def=b&quot;&quot;) Default bytes value</span>
+<span class="sd">    :type  filename: str</span>
+<span class="sd">    :param filename: (Optional, def=None) Filename pattern to load all fuzz value</span>
+<span class="sd">    :type  encoding: str</span>
+<span class="sd">    :param encoding: (DEPRECIATED, def=&quot;ascii&quot;) String encoding, ex: utf_16_le for Microsoft Unicode.</span>
+<span class="sd">    :type  fuzzable: bool</span>
+<span class="sd">    :param fuzzable: (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  max_len:  int</span>
+<span class="sd">    :param max_len:  (Optional, def=0) Maximum string length</span>
+<span class="sd">    :type  name:     str</span>
+<span class="sd">    :param name:     (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">FromFile</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="n">max_len</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">s_float</span><span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">s_format</span><span class="o">=</span><span class="s2">&quot;.1f&quot;</span><span class="p">,</span>
+    <span class="n">f_min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">f_max</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
+    <span class="n">max_mutations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">encode_as_ieee_754</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">endian</span><span class="o">=</span><span class="s2">&quot;big&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a float onto the current block stack.</span>
+
+<span class="sd">    :type  value:              float</span>
+<span class="sd">    :param value:              (Optional, def=0.0) Default float value</span>
+<span class="sd">    :type  s_format:           str</span>
+<span class="sd">    :param s_format:           (Optional, def=&quot;.1f&quot;) Format of the float value after encoding.</span>
+<span class="sd">    :type f_min:               float</span>
+<span class="sd">    :param f_min:              (Optional, def=0.0) Min value of generated floats.</span>
+<span class="sd">    :type f_max:               float</span>
+<span class="sd">    :param f_max:              (Optional, def=100.0) Max value of generated floats.</span>
+<span class="sd">    :type max_mutations:       int</span>
+<span class="sd">    :param max_mutations:      (Optional, def=1000) Total number of mutations for this individual primitive</span>
+<span class="sd">    :type  fuzzable:           bool</span>
+<span class="sd">    :param fuzzable:           (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type seed:                int or str or bytes or bytearray</span>
+<span class="sd">    :param seed:               (Optional, def=None) Set random.seed() with the given seed for reproducible results</span>
+<span class="sd">    :type encode_as_ieee_754:  bool</span>
+<span class="sd">    :param encode_as_ieee_754: (Optional, def=False) Enable/disable encoding as IEEE 754 float</span>
+<span class="sd">    :type endian:              str</span>
+<span class="sd">    :param endian:             (Optional, def=&#39;big&#39;) Set the endianness for IEEE 754 float</span>
+<span class="sd">    :type  name:               str</span>
+<span class="sd">    :param name:               (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">Float</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">s_format</span><span class="o">=</span><span class="n">s_format</span><span class="p">,</span>
+            <span class="n">f_min</span><span class="o">=</span><span class="n">f_min</span><span class="p">,</span>
+            <span class="n">f_max</span><span class="o">=</span><span class="n">f_max</span><span class="p">,</span>
+            <span class="n">max_mutations</span><span class="o">=</span><span class="n">max_mutations</span><span class="p">,</span>
+            <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+            <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+            <span class="n">encode_as_ieee_754</span><span class="o">=</span><span class="n">encode_as_ieee_754</span><span class="p">,</span>
+            <span class="n">endian</span><span class="o">=</span><span class="n">endian</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># noinspection PyTypeChecker</span>
+<div class="viewcode-block" id="s_bit_field"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_bit_field">[文档]</a><span class="k">def</span> <span class="nf">s_bit_field</span><span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">endian</span><span class="o">=</span><span class="n">LITTLE_ENDIAN</span><span class="p">,</span>
+    <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="n">signed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">full_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">fuzz_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a variable length bit field onto the current block stack.</span>
+
+<span class="sd">    :see: Aliases: s_bit(), s_bits()</span>
+
+<span class="sd">    :type  value:          int</span>
+<span class="sd">    :param value:          (Optional, def=0) Default integer value</span>
+<span class="sd">    :type  width:          int</span>
+<span class="sd">    :param width:          (Optional, def=8) Width of bit fields</span>
+<span class="sd">    :type  endian:         Character</span>
+<span class="sd">    :param endian:         (Optional, def=LITTLE_ENDIAN) Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;)</span>
+<span class="sd">    :type  output_format:  str</span>
+<span class="sd">    :param output_format:  (Optional, def=binary) Output format, &quot;binary&quot; or &quot;ascii&quot;</span>
+<span class="sd">    :type  signed:         bool</span>
+<span class="sd">    :param signed:         (Optional, def=False) Make size signed vs. unsigned (applicable only with format=&quot;ascii&quot;)</span>
+<span class="sd">    :type  full_range:     bool</span>
+<span class="sd">    :param full_range:     (Optional, def=False) If enabled the field mutates through *all* possible values.</span>
+<span class="sd">    :type  fuzzable:       bool</span>
+<span class="sd">    :param fuzzable:       (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  name:           str</span>
+<span class="sd">    :param name:           (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    :type fuzz_values:     list</span>
+<span class="sd">    :param fuzz_values:    List of custom fuzz values to add to the normal mutations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">BitField</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+            <span class="n">endian</span><span class="o">=</span><span class="n">endian</span><span class="p">,</span>
+            <span class="n">output_format</span><span class="o">=</span><span class="n">output_format</span><span class="p">,</span>
+            <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+            <span class="n">full_range</span><span class="o">=</span><span class="n">full_range</span><span class="p">,</span>
+            <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+            <span class="n">fuzz_values</span><span class="o">=</span><span class="n">fuzz_values</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="s_byte"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_byte">[文档]</a><span class="k">def</span> <span class="nf">s_byte</span><span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">endian</span><span class="o">=</span><span class="n">LITTLE_ENDIAN</span><span class="p">,</span>
+    <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="n">signed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">full_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">fuzz_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a byte onto the current block stack.</span>
+
+<span class="sd">    :see: Aliases: s_char()</span>
+
+<span class="sd">    :type  value:         int|byte</span>
+<span class="sd">    :param value:         (Optional, def=0) Default integer value</span>
+<span class="sd">    :type  endian:        Character</span>
+<span class="sd">    :param endian:        (Optional, def=LITTLE_ENDIAN) Endianess of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;)</span>
+<span class="sd">    :type  output_format: str</span>
+<span class="sd">    :param output_format: (Optional, def=binary) Output format, &quot;binary&quot; or &quot;ascii&quot;</span>
+<span class="sd">    :type  signed:        bool</span>
+<span class="sd">    :param signed:        (Optional, def=False) Make size signed vs. unsigned (applicable only with format=&quot;ascii&quot;)</span>
+<span class="sd">    :type  full_range:    bool</span>
+<span class="sd">    :param full_range:    (Optional, def=False) If enabled the field mutates through *all* possible values.</span>
+<span class="sd">    :type  fuzzable:      bool</span>
+<span class="sd">    :param fuzzable:      (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  name:          str</span>
+<span class="sd">    :param name:          (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    :type fuzz_values:    list</span>
+<span class="sd">    :param fuzz_values:   List of custom fuzz values to add to the normal mutations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">Byte</span><span class="p">(</span>
+            <span class="n">endian</span><span class="o">=</span><span class="n">endian</span><span class="p">,</span>
+            <span class="n">output_format</span><span class="o">=</span><span class="n">output_format</span><span class="p">,</span>
+            <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+            <span class="n">full_range</span><span class="o">=</span><span class="n">full_range</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+            <span class="n">fuzz_values</span><span class="o">=</span><span class="n">fuzz_values</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="s_bytes"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_bytes">[文档]</a><span class="k">def</span> <span class="nf">s_bytes</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a bytes field of arbitrary length onto the current block stack.</span>
+
+<span class="sd">    :type  value:        bytes</span>
+<span class="sd">    :param value:        (Optional, def=b&quot;&quot;)Default binary value</span>
+<span class="sd">    :type  size:         int</span>
+<span class="sd">    :param size:         (Optional, def=None) Static size of this field, leave None for dynamic.</span>
+<span class="sd">    :type  padding:      chr</span>
+<span class="sd">    :param padding:      (Optional, def=b&quot;\\x00&quot;) Value to use as padding to fill static field size.</span>
+<span class="sd">    :type  fuzzable:     bool</span>
+<span class="sd">    :param fuzzable:     (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  max_len:      int</span>
+<span class="sd">    :param max_len:      (Optional, def=None) Maximum string length</span>
+<span class="sd">    :type  name:         str</span>
+<span class="sd">    :param name:         (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">Bytes</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="n">padding</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="n">max_len</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="s_word"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_word">[文档]</a><span class="k">def</span> <span class="nf">s_word</span><span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">endian</span><span class="o">=</span><span class="n">LITTLE_ENDIAN</span><span class="p">,</span>
+    <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="n">signed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">full_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">fuzz_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a word onto the current block stack.</span>
+
+<span class="sd">    :see: Aliases: s_short()</span>
+
+<span class="sd">    :type  value:         (Optional, def=0) int</span>
+<span class="sd">    :param value:         Default integer value</span>
+<span class="sd">    :type  endian:        chr</span>
+<span class="sd">    :param endian:        (Optional, def=LITTLE_ENDIAN) Endianess of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;)</span>
+<span class="sd">    :type  output_format: str</span>
+<span class="sd">    :param output_format: (Optional, def=binary) Output format, &quot;binary&quot; or &quot;ascii&quot;</span>
+<span class="sd">    :type  signed:        bool</span>
+<span class="sd">    :param signed:        (Optional, def=False) Make size signed vs. unsigned (applicable only with format=&quot;ascii&quot;)</span>
+<span class="sd">    :type  full_range:    bool</span>
+<span class="sd">    :param full_range:    (Optional, def=False) If enabled the field mutates through *all* possible values.</span>
+<span class="sd">    :type  fuzzable:      bool</span>
+<span class="sd">    :param fuzzable:      (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  name:          str</span>
+<span class="sd">    :param name:          (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    :type fuzz_values:    list</span>
+<span class="sd">    :param fuzz_values:   List of custom fuzz values to add to the normal mutations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">Word</span><span class="p">(</span>
+            <span class="n">endian</span><span class="o">=</span><span class="n">endian</span><span class="p">,</span>
+            <span class="n">output_format</span><span class="o">=</span><span class="n">output_format</span><span class="p">,</span>
+            <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+            <span class="n">full_range</span><span class="o">=</span><span class="n">full_range</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+            <span class="n">fuzz_values</span><span class="o">=</span><span class="n">fuzz_values</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="s_dword"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_dword">[文档]</a><span class="k">def</span> <span class="nf">s_dword</span><span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">endian</span><span class="o">=</span><span class="n">LITTLE_ENDIAN</span><span class="p">,</span>
+    <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="n">signed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">full_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">fuzz_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a double word onto the current block stack.</span>
+
+<span class="sd">    :see: Aliases: s_long(), s_int()</span>
+
+<span class="sd">    :type  value:         (Optional, def=0) int</span>
+<span class="sd">    :param value:         Default integer value</span>
+<span class="sd">    :type  endian:        Character</span>
+<span class="sd">    :param endian:        (Optional, def=LITTLE_ENDIAN) Endianess of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;)</span>
+<span class="sd">    :type  output_format: str</span>
+<span class="sd">    :param output_format: (Optional, def=binary) Output format, &quot;binary&quot; or &quot;ascii&quot;</span>
+<span class="sd">    :type  signed:        bool</span>
+<span class="sd">    :param signed:        (Optional, def=False) Make size signed vs. unsigned (applicable only with format=&quot;ascii&quot;)</span>
+<span class="sd">    :type  full_range:    bool</span>
+<span class="sd">    :param full_range:    (Optional, def=False) If enabled the field mutates through *all* possible values.</span>
+<span class="sd">    :type  fuzzable:      bool</span>
+<span class="sd">    :param fuzzable:      (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  name:          str</span>
+<span class="sd">    :param name:          (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    :type fuzz_values:    list</span>
+<span class="sd">    :param fuzz_values:   List of custom fuzz values to add to the normal mutations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">DWord</span><span class="p">(</span>
+            <span class="n">endian</span><span class="o">=</span><span class="n">endian</span><span class="p">,</span>
+            <span class="n">output_format</span><span class="o">=</span><span class="n">output_format</span><span class="p">,</span>
+            <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+            <span class="n">full_range</span><span class="o">=</span><span class="n">full_range</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+            <span class="n">fuzz_values</span><span class="o">=</span><span class="n">fuzz_values</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="s_qword"><a class="viewcode-back" href="../user/static-protocol-definition.html#boofuzz.s_qword">[文档]</a><span class="k">def</span> <span class="nf">s_qword</span><span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">endian</span><span class="o">=</span><span class="n">LITTLE_ENDIAN</span><span class="p">,</span>
+    <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="n">signed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">full_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fuzzable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">fuzz_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Push a quad word onto the current block stack.</span>
+
+<span class="sd">    :see: Aliases: s_double()</span>
+
+<span class="sd">    :type  value:         (Optional, def=0) int</span>
+<span class="sd">    :param value:         Default integer value</span>
+<span class="sd">    :type  endian:        Character</span>
+<span class="sd">    :param endian:        (Optional, def=LITTLE_ENDIAN) Endianess of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;)</span>
+<span class="sd">    :type  output_format: str</span>
+<span class="sd">    :param output_format: (Optional, def=binary) Output format, &quot;binary&quot; or &quot;ascii&quot;</span>
+<span class="sd">    :type  signed:        bool</span>
+<span class="sd">    :param signed:        (Optional, def=False) Make size signed vs. unsigned (applicable only with format=&quot;ascii&quot;)</span>
+<span class="sd">    :type  full_range:    bool</span>
+<span class="sd">    :param full_range:    (Optional, def=False) If enabled the field mutates through *all* possible values.</span>
+<span class="sd">    :type  fuzzable:      bool</span>
+<span class="sd">    :param fuzzable:      (Optional, def=True) Enable/disable fuzzing of this primitive</span>
+<span class="sd">    :type  name:          str</span>
+<span class="sd">    :param name:          (Optional, def=None) Specifying a name gives you direct access to a primitive</span>
+<span class="sd">    :type fuzz_values:    list</span>
+<span class="sd">    :param fuzz_values:   List of custom fuzz values to add to the normal mutations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">blocks</span><span class="o">.</span><span class="n">CURRENT</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>
+        <span class="n">QWord</span><span class="p">(</span>
+            <span class="n">endian</span><span class="o">=</span><span class="n">endian</span><span class="p">,</span>
+            <span class="n">output_format</span><span class="o">=</span><span class="n">output_format</span><span class="p">,</span>
+            <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+            <span class="n">full_range</span><span class="o">=</span><span class="n">full_range</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">default_value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">fuzzable</span><span class="o">=</span><span class="n">fuzzable</span><span class="p">,</span>
+            <span class="n">fuzz_values</span><span class="o">=</span><span class="n">fuzz_values</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<span class="c1"># ALIASES</span>
+
+
+<span class="n">s_dunno</span> <span class="o">=</span> <span class="n">s_raw</span> <span class="o">=</span> <span class="n">s_unknown</span> <span class="o">=</span> <span class="n">s_static</span>
+<span class="n">s_sizer</span> <span class="o">=</span> <span class="n">s_size</span>
+<span class="n">s_bit</span> <span class="o">=</span> <span class="n">s_bits</span> <span class="o">=</span> <span class="n">s_bit_field</span>
+<span class="n">s_char</span> <span class="o">=</span> <span class="n">s_byte</span>
+<span class="n">s_short</span> <span class="o">=</span> <span class="n">s_word</span>
+<span class="n">s_long</span> <span class="o">=</span> <span class="n">s_int</span> <span class="o">=</span> <span class="n">s_dword</span>
+<span class="n">s_double</span> <span class="o">=</span> <span class="n">s_qword</span>
+<span class="n">s_repeater</span> <span class="o">=</span> <span class="n">s_repeat</span>
+
+
+<span class="k">def</span> <span class="nf">s_intelword</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;endian&quot;</span><span class="p">:</span> <span class="s2">&quot;LITTLE_ENDIAN&quot;</span><span class="p">}</span>
+    <span class="n">defaults</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s_long</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">s_intelhalfword</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;endian&quot;</span><span class="p">:</span> <span class="s2">&quot;LITTLE_ENDIAN&quot;</span><span class="p">}</span>
+    <span class="n">defaults</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s_short</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">s_bigword</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;endian&quot;</span><span class="p">:</span> <span class="s2">&quot;BIG_ENDIAN&quot;</span><span class="p">}</span>
+    <span class="n">defaults</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s_long</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">s_cstring</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">s_string</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">s_static</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Not implemented aliases yet</span>
+<span class="k">def</span> <span class="nf">not_impl</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> isn&#39;t implemented yet. Args -&gt; </span><span class="si">%s</span><span class="s2">. Kwargs -&gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">))</span>
+
+
+<span class="n">s_string_lf</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">not_impl</span><span class="p">,</span> <span class="s2">&quot;s_string_lf&quot;</span><span class="p">)</span>
+<span class="n">s_string_or_env</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">not_impl</span><span class="p">,</span> <span class="s2">&quot;s_string_or_env&quot;</span><span class="p">)</span>
+<span class="n">s_string_repeat</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">not_impl</span><span class="p">,</span> <span class="s2">&quot;s_string_repeat&quot;</span><span class="p">)</span>
+<span class="n">s_string_variable</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">not_impl</span><span class="p">,</span> <span class="s2">&quot;s_string_variable&quot;</span><span class="p">)</span>
+<span class="n">s_string_variables</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">not_impl</span><span class="p">,</span> <span class="s2">&quot;s_string_variables&quot;</span><span class="p">)</span>
+<span class="n">s_binary_repeat</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">not_impl</span><span class="p">,</span> <span class="s2">&quot;s_binary_repeat&quot;</span><span class="p">)</span>
+<span class="n">s_unistring_variable</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">not_impl</span><span class="p">,</span> <span class="s2">&quot;s_unistring_variable&quot;</span><span class="p">)</span>
+<span class="n">s_xdr_string</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">not_impl</span><span class="p">,</span> <span class="s2">&quot;s_xdr_string&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">no_sizer</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">kwargs</span>  <span class="c1"># just making the function univesral</span>
+    <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">SizerNotUtilizedError</span><span class="p">(</span><span class="s2">&quot;Use the s_size primitive for including sizes. Args -&gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="p">)</span>
+
+
+<span class="c1"># A bunch of un-defined primitives from SPIKE</span>
+<span class="n">s_binary_block_size_intel_halfword_plus_variable</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_halfword_bigendian_variable</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_word_bigendian_plussome</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_word_bigendian_variable</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_halfword_bigendian_mult</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_intel_halfword_variable</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_intel_halfword_mult</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_intel_halfword_plus</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_halfword_bigendian</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_word_intel_mult_plus</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_intel_word_variable</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_word_bigendian_mult</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_blocksize_unsigned_string_variable</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_intel_word_plus</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_intel_halfword</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_word_bigendian</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_blocksize_signed_string_variable</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_byte_variable</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_intel_word</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_byte_plus</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_byte_mult</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_blocksize_asciihex_variable</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_binary_block_size_byte</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_blocksize_asciihex</span> <span class="o">=</span> <span class="n">no_sizer</span>
+<span class="n">s_blocksize_string</span> <span class="o">=</span> <span class="n">no_sizer</span>
+
+
+<span class="c1"># MISC</span>
+
+
+<span class="k">def</span> <span class="nf">s_hex_dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the hex dump of the supplied data starting at the offset address specified.</span>
+
+<span class="sd">    :type  data: Raw</span>
+<span class="sd">    :param data: Data to show hex dump of</span>
+<span class="sd">    :type  addr: int</span>
+<span class="sd">    :param addr: (Optional, def=0) Offset to start displaying hex dump addresses from</span>
+
+<span class="sd">    :rtype:  str</span>
+<span class="sd">    :return: Hex dump of raw data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dump</span> <span class="o">=</span> <span class="n">byte_slice</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">addr</span> <span class="o">%</span> <span class="mi">16</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">dump</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+
+            <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">byte_slice</span><span class="p">:</span>
+                <span class="k">if</span> <span class="mi">32</span> <span class="o">&lt;=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">126</span><span class="p">:</span>
+                    <span class="n">dump</span> <span class="o">+=</span> <span class="n">char</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dump</span> <span class="o">+=</span> <span class="s2">&quot;.&quot;</span>
+
+            <span class="n">dump</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="si">%04x</span><span class="s2">: &quot;</span> <span class="o">%</span> <span class="n">addr</span>
+            <span class="n">byte_slice</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">dump</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%02x</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="nb">ord</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
+        <span class="n">byte_slice</span> <span class="o">+=</span> <span class="n">byte</span>
+        <span class="n">addr</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">remainder</span> <span class="o">=</span> <span class="n">addr</span> <span class="o">%</span> <span class="mi">16</span>
+
+    <span class="k">if</span> <span class="n">remainder</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">dump</span> <span class="o">+=</span> <span class="s2">&quot;   &quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">16</span> <span class="o">-</span> <span class="n">remainder</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">byte_slice</span><span class="p">:</span>
+        <span class="k">if</span> <span class="mi">32</span> <span class="o">&lt;=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">126</span><span class="p">:</span>
+            <span class="n">dump</span> <span class="o">+=</span> <span class="n">char</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dump</span> <span class="o">+=</span> <span class="s2">&quot;.&quot;</span>
+
+    <span class="k">return</span> <span class="n">dump</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 boofuzz。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

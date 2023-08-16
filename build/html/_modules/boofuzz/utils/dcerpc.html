@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>boofuzz.utils.dcerpc &mdash; rainfuzz 0.0 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=16727793"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/other-modules.html">Other Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../../boofuzz.html">boofuzz</a></li>
+      <li class="breadcrumb-item active">boofuzz.utils.dcerpc</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>boofuzz.utils.dcerpc 源代码</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">helpers</span>
+
+
+<div class="viewcode-block" id="bind"><a class="viewcode-back" href="../../../user/other-modules.html#boofuzz.utils.dcerpc.bind">[文档]</a><span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="n">uuid</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate the data necessary to bind to the specified interface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">major</span><span class="p">,</span> <span class="n">minor</span> <span class="o">=</span> <span class="n">version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+
+    <span class="n">major</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">major</span><span class="p">))</span>
+    <span class="n">minor</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">minor</span><span class="p">))</span>
+
+    <span class="n">bind_request</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x05\x00</span><span class="s2">&quot;</span>  <span class="c1"># version 5.0</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x0b</span><span class="s2">&quot;</span>  <span class="c1"># packet type = bind (11)</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x03</span><span class="s2">&quot;</span>  <span class="c1"># packet flags = last/first flag set</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x10\x00\x00\x00</span><span class="s2">&quot;</span>  <span class="c1"># data representation</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x48\x00</span><span class="s2">&quot;</span>  <span class="c1"># frag length: 72</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span>  <span class="c1"># auth length</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00\x00\x00</span><span class="s2">&quot;</span>  <span class="c1"># call id</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xb8\x10</span><span class="s2">&quot;</span>  <span class="c1"># max transmit frag (4280)</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xb8\x10</span><span class="s2">&quot;</span>  <span class="c1"># max recv frag (4280)</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00\x00\x00</span><span class="s2">&quot;</span>  <span class="c1"># assoc group</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x01</span><span class="s2">&quot;</span>  <span class="c1"># number of ctx items (1)</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00\x00</span><span class="s2">&quot;</span>  <span class="c1"># padding</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span>  <span class="c1"># context id (0)</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x01</span><span class="s2">&quot;</span>  <span class="c1"># number of trans items (1)</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span>  <span class="c1"># padding</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">uuid_str_to_bin</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>  <span class="c1"># abstract syntax</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="n">major</span>  <span class="c1"># interface version</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="n">minor</span>  <span class="c1"># interface version minor</span>
+
+    <span class="c1"># transfer syntax 8a885d04-1ceb-11c9-9fe8-08002b104860 v2.0</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x04\x5d\x88\x8a\xeb\x1c\xc9\x11\x9f\xe8\x08\x00\x2b\x10\x48\x60</span><span class="s2">&quot;</span>
+    <span class="n">bind_request</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x02\x00\x00\x00</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="n">bind_request</span></div>
+
+
+<div class="viewcode-block" id="bind_ack"><a class="viewcode-back" href="../../../user/other-modules.html#boofuzz.utils.dcerpc.bind_ack">[文档]</a><span class="k">def</span> <span class="nf">bind_ack</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ensure the data is a bind ack and that the</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># packet type == bind ack (12)?</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x0c</span><span class="s2">&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># ack result == acceptance?</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="mi">36</span><span class="p">:</span><span class="mi">38</span><span class="p">]</span> <span class="o">!=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="request"><a class="viewcode-back" href="../../../user/other-modules.html#boofuzz.utils.dcerpc.request">[文档]</a><span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">opnum</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a list of packets broken into 5k fragmented chunks necessary to make the RPC request.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">frag_size</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># max frag size = 5840?</span>
+    <span class="n">frags</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">num_frags</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">frag_size</span><span class="p">)))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_frags</span><span class="p">):</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">frag_size</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">frag_size</span><span class="p">]</span>
+        <span class="n">frag_length</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span> <span class="o">+</span> <span class="mi">24</span><span class="p">)</span>
+        <span class="n">alloc_hint</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;L&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">))</span>
+
+        <span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">flags</span> <span class="o">|=</span> <span class="mh">0x1</span>  <span class="c1"># first frag</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">num_frags</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">flags</span> <span class="o">|=</span> <span class="mh">0x2</span>  <span class="c1"># last frag</span>
+
+        <span class="n">request_buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x05\x00</span><span class="s2">&quot;</span>  <span class="c1"># version 5.0</span>
+        <span class="n">request_buffer</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span>  <span class="c1"># packet type = request (0)</span>
+        <span class="n">request_buffer</span> <span class="o">+=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>  <span class="c1"># packet flags</span>
+        <span class="n">request_buffer</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x10\x00\x00\x00</span><span class="s2">&quot;</span>  <span class="c1"># data representation</span>
+        <span class="n">request_buffer</span> <span class="o">+=</span> <span class="n">frag_length</span>  <span class="c1"># frag length</span>
+        <span class="n">request_buffer</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span>  <span class="c1"># auth length</span>
+        <span class="n">request_buffer</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00\x00\x00</span><span class="s2">&quot;</span>  <span class="c1"># call id</span>
+        <span class="n">request_buffer</span> <span class="o">+=</span> <span class="n">alloc_hint</span>  <span class="c1"># alloc hint</span>
+        <span class="n">request_buffer</span> <span class="o">+=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span>  <span class="c1"># context id (0)</span>
+        <span class="n">request_buffer</span> <span class="o">+=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="n">opnum</span><span class="p">)</span>  <span class="c1"># opnum</span>
+        <span class="n">request_buffer</span> <span class="o">+=</span> <span class="n">chunk</span>
+
+        <span class="n">frags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">request_buffer</span><span class="p">)</span>
+
+    <span class="c1"># you don&#39;t have to send chunks out individually. so make life easier for the user and send them all at once.</span>
+    <span class="k">return</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">frags</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 boofuzz。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

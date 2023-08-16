@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>boofuzz.blocks.size &#8212; rainfuzz 0.0 文档</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=039e1c02" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=16727793"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>boofuzz.blocks.size 源代码</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">helpers</span><span class="p">,</span> <span class="n">primitives</span>
+<span class="kn">from</span> <span class="nn">..fuzzable</span> <span class="kn">import</span> <span class="n">Fuzzable</span>
+
+
+<span class="k">def</span> <span class="nf">_may_recurse</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">safe_recurse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recursion_flag</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recursion_flag</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">return</span> <span class="n">safe_recurse</span>
+
+
+<div class="viewcode-block" id="Size"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.Size">[文档]</a><span class="k">class</span> <span class="nc">Size</span><span class="p">(</span><span class="n">Fuzzable</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a sizer block bound to the block with the specified name.</span>
+
+<span class="sd">    Size blocks that size their own parent or grandparent are allowed.</span>
+
+<span class="sd">    :type name: str, optional</span>
+<span class="sd">    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,</span>
+<span class="sd">        defaults to None</span>
+<span class="sd">    :type  block_name:    str, optional</span>
+<span class="sd">    :param block_name:    Name of block to apply sizer to.</span>
+<span class="sd">    :type  request:       boofuzz.Request, optional</span>
+<span class="sd">    :param request:       Request this block belongs to.</span>
+<span class="sd">    :type  offset:        int, optional</span>
+<span class="sd">    :param offset:        Offset for calculated size value, defaults to 0</span>
+<span class="sd">    :type  length:        int, optional</span>
+<span class="sd">    :param length:        Length of sizer, defaults to 4</span>
+<span class="sd">    :type  endian:        chr, optional</span>
+<span class="sd">    :param endian:        Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</span>
+<span class="sd">    :type  output_format: str, optional</span>
+<span class="sd">    :param output_format: Output format, &quot;binary&quot; or &quot;ascii&quot;, defaults to binary</span>
+<span class="sd">    :type  inclusive:     bool, optional</span>
+<span class="sd">    :param inclusive:     Should the sizer count its own length? Defaults to False</span>
+<span class="sd">    :type  signed:        bool, optional</span>
+<span class="sd">    :param signed:        Make size signed vs. unsigned (applicable only with format=&quot;ascii&quot;), defaults to False</span>
+<span class="sd">    :type  math:          def, optional</span>
+<span class="sd">    :param math:          Apply the mathematical op defined in this function to the size, defaults to None</span>
+<span class="sd">    :type  fuzzable:      bool, optional</span>
+<span class="sd">    :param fuzzable:      Enable/disable fuzzing of this block, defaults to true</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">block_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">request</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">endian</span><span class="o">=</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span>
+        <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+        <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">signed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">math</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Size</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span> <span class="o">=</span> <span class="n">block_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endian</span> <span class="o">=</span> <span class="n">endian</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="n">output_format</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusive</span> <span class="o">=</span> <span class="n">inclusive</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signed</span> <span class="o">=</span> <span class="n">signed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">math</span> <span class="o">=</span> <span class="n">math</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bit_field</span> <span class="o">=</span> <span class="n">primitives</span><span class="o">.</span><span class="n">BitField</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;innerBitField&quot;</span><span class="p">,</span>
+            <span class="n">default_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="n">endian</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">endian</span><span class="p">,</span>
+            <span class="n">output_format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span>
+            <span class="n">signed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">signed</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rendered</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_complete</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">math</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
+
+        <span class="c1"># Set the recursion flag before calling a method that may cause a recursive loop.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recursion_flag</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">mutation</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_field</span><span class="o">.</span><span class="n">mutations</span><span class="p">(</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">mutation</span>
+
+    <span class="k">def</span> <span class="nf">num_mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wrap the num_mutations routine of the internal bit_field primitive.</span>
+
+<span class="sd">        :param default_value:</span>
+<span class="sd">        :rtype:  int</span>
+<span class="sd">        :return: Number of mutated forms this primitive can take.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_field</span><span class="o">.</span><span class="n">get_num_mutations</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mutation_context</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># default</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recursion_flag</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dummy_value</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">helpers</span><span class="o">.</span><span class="n">str_to_bytes</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_length_to_bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_calculated_length</span><span class="p">(</span><span class="n">mutation_context</span><span class="o">=</span><span class="n">mutation_context</span><span class="p">))</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bit_field</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">mutation_context</span><span class="o">=</span><span class="n">mutation_context</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dummy_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_calculated_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mutation_context</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inclusive_length_of_self</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length_of_target_block</span><span class="p">(</span><span class="n">mutation_context</span><span class="o">=</span><span class="n">mutation_context</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_length_to_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">primitives</span><span class="o">.</span><span class="n">BitField</span><span class="o">.</span><span class="n">_render_int</span><span class="p">(</span>
+            <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">math</span><span class="p">(</span><span class="n">length</span><span class="p">),</span>
+            <span class="n">output_format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span>
+            <span class="n">bit_width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="n">endian</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">endian</span><span class="p">,</span>
+            <span class="n">signed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">signed</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_inclusive_length_of_self</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return length of self or zero if inclusive flag is False.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inclusive</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="nd">@_may_recurse</span>
+    <span class="k">def</span> <span class="nf">_length_of_target_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mutation_context</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return length of target block, including mutations if mutation applies.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">resolve_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_block</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">mutation_context</span><span class="o">=</span><span class="n">mutation_context</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@_may_recurse</span>
+    <span class="k">def</span> <span class="nf">_original_length_of_target_block</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return length of target block, including mutations if it is currently mutated.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">resolve_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_block</span><span class="o">.</span><span class="n">original_value</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">length</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">rainfuzz</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../test.html">环境搭建</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../boofuzz1/index.html">boofuzz分析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/protocol-definition.html">Protocol Definition</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">模块代码</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="提交" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;一袭青衣尽长安.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

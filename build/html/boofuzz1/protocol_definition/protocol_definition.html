@@ -1,48 +1,99 @@
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Protocol Definition &#8212; rainfuzz 0.0 文档</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=4f649999" />
-    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=039e1c02" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=16727793"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="../../_static/translations.js?v=beaddf03"></script>
-    <link rel="index" title="索引" href="../../genindex.html" />
-    <link rel="search" title="搜索" href="../../search.html" />
-    <link rel="next" title="Other Modules" href="../other_modules/other_modules.html" />
-    <link rel="prev" title="样例分析" href="../examples/examples.html" />
-   
-  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protocol Definition &mdash; rainfuzz 0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=44496db0"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
           
+          
+          <a href="../../index.html" class="icon icon-home">
+            rainfuzz
+          </a>
+              <div class="version">
+                0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/contributing.html">Contributing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/connections.html">Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/monitors.html">Monitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/other-modules.html">Other Modules</a></li>
+</ul>
 
-          <div class="body" role="main">
-            
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">rainfuzz</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Protocol Definition</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/boofuzz1/protocol_definition/protocol_definition.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="protocol-definition">
-<h1><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/user/protocol-definition.html#request">Protocol Definition</a><a class="headerlink" href="#protocol-definition" title="此标题的永久链接">¶</a></h1>
+<h1><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/user/protocol-definition.html#request">Protocol Definition</a><a class="headerlink" href="#protocol-definition" title="Permalink to this heading"></a></h1>
 <p>对于老旧风格的协议定义，可以参看<a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/user/static-protocol-definition.html#static-primitives">这里</a>，此处描述的是新版本的协议格式。</p>
 <section id="id1">
-<h2>概述<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h2>
+<h2>概述<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <p><strong>Request</strong> 可以看作是要发送的消息，而 <strong>Blocks</strong>
 则可视为消息内的块，<strong>Primitives</strong> 则是构成 Block/Request
 的元素，这些元素可以是字节、字符串、数字、checksums。</p>
 </section>
 <section id="id2">
-<h2>样例<a class="headerlink" href="#id2" title="此标题的永久链接">¶</a></h2>
+<h2>样例<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
 <p>以下是一个 HTTP 消息的例子，演示了如何使用 Request、Block 和
 primitives。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="s2">&quot;HTTP-Request&quot;</span><span class="p">,</span><span class="n">children</span><span class="o">=</span><span class="p">(</span>
@@ -67,7 +118,7 @@ primitives。</p>
 <p>下面对 boofuzz 框架<strong>协议定义类</strong>的实现展开分析。</p>
 </section>
 <section id="fuzzable">
-<h2><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable">Fuzzable</a><a class="headerlink" href="#fuzzable" title="此标题的永久链接">¶</a></h2>
+<h2><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable">Fuzzable</a><a class="headerlink" href="#fuzzable" title="Permalink to this heading"></a></h2>
 <p>Fuzzable 是所有 primitives 和 blocks
 的父类（准确地说是父类的父类），当创建 Fuzzable
 的子类时，一般情况下会重写 <code class="docutils literal notranslate"><span class="pre">mutations()</span></code> 和/或 <code class="docutils literal notranslate"><span class="pre">encode()</span></code>
@@ -80,7 +131,7 @@ primitives。</p>
 自行处理，所以通常不需要重写它们。</p>
 <p>下面进行方法/函数的分析。</p>
 <section id="init">
-<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable">__init__()</a><a class="headerlink" href="#init" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable">__init__()</a><a class="headerlink" href="#init" title="Permalink to this heading"></a></h3>
 <p><strong>参数：</strong></p>
 <ul class="simple">
 <li><p>name (str) -
@@ -128,7 +179,7 @@ None)，则会使用默认名称。默认名称是基于类名和一个计数器
 </ul>
 </section>
 <section id="encode">
-<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable.encode">encode()</a><a class="headerlink" href="#encode" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable.encode">encode()</a><a class="headerlink" href="#encode" title="Permalink to this heading"></a></h3>
 <p>该方法用于将 value 编码成一个字节串。</p>
 <p><strong>参数：</strong></p>
 <ul class="simple">
@@ -149,10 +200,10 @@ None)，则会使用默认名称。默认名称是基于类名和一个计数器
 </div></blockquote>
 </section>
 <section id="get-mutations">
-<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable.get_mutations">get_mutations()</a><a class="headerlink" href="#get-mutations" title="此标题的永久链接">¶</a></h3>
+<h3><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/fuzzable.html#Fuzzable.get_mutations">get_mutations()</a><a class="headerlink" href="#get-mutations" title="Permalink to this heading"></a></h3>
 </section>
 <section id="fuzzable-1">
-<span id="id3"></span><h3>fuzzable()<a class="headerlink" href="#fuzzable-1" title="此标题的永久链接">¶</a></h3>
+<span id="id3"></span><h3>fuzzable()<a class="headerlink" href="#fuzzable-1" title="Permalink to this heading"></a></h3>
 <p>装饰器方法，&#64;property 将该方法转换为了属性。比如 a 是一个 Fuzzable
 对象，那么可以通过 <code class="docutils literal notranslate"><span class="pre">a.fuzzable</span></code> 获取到 _fuzzable 属性。</p>
 <blockquote>
@@ -166,7 +217,7 @@ None)，则会使用默认名称。默认名称是基于类名和一个计数器
 </div>
 </section>
 <section id="name">
-<h3>name()<a class="headerlink" href="#name" title="此标题的永久链接">¶</a></h3>
+<h3>name()<a class="headerlink" href="#name" title="Permalink to this heading"></a></h3>
 <p>返回元素名称，该名称对于每个实例来说应该是唯一的。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@property</span>
 <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -179,7 +230,7 @@ None)，则会使用默认名称。默认名称是基于类名和一个计数器
 </div>
 </section>
 <section id="qualified-name">
-<h3>qualified_name()<a class="headerlink" href="#qualified-name" title="此标题的永久链接">¶</a></h3>
+<h3>qualified_name()<a class="headerlink" href="#qualified-name" title="Permalink to this heading"></a></h3>
 <p>一个装饰器函数，会返回一个描述请求名称和请求内元素路径的以点号作为分隔符的字符串。</p>
 <p>字符串的值由 <code class="docutils literal notranslate"><span class="pre">_context_path</span></code> 和 <code class="docutils literal notranslate"><span class="pre">name</span></code>
 组成，通过点号连接起来。例如，如果 <code class="docutils literal notranslate"><span class="pre">_context_path</span></code>
@@ -192,7 +243,7 @@ None)，则会使用默认名称。默认名称是基于类名和一个计数器
 </div>
 </section>
 <section id="context-path">
-<h3>context_path()<a class="headerlink" href="#context-path" title="此标题的永久链接">¶</a></h3>
+<h3>context_path()<a class="headerlink" href="#context-path" title="Permalink to this heading"></a></h3>
 <p>context_path 是一个装饰器函数，由 getter 和 setter
 方法组成，用于描述到达当前元素的路径的点分隔字符串。</p>
 <p><strong>实现思路：</strong></p>
@@ -218,7 +269,7 @@ None)，则会使用默认名称。默认名称是基于类名和一个计数器
 </ul>
 </section>
 <section id="request">
-<h3>request<a class="headerlink" href="#request" title="此标题的永久链接">¶</a></h3>
+<h3>request<a class="headerlink" href="#request" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@property</span>
 <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference to the Request to which this object is attached.&quot;&quot;&quot;</span>
@@ -233,7 +284,7 @@ None)，则会使用默认名称。默认名称是基于类名和一个计数器
 </div>
 </section>
 <section id="stop-mutations">
-<h3>stop_mutations()<a class="headerlink" href="#stop-mutations" title="此标题的永久链接">¶</a></h3>
+<h3>stop_mutations()<a class="headerlink" href="#stop-mutations" title="Permalink to this heading"></a></h3>
 <p>该方法用于停止当前运行的<code class="docutils literal notranslate"><span class="pre">mutations</span></code>调用中的突变生成。在当一个元素已经导致了多个失败时，boofuzz使用这个方法来停止对该元素进行模糊化。</p>
 <p>方法内部将属性<code class="docutils literal notranslate"><span class="pre">_halt_mutations</span></code>设置为<code class="docutils literal notranslate"><span class="pre">True</span></code>，表示停止突变生成。</p>
 <p>该方法不返回任何值，返回类型为<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p>
@@ -252,18 +303,18 @@ None)，则会使用默认名称。默认名称是基于类名和一个计数器
 </section>
 </section>
 <section id="fuzzableblock">
-<h2>FuzzableBlock<a class="headerlink" href="#fuzzableblock" title="此标题的永久链接">¶</a></h2>
+<h2>FuzzableBlock<a class="headerlink" href="#fuzzableblock" title="Permalink to this heading"></a></h2>
 <p>待定。</p>
 </section>
 <section id="request-1">
-<span id="id4"></span><h2>Request<a class="headerlink" href="#request-1" title="此标题的永久链接">¶</a></h2>
+<span id="id4"></span><h2>Request<a class="headerlink" href="#request-1" title="Permalink to this heading"></a></h2>
 <p>顶级容器，可以包含任何 block structure 和 primitive。如前所述，Request
 实际上代表着要发送的消息，该消息可由许多 blocks 组成，所以可以将 Request
 看作是一个超级块、根块等等。</p>
 <p>Request 对应着 Request 类，该类继承自 <code class="docutils literal notranslate"><span class="pre">FuzzableBlock</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Node</span></code>
 ，下面对 Request 类的具体实现展开分析与说明。</p>
 <section id="init-1">
-<span id="id5"></span><h3>__init__<a class="headerlink" href="#init-1" title="此标题的永久链接">¶</a></h3>
+<span id="id5"></span><h3>__init__<a class="headerlink" href="#init-1" title="Permalink to this heading"></a></h3>
 <p><strong>参数：</strong></p>
 <ul class="simple">
 <li><p>name（str，可选）- 当前 request 的名称</p></li>
@@ -316,90 +367,37 @@ stack），block_stack 是由 open blocks 组成的列表。callbacks
 </ul>
 </section>
 <section id="initialize-children">
-<h3>_initialize_children<a class="headerlink" href="#initialize-children" title="此标题的永久链接">¶</a></h3>
+<h3>_initialize_children<a class="headerlink" href="#initialize-children" title="Permalink to this heading"></a></h3>
 </section>
 </section>
 </section>
 
 
+           </div>
           </div>
-          
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright boofuzz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../index.html">rainfuzz</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>导航</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../test.html">环境搭建</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">boofuzz分析</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../session/session.html">Session</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../target/target.html">Target</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../connections/connections.html">Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../logging/logging.html">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../examples/examples.html">样例分析</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Protocol Definition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../other_modules/other_modules.html">Other Modules</a></li>
-</ul>
-</li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">boofuzz分析</a><ul>
-      <li>Previous: <a href="../examples/examples.html" title="上一章">样例分析</a></li>
-      <li>Next: <a href="../other_modules/other_modules.html" title="下一章">Other Modules</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">快速搜索</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="提交" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;一袭青衣尽长安.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
-      
-      |
-      <a href="../../_sources/boofuzz1/protocol_definition/protocol_definition.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>
