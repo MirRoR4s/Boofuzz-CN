@@ -6,8 +6,12 @@ boofuzz分析
 
    session/session
    target/target
+   connections/connections
+   logging/logging
    examples/examples
    protocol_definition/protocol_definition
+   other_modules/other_modules
+
 
 
 

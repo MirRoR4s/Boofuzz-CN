@@ -14,6 +14,8 @@
     <script src="../../_static/translations.js?v=beaddf03"></script>
     <link rel="index" title="索引" href="../../genindex.html" />
     <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="Other Modules" href="../other_modules/other_modules.html" />
+    <link rel="prev" title="样例分析" href="../examples/examples.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
@@ -34,7 +36,7 @@
 <h1><a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/user/protocol-definition.html#request">Protocol Definition</a><a class="headerlink" href="#protocol-definition" title="此标题的永久链接">¶</a></h1>
 <section id="id1">
 <h2>前言<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h2>
-<p>对于老旧风格的协议定义，可以参看<a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/user/static-protocol-definition.html#static-primitives">此处</a>。此处描述的协议定义格式是新版的！</p>
+<p>对于老旧风格的协议定义，可以参看<a class="reference external" href="https://boofuzz.readthedocs.io/en/stable/user/static-protocol-definition.html#static-primitives">这里</a>，此处描述的是新版本的协议格式。</p>
 </section>
 <section id="id2">
 <h2>总览<a class="headerlink" href="#id2" title="此标题的永久链接">¶</a></h2>
@@ -72,8 +74,8 @@
     <span class="bp">self</span><span class="o">.</span><span class="n">_fuzzable</span> <span class="o">=</span> <span class="n">fuzzable</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_default_value</span> <span class="o">=</span> <span class="n">default_value</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_context_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_request</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_context_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="c1">#  _context_path 代表什么含义？</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_request</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1">#  _request 代表什么含义？</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_halt_mutations</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">fuzz_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fuzz_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -259,15 +261,28 @@
 
 <h3>导航</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../test.html">环境搭建</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">boofuzz分析</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">boofuzz分析</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../session/session.html">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../target/target.html">Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../connections/connections.html">Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../logging/logging.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/examples.html">样例分析</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Protocol Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other_modules/other_modules.html">Other Modules</a></li>
+</ul>
+</li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">boofuzz分析</a><ul>
+      <li>Previous: <a href="../examples/examples.html" title="上一章">样例分析</a></li>
+      <li>Next: <a href="../other_modules/other_modules.html" title="下一章">Other Modules</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>

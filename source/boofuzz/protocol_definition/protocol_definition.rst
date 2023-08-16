@@ -4,7 +4,7 @@
 前言
 ----
 
-对于老旧风格的协议定义，可以参看\ `此处 <https://boofuzz.readthedocs.io/en/stable/user/static-protocol-definition.html#static-primitives>`__\ 。此处描述的协议定义格式是新版的！
+对于老旧风格的协议定义，可以参看\ `这里 <https://boofuzz.readthedocs.io/en/stable/user/static-protocol-definition.html#static-primitives>`__\ ，此处描述的是新版本的协议格式。
 
 总览
 ----
@@ -50,8 +50,8 @@ Fuzzable 是所有 primitives 和 blocks 的父类，当创建一个新的 fuzza
            self._fuzzable = fuzzable
            self._name = name
            self._default_value = default_value
-           self._context_path = ""
-           self._request = None
+           self._context_path = "" #  _context_path 代表什么含义？
+           self._request = None #  _request 代表什么含义？
            self._halt_mutations = False
            if fuzz_values is None:
                fuzz_values = list()

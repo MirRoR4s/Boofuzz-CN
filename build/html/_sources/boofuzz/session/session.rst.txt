@@ -23,7 +23,7 @@ Graph 类，所以 Session 对象相当于一个\ **图**\ 。
 `\__init_\_ <https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session>`__
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-会话类的构造函数。以下是各个成员变量的汇总表：
+**参数：**
 
 +----------------------------------+-----------------------------------+
 | 名称                             | 描述                              |
@@ -142,6 +142,67 @@ Graph 类，所以 Session 对象相当于一个\ **图**\ 。
 +----------------------------------+-----------------------------------+
 | \_callback_monitor               | 一个回调监视器列表，具体参看源码  |
 +----------------------------------+-----------------------------------+
+
+**返回值：**
+
+-  一个 Session 对象
+
+**实现思路：**
+
+-  设置下列成员变量：
+
+.. code:: python
+
+           self._ignore_connection_reset = ignore_connection_reset
+           self._ignore_connection_aborted = ignore_connection_aborted
+           self._ignore_connection_issues_when_sending_fuzz_data = ignore_connection_issues_when_sending_fuzz_data
+           self._reuse_target_connection = reuse_target_connection
+           self._ignore_connection_ssl_errors = ignore_connection_ssl_errors
+
+-  调用父类构造函数：
+
+.. code:: python
+
+   super(Session, self).__init__()
+
+.. code:: python
+
+       def __init__(self, graph_id=None):
+           self.id = graph_id
+           self.clusters = []
+           self.edges = {}
+           self.nodes = {}
+
+-  设置下列成员变量：
+
+.. code:: python
+
+           self.session_filename = session_filename
+           self._index_start = max(index_start, 1)
+           self._index_end = index_end
+           self.sleep_time = sleep_time
+           self.restart_interval = restart_interval
+           self.web_port = web_port
+           self._keep_web_open = keep_web_open
+           self.console_gui = console_gui
+           self._crash_threshold_node = crash_threshold_request
+           self._crash_threshold_element = crash_threshold_element
+           self.restart_sleep_time = restart_sleep_time
+           self.restart_threshold = restart_threshold
+           self.restart_timeout = restart_timeout
+
+-  如果日志记录器是 None，将其初始化为一个空的列表。此时如果要在 web
+   端生成一个控制台并且操作系统不是 Windows，
+
+.. code:: python
+
+           if fuzz_loggers is None: # 当没有设置记录器的时候，默认输出到标准输出。
+               fuzz_loggers = []
+               if self.console_gui and os.name != "nt":
+                   fuzz_loggers.append(fuzz_logger_curses.FuzzLoggerCurses(web_port=self.web_port))
+                   self._keep_web_open = False
+               else:
+                   fuzz_loggers = [fuzz_logger_text.FuzzLoggerText()]
 
 `add_node(node) <https://boofuzz.readthedocs.io/en/stable/_modules/boofuzz/sessions.html#Session.add_node>`__
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -266,14 +327,27 @@ build_webapp_thread
 
 **实现思路：**
 
-1. 若仅提供了源节点，那么将传入的源节点置为目的节点，将根节点置为真正的源节点
-2. 如果传入的源节点和目标节点是字符串类型的，那么默认传入的是节点名称，调用
+-  若仅提供了源节点，那么将传入的源节点置为目的节点，将根节点置为真正的源节点
+
+   .. code:: python
+
+              if dst is None:
+                  dst = src
+                  src = self.root
+
+-  如果传入的源节点和目标节点是字符串类型的，那么默认传入的是节点名称，调用
    ``find_node`` 方法寻找名称对应的节点
-3. 若寻找到了源节点并且该节点不是根节点，则调用
+
+   ::
+
+              if isinstance(src, six.string_types):
+                  src = self.find_node("name", src)
+
+1. 若寻找到了源节点并且该节点不是根节点，则调用
    ``add_node``\ 将其加入节点集
-4. 若找到了目的节点，则将其加入节点集
-5. 根据源节点和目的节点的 id，实例化 Connection 类新建一条边
-6. 调用 ``add_edge`` 将新建的边加入 session
+2. 若找到了目的节点，则将其加入节点集
+3. 根据源节点和目的节点的 id，实例化 Connection 类新建一条边
+4. 调用 ``add_edge`` 将新建的边加入 session
 
 example_test_case_callback
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
