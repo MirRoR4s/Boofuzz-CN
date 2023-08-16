@@ -3,21 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>boofuzz.sessions &mdash; rainfuzz 0.0 documentation</title>
+  <title>boofuzz.sessions &mdash; boofuzz 0.4.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon-32x32.ico"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=44496db0"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=ea00750a"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/js/theme.js"></script>
+    <link rel="icon" type="image/svg+xml" href="../../_static/favicon.svg" sizes="any">
+    
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+ 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -28,11 +32,12 @@
 
           
           
-          <a href="../../index.html" class="icon icon-home">
-            rainfuzz
+          <a href="../../index.html">
+            
+              <img src="../../_static/boo-logo-light.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.0
+                0.4.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -51,12 +56,16 @@
 <p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../source/Session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/Target.html">Target</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/connections.html">Connections</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/monitors.html">Monitors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/protocol-definition.html">Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/other-modules.html">Other Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/changelog.html">Changelog</a></li>
 </ul>
 
         </div>
@@ -65,7 +74,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">rainfuzz</a>
+          <a href="../../index.html">boofuzz</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -124,7 +133,7 @@
 <span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">BoofuzzFailure</span>
 
 
-<span class="k">class</span> <span class="nc">Target</span><span class="p">:</span>
+<div class="viewcode-block" id="Target"><a class="viewcode-back" href="../../source/Target.html#boofuzz.Target">[docs]</a><span class="k">class</span> <span class="nc">Target</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Target descriptor container.</span>
 
 <span class="sd">    Takes an ITargetConnection and wraps send/recv with appropriate</span>
@@ -207,7 +216,7 @@
             <span class="s2">&quot;This property is not supported; grab procmon from monitors and use set_options(**dict)&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Target.close"><a class="viewcode-back" href="../../source/Target.html#boofuzz.Target.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Close connection to the target.</span>
 
@@ -215,9 +224,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Closing target connection...&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_target_connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Connection closed.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Connection closed.&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Target.open"><a class="viewcode-back" href="../../source/Target.html#boofuzz.Target.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Opens connection to the target. Make sure to call close!</span>
 
@@ -225,18 +234,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Opening target connection (</span><span class="si">{0}</span><span class="s2">)...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_target_connection</span><span class="o">.</span><span class="n">info</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_target_connection</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Connection opened.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Connection opened.&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">pedrpc_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Target.pedrpc_connect"><a class="viewcode-back" href="../../source/Target.html#boofuzz.Target.pedrpc_connect">[docs]</a>    <span class="k">def</span> <span class="nf">pedrpc_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;pedrpc_connect has been renamed to monitors_alive. &quot;</span>
             <span class="s2">&quot;This alias will stop working in a future version of boofuzz.&quot;</span><span class="p">,</span>
             <span class="ne">FutureWarning</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitors_alive</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitors_alive</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">monitors_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Target.monitors_alive"><a class="viewcode-back" href="../../source/Target.html#boofuzz.Target.monitors_alive">[docs]</a>    <span class="k">def</span> <span class="nf">monitors_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wait for the monitors to become alive / establish connection to the RPC server.</span>
 <span class="sd">        This method is called on every restart of the target and when it&#39;s added to a session.</span>
@@ -252,9 +261,9 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_alive</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_alive</span><span class="p">:</span>
-                    <span class="n">cb</span><span class="p">(</span><span class="n">monitor</span><span class="p">)</span>
+                    <span class="n">cb</span><span class="p">(</span><span class="n">monitor</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_bytes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Target.recv"><a class="viewcode-back" href="../../source/Target.html#boofuzz.Target.recv">[docs]</a>    <span class="k">def</span> <span class="nf">recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_bytes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Receive up to max_bytes data from the target.</span>
 
@@ -275,9 +284,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_recv</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="n">data</span></div>
 
-    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="Target.send"><a class="viewcode-back" href="../../source/Target.html#boofuzz.Target.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Send data to the target. Only valid after calling open!</span>
 
@@ -304,9 +313,9 @@
             <span class="n">num_sent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_connection</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_send</span><span class="p">(</span><span class="n">data</span><span class="p">[:</span><span class="n">num_sent</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">log_send</span><span class="p">(</span><span class="n">data</span><span class="p">[:</span><span class="n">num_sent</span><span class="p">])</span></div>
 
-    <span class="k">def</span> <span class="nf">set_fuzz_data_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fuzz_data_logger</span><span class="p">):</span>
+<div class="viewcode-block" id="Target.set_fuzz_data_logger"><a class="viewcode-back" href="../../source/Target.html#boofuzz.Target.set_fuzz_data_logger">[docs]</a>    <span class="k">def</span> <span class="nf">set_fuzz_data_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fuzz_data_logger</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set this object&#39;s fuzz data logger -- for sent and received fuzz data.</span>
 
@@ -315,7 +324,7 @@
 
 <span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span> <span class="o">=</span> <span class="n">fuzz_data_logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span> <span class="o">=</span> <span class="n">fuzz_data_logger</span></div></div>
 
 
 <span class="k">class</span> <span class="nc">Connection</span><span class="p">(</span><span class="n">pgraph</span><span class="o">.</span><span class="n">Edge</span><span class="p">):</span>
@@ -1965,7 +1974,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright boofuzz.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

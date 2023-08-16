@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="zh-CN" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>boofuzz.helpers &mdash; rainfuzz 0.0 文档</title>
+  <title>boofuzz.helpers &mdash; boofuzz 0.4.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon-32x32.ico"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=16727793"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=ea00750a"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-        <script src="../../_static/translations.js?v=beaddf03"></script>
     <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="索引" href="../../genindex.html" />
-    <link rel="search" title="搜索" href="../../search.html" /> 
+    <link rel="icon" type="image/svg+xml" href="../../_static/favicon.svg" sizes="any">
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+ 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -29,20 +32,21 @@
 
           
           
-          <a href="../../index.html" class="icon icon-home">
-            rainfuzz
+          <a href="../../index.html">
+            
+              <img src="../../_static/boo-logo-light.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.0
+                0.4.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installing boofuzz</a></li>
@@ -51,6 +55,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/Session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/Target.html">Target</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/connections.html">Connections</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/monitors.html">Monitors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/logging.html">Logging</a></li>
@@ -58,22 +64,25 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/other-modules.html">Other Modules</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/changelog.html">Changelog</a></li>
+</ul>
 
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">rainfuzz</a>
+          <a href="../../index.html">boofuzz</a>
       </nav>
 
       <div class="wy-nav-content">
         <div class="rst-content">
-          <div role="navigation" aria-label="页面导航">
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
           <li class="breadcrumb-item"><a href="../boofuzz.html">boofuzz</a></li>
       <li class="breadcrumb-item active">boofuzz.helpers</li>
       <li class="wy-breadcrumbs-aside">
@@ -84,7 +93,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>boofuzz.helpers 源代码</h1><div class="highlight"><pre>
+  <h1>Source code for boofuzz.helpers</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">errno</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -188,7 +197,7 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="ip_str_to_bytes"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.ip_str_to_bytes">[文档]</a><span class="k">def</span> <span class="nf">ip_str_to_bytes</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+<div class="viewcode-block" id="ip_str_to_bytes"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.ip_str_to_bytes">[docs]</a><span class="k">def</span> <span class="nf">ip_str_to_bytes</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert an IP string to a four-byte bytes.</span>
 
 <span class="sd">    :param ip: IP address string, e.g. &#39;127.0.0.1&#39;</span>
@@ -204,7 +213,7 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Illegal IP address passed to socket.inet_aton: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ip</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="get_max_udp_size"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.get_max_udp_size">[文档]</a><span class="k">def</span> <span class="nf">get_max_udp_size</span><span class="p">():</span>
+<div class="viewcode-block" id="get_max_udp_size"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.get_max_udp_size">[docs]</a><span class="k">def</span> <span class="nf">get_max_udp_size</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Crazy CTypes magic to do a getsockopt() which determines the max UDP payload size in a platform-agnostic way.</span>
 
@@ -223,11 +232,11 @@
     <span class="k">return</span> <span class="n">udp_socket_connection</span><span class="o">.</span><span class="n">UDPSocketConnection</span><span class="o">.</span><span class="n">max_payload</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="calculate_four_byte_padding"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.calculate_four_byte_padding">[文档]</a><span class="k">def</span> <span class="nf">calculate_four_byte_padding</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="calculate_four_byte_padding"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.calculate_four_byte_padding">[docs]</a><span class="k">def</span> <span class="nf">calculate_four_byte_padding</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">character</span> <span class="o">*</span> <span class="p">((</span><span class="mi">4</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">3</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mi">3</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="crc16"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.crc16">[文档]</a><span class="k">def</span> <span class="nf">crc16</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="crc16"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.crc16">[docs]</a><span class="k">def</span> <span class="nf">crc16</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;CRC-16 poly: p(x) = x**16 + x**15 + x**2 + 1</span>
 
 <span class="sd">    @param string: Data over which to calculate crc.</span>
@@ -253,11 +262,11 @@
     <span class="k">return</span> <span class="n">value</span></div>
 
 
-<div class="viewcode-block" id="crc32"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.crc32">[文档]</a><span class="k">def</span> <span class="nf">crc32</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+<div class="viewcode-block" id="crc32"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.crc32">[docs]</a><span class="k">def</span> <span class="nf">crc32</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">zlib</span><span class="o">.</span><span class="n">crc32</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFF</span></div>
 
 
-<div class="viewcode-block" id="uuid_bin_to_str"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.uuid_bin_to_str">[文档]</a><span class="k">def</span> <span class="nf">uuid_bin_to_str</span><span class="p">(</span><span class="n">uuid</span><span class="p">):</span>
+<div class="viewcode-block" id="uuid_bin_to_str"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.uuid_bin_to_str">[docs]</a><span class="k">def</span> <span class="nf">uuid_bin_to_str</span><span class="p">(</span><span class="n">uuid</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a binary UUID to human readable string.</span>
 
 <span class="sd">    @param uuid: bytes representing UUID.</span>
@@ -268,7 +277,7 @@
     <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%08x</span><span class="s2">-</span><span class="si">%04x</span><span class="s2">-</span><span class="si">%04x</span><span class="s2">-</span><span class="si">%04x</span><span class="s2">-</span><span class="si">%04x%08x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">block1</span><span class="p">,</span> <span class="n">block2</span><span class="p">,</span> <span class="n">block3</span><span class="p">,</span> <span class="n">block4</span><span class="p">,</span> <span class="n">block5</span><span class="p">,</span> <span class="n">block6</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="uuid_str_to_bin"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.uuid_str_to_bin">[文档]</a><span class="k">def</span> <span class="nf">uuid_str_to_bin</span><span class="p">(</span><span class="n">uuid</span><span class="p">):</span>
+<div class="viewcode-block" id="uuid_str_to_bin"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.uuid_str_to_bin">[docs]</a><span class="k">def</span> <span class="nf">uuid_str_to_bin</span><span class="p">(</span><span class="n">uuid</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a UUID string to binary form.</span>
 
@@ -323,7 +332,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">msb</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">lsb</span>
 
 
-<div class="viewcode-block" id="ipv4_checksum"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.ipv4_checksum">[文档]</a><span class="k">def</span> <span class="nf">ipv4_checksum</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+<div class="viewcode-block" id="ipv4_checksum"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.ipv4_checksum">[docs]</a><span class="k">def</span> <span class="nf">ipv4_checksum</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return IPv4 checksum of msg.</span>
 <span class="sd">    :param msg: Message to compute checksum over.</span>
@@ -359,7 +368,7 @@
     <span class="k">return</span> <span class="n">src_addr</span> <span class="o">+</span> <span class="n">dst_addr</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">([</span><span class="n">ip_constants</span><span class="o">.</span><span class="n">IPV4_PROTOCOL_UDP</span><span class="p">])</span> <span class="o">+</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&gt;H&quot;</span><span class="p">,</span> <span class="n">msg_len</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="udp_checksum"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.udp_checksum">[文档]</a><span class="k">def</span> <span class="nf">udp_checksum</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">src_addr</span><span class="p">,</span> <span class="n">dst_addr</span><span class="p">):</span>
+<div class="viewcode-block" id="udp_checksum"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.udp_checksum">[docs]</a><span class="k">def</span> <span class="nf">udp_checksum</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">src_addr</span><span class="p">,</span> <span class="n">dst_addr</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return UDP checksum of msg.</span>
 
 <span class="sd">    Recall that the UDP checksum involves creating a sort of pseudo IP header.</span>
@@ -391,7 +400,7 @@
     <span class="k">return</span> <span class="n">ipv4_checksum</span><span class="p">(</span><span class="n">_udp_checksum_pseudo_header</span><span class="p">(</span><span class="n">src_addr</span><span class="p">,</span> <span class="n">dst_addr</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span> <span class="o">+</span> <span class="n">msg</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="hex_str"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.hex_str">[文档]</a><span class="k">def</span> <span class="nf">hex_str</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<div class="viewcode-block" id="hex_str"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.hex_str">[docs]</a><span class="k">def</span> <span class="nf">hex_str</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a hex-formatted string based on s.</span>
 
@@ -404,7 +413,7 @@
     <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">s</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="pause_for_signal"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.pause_for_signal">[文档]</a><span class="k">def</span> <span class="nf">pause_for_signal</span><span class="p">():</span>
+<div class="viewcode-block" id="pause_for_signal"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.pause_for_signal">[docs]</a><span class="k">def</span> <span class="nf">pause_for_signal</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Pauses the current thread in a way that can still receive signals like SIGINT from Ctrl+C.</span>
 
@@ -425,7 +434,7 @@
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_time_stamp"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.get_time_stamp">[文档]</a><span class="k">def</span> <span class="nf">get_time_stamp</span><span class="p">():</span>
+<div class="viewcode-block" id="get_time_stamp"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.get_time_stamp">[docs]</a><span class="k">def</span> <span class="nf">get_time_stamp</span><span class="p">():</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;[%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
     <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;,</span><span class="si">%03d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">%</span> <span class="mi">1000</span><span class="p">)</span>
@@ -442,7 +451,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="format_log_msg"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.format_log_msg">[文档]</a><span class="k">def</span> <span class="nf">format_log_msg</span><span class="p">(</span>
+<div class="viewcode-block" id="format_log_msg"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.format_log_msg">[docs]</a><span class="k">def</span> <span class="nf">format_log_msg</span><span class="p">(</span>
     <span class="n">msg_type</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">indent_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">truncated</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">format_type</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span>
 <span class="p">):</span>
     <span class="n">curses_mode</span> <span class="o">=</span> <span class="kc">False</span>
@@ -473,14 +482,14 @@
     <span class="k">return</span> <span class="n">msg</span></div>
 
 
-<div class="viewcode-block" id="format_msg"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.format_msg">[文档]</a><span class="k">def</span> <span class="nf">format_msg</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">indent_level</span><span class="p">,</span> <span class="n">indent_size</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="format_msg"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.format_msg">[docs]</a><span class="k">def</span> <span class="nf">format_msg</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">indent_level</span><span class="p">,</span> <span class="n">indent_size</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="n">_indent_all_lines</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">indent_level</span> <span class="o">*</span> <span class="n">indent_size</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">timestamp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">timestamp</span> <span class="o">=</span> <span class="n">get_time_stamp</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">timestamp</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">_indent_after_first_line</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="hex_to_hexstr"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.hex_to_hexstr">[文档]</a><span class="k">def</span> <span class="nf">hex_to_hexstr</span><span class="p">(</span><span class="n">input_bytes</span><span class="p">):</span>
+<div class="viewcode-block" id="hex_to_hexstr"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.hex_to_hexstr">[docs]</a><span class="k">def</span> <span class="nf">hex_to_hexstr</span><span class="p">(</span><span class="n">input_bytes</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Render input_bytes as ASCII-encoded hex bytes, followed by a best effort</span>
 <span class="sd">    utf-8 rendering.</span>
@@ -494,7 +503,7 @@
     <span class="k">return</span> <span class="n">hex_str</span><span class="p">(</span><span class="n">input_bytes</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">input_bytes</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="mkdir_safe"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.mkdir_safe">[文档]</a><span class="k">def</span> <span class="nf">mkdir_safe</span><span class="p">(</span><span class="n">directory_name</span><span class="p">,</span> <span class="n">file_included</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="mkdir_safe"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.mkdir_safe">[docs]</a><span class="k">def</span> <span class="nf">mkdir_safe</span><span class="p">(</span><span class="n">directory_name</span><span class="p">,</span> <span class="n">file_included</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates directory_name and subdirectories. If file_included is true, removes final element of the path&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">file_included</span><span class="p">:</span>
         <span class="n">fullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">directory_name</span><span class="p">)</span>
@@ -506,12 +515,12 @@
             <span class="k">raise</span></div>
 
 
-<div class="viewcode-block" id="path_exists"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.path_exists">[文档]</a><span class="k">def</span> <span class="nf">path_exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="path_exists"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.path_exists">[docs]</a><span class="k">def</span> <span class="nf">path_exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;To avoid polluting files with import os&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_boofuzz_version"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.get_boofuzz_version">[文档]</a><span class="k">def</span> <span class="nf">get_boofuzz_version</span><span class="p">(</span><span class="n">boofuzz_class</span><span class="p">):</span>
+<div class="viewcode-block" id="get_boofuzz_version"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.get_boofuzz_version">[docs]</a><span class="k">def</span> <span class="nf">get_boofuzz_version</span><span class="p">(</span><span class="n">boofuzz_class</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parses __init__.py for a version string and returns it like &#39;v0.0.0&#39;</span>
 
@@ -529,13 +538,13 @@
     <span class="k">return</span> <span class="s2">&quot;v-.-.-&quot;</span></div>
 
 
-<div class="viewcode-block" id="str_to_bytes"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.str_to_bytes">[文档]</a><span class="k">def</span> <span class="nf">str_to_bytes</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="str_to_bytes"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.str_to_bytes">[docs]</a><span class="k">def</span> <span class="nf">str_to_bytes</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">value</span>
     <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">encoding</span><span class="p">,</span> <span class="n">errors</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="parse_target"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.parse_target">[文档]</a><span class="k">def</span> <span class="nf">parse_target</span><span class="p">(</span><span class="n">target_name</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_target"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.parse_target">[docs]</a><span class="k">def</span> <span class="nf">parse_target</span><span class="p">(</span><span class="n">target_name</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">host</span><span class="p">,</span> <span class="n">ip</span> <span class="o">=</span> <span class="n">target_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">host</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
@@ -543,7 +552,7 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Target format is HOST:PORT&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="parse_test_case_name"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.parse_test_case_name">[文档]</a><span class="k">def</span> <span class="nf">parse_test_case_name</span><span class="p">(</span><span class="n">test_case</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_test_case_name"><a class="viewcode-back" href="../../user/other-modules.html#boofuzz.helpers.parse_test_case_name">[docs]</a><span class="k">def</span> <span class="nf">parse_test_case_name</span><span class="p">(</span><span class="n">test_case</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a test case name into a message path and a list of mutation names.</span>
 
 <span class="sd">    Example:</span>
@@ -575,12 +584,12 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; 版权所有 boofuzz。</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
   </div>
 
-  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
-    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
    
 
 </footer>

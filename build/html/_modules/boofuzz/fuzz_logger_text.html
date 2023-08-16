@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="zh-CN" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>boofuzz.fuzz_logger_text &mdash; rainfuzz 0.0 文档</title>
+  <title>boofuzz.fuzz_logger_text &mdash; boofuzz 0.4.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon-32x32.ico"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=16727793"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=ea00750a"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-        <script src="../../_static/translations.js?v=beaddf03"></script>
     <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="索引" href="../../genindex.html" />
-    <link rel="search" title="搜索" href="../../search.html" /> 
+    <link rel="icon" type="image/svg+xml" href="../../_static/favicon.svg" sizes="any">
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+ 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -29,20 +32,21 @@
 
           
           
-          <a href="../../index.html" class="icon icon-home">
-            rainfuzz
+          <a href="../../index.html">
+            
+              <img src="../../_static/boo-logo-light.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.0
+                0.4.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installing boofuzz</a></li>
@@ -51,27 +55,35 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/Session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/Target.html">Target</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/connections.html">Connections</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/monitors.html">Monitors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/protocol-definition.html">Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/other-modules.html">Other Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/changelog.html">Changelog</a></li>
 </ul>
 
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">rainfuzz</a>
+          <a href="../../index.html">boofuzz</a>
       </nav>
 
       <div class="wy-nav-content">
         <div class="rst-content">
-          <div role="navigation" aria-label="页面导航">
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">模块代码</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../boofuzz.html">boofuzz</a></li>
       <li class="breadcrumb-item active">boofuzz.fuzz_logger_text</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -81,7 +93,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>boofuzz.fuzz_logger_text 源代码</h1><div class="highlight"><pre>
+  <h1>Source code for boofuzz.fuzz_logger_text</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">from</span> <span class="nn">colorama</span> <span class="kn">import</span> <span class="n">init</span>
@@ -93,7 +105,7 @@
 <span class="n">DEFAULT_HEX_TO_STR</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">hex_to_hexstr</span>
 
 
-<div class="viewcode-block" id="FuzzLoggerText"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText">[文档]</a><span class="k">class</span> <span class="nc">FuzzLoggerText</span><span class="p">(</span><span class="n">ifuzz_logger_backend</span><span class="o">.</span><span class="n">IFuzzLoggerBackend</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText">[docs]</a><span class="k">class</span> <span class="nc">FuzzLoggerText</span><span class="p">(</span><span class="n">ifuzz_logger_backend</span><span class="o">.</span><span class="n">IFuzzLoggerBackend</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class formats FuzzLogger data for text presentation. It can be</span>
 <span class="sd">    configured to output to STDOUT, or to a named file.</span>
@@ -115,37 +127,37 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_file_handle</span> <span class="o">=</span> <span class="n">file_handle</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_format_raw_bytes</span> <span class="o">=</span> <span class="n">bytes_to_str</span>
 
-<div class="viewcode-block" id="FuzzLoggerText.open_test_step"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.open_test_step">[文档]</a>    <span class="k">def</span> <span class="nf">open_test_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.open_test_step"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.open_test_step">[docs]</a>    <span class="k">def</span> <span class="nf">open_test_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_print_log_msg</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">msg_type</span><span class="o">=</span><span class="s2">&quot;step&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzLoggerText.log_check"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_check">[文档]</a>    <span class="k">def</span> <span class="nf">log_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.log_check"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_check">[docs]</a>    <span class="k">def</span> <span class="nf">log_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_print_log_msg</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">msg_type</span><span class="o">=</span><span class="s2">&quot;check&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzLoggerText.log_error"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_error">[文档]</a>    <span class="k">def</span> <span class="nf">log_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.log_error"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_error">[docs]</a>    <span class="k">def</span> <span class="nf">log_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_print_log_msg</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">msg_type</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzLoggerText.log_recv"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_recv">[文档]</a>    <span class="k">def</span> <span class="nf">log_recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.log_recv"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_recv">[docs]</a>    <span class="k">def</span> <span class="nf">log_recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_print_log_msg</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">msg_type</span><span class="o">=</span><span class="s2">&quot;receive&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzLoggerText.log_send"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_send">[文档]</a>    <span class="k">def</span> <span class="nf">log_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.log_send"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_send">[docs]</a>    <span class="k">def</span> <span class="nf">log_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_print_log_msg</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">msg_type</span><span class="o">=</span><span class="s2">&quot;send&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzLoggerText.log_info"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_info">[文档]</a>    <span class="k">def</span> <span class="nf">log_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.log_info"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_info">[docs]</a>    <span class="k">def</span> <span class="nf">log_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_print_log_msg</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">msg_type</span><span class="o">=</span><span class="s2">&quot;info&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzLoggerText.open_test_case"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.open_test_case">[文档]</a>    <span class="k">def</span> <span class="nf">open_test_case</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_case_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.open_test_case"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.open_test_case">[docs]</a>    <span class="k">def</span> <span class="nf">open_test_case</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_case_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_print_log_msg</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">test_case_id</span><span class="p">,</span> <span class="n">msg_type</span><span class="o">=</span><span class="s2">&quot;test_case&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzLoggerText.log_fail"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_fail">[文档]</a>    <span class="k">def</span> <span class="nf">log_fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.log_fail"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_fail">[docs]</a>    <span class="k">def</span> <span class="nf">log_fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_print_log_msg</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">msg_type</span><span class="o">=</span><span class="s2">&quot;fail&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzLoggerText.log_pass"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_pass">[文档]</a>    <span class="k">def</span> <span class="nf">log_pass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.log_pass"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.log_pass">[docs]</a>    <span class="k">def</span> <span class="nf">log_pass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_print_log_msg</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">msg_type</span><span class="o">=</span><span class="s2">&quot;pass&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FuzzLoggerText.close_test_case"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.close_test_case">[文档]</a>    <span class="k">def</span> <span class="nf">close_test_case</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.close_test_case"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.close_test_case">[docs]</a>    <span class="k">def</span> <span class="nf">close_test_case</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="FuzzLoggerText.close_test"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.close_test">[文档]</a>    <span class="k">def</span> <span class="nf">close_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FuzzLoggerText.close_test"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText.close_test">[docs]</a>    <span class="k">def</span> <span class="nf">close_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
     <span class="k">def</span> <span class="nf">_print_log_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_type</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -162,12 +174,12 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; 版权所有 boofuzz。</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
   </div>
 
-  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
-    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
    
 
 </footer>

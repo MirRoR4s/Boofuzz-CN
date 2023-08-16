@@ -4,22 +4,27 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Other Modules &mdash; rainfuzz 0.0 documentation</title>
+  <title>Other Modules &mdash; boofuzz 0.4.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon-32x32.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=44496db0"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=ea00750a"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../_static/js/theme.js"></script>
+    <link rel="icon" type="image/svg+xml" href="../_static/favicon.svg" sizes="any">
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Static Protocol Definition" href="static-protocol-definition.html" /> 
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Static Protocol Definition" href="static-protocol-definition.html" />
+ 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -30,11 +35,12 @@
 
           
           
-          <a href="../index.html" class="icon icon-home">
-            rainfuzz
+          <a href="../index.html">
+            
+              <img src="../_static/boo-logo-light.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.0
+                0.4.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -52,6 +58,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/Session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/Target.html">Target</a></li>
 <li class="toctree-l1"><a class="reference internal" href="connections.html">Connections</a></li>
 <li class="toctree-l1"><a class="reference internal" href="monitors.html">Monitors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
@@ -138,6 +146,9 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
 
         </div>
       </div>
@@ -145,7 +156,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">rainfuzz</a>
+          <a href="../index.html">boofuzz</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -173,13 +184,13 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Refers to a dynamic value received or generated in the context of an individual test case.</p>
 <p>Pass this object as a primitive’s <code class="docutils literal notranslate"><span class="pre">default_value</span></code> argument, and make sure you set the referred-to value using
-callbacks, e.g. <code class="docutils literal notranslate"><span class="pre">post_test_case_callbacks</span></code> (see <code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>).</p>
+callbacks, e.g. <code class="docutils literal notranslate"><span class="pre">post_test_case_callbacks</span></code> (see <a class="reference internal" href="../source/Session.html#boofuzz.Session" title="boofuzz.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – Refers to a test case session key. Must be set in the
 <a class="reference internal" href="#boofuzz.ProtocolSession" title="boofuzz.ProtocolSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolSession</span></code></a> by the time the value is required in the protocol
-definition. See <code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>.</p></li>
+definition. See <a class="reference internal" href="../source/Session.html#boofuzz.Session" title="boofuzz.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>.</p></li>
 <li><p><strong>default_value</strong> – The default value, used if the element must be rendered outside the context of a test
 case, or sometimes for generating mutations.</p></li>
 </ul>
@@ -196,7 +207,7 @@ case, or sometimes for generating mutations.</p></li>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Contains a <code class="docutils literal notranslate"><span class="pre">session_variables</span></code> dictionary used to store data specific to a single fuzzing test case.</p>
 <p>Generally, values in <code class="docutils literal notranslate"><span class="pre">session_variables</span></code> will be set in a callback function, e.g. <code class="docutils literal notranslate"><span class="pre">post_test_case_callbacks</span></code>
-(see <code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>). Variables may be used in a later callback function, or by a
+(see <a class="reference internal" href="../source/Session.html#boofuzz.Session" title="boofuzz.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>). Variables may be used in a later callback function, or by a
 <a class="reference internal" href="#boofuzz.ProtocolSessionReference" title="boofuzz.ProtocolSessionReference"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolSessionReference</span></code></a> object.</p>
 </dd></dl>
 
@@ -654,12 +665,13 @@ address.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="static-protocol-definition.html" class="btn btn-neutral float-left" title="Static Protocol Definition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright boofuzz.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

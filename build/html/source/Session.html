@@ -4,23 +4,27 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Session &mdash; rainfuzz 0.0 documentation</title>
+  <title>Session &mdash; boofuzz 0.4.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon-32x32.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=44496db0"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=ea00750a"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../_static/js/theme.js"></script>
+    <link rel="icon" type="image/svg+xml" href="../_static/favicon.svg" sizes="any">
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Connections" href="../user/connections.html" />
-    <link rel="prev" title="Contributing" href="../user/contributing.html" /> 
+    <link rel="next" title="Target" href="Target.html" />
+    <link rel="prev" title="Contributing" href="../user/contributing.html" />
+ 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,11 +35,12 @@
 
           
           
-          <a href="../index.html" class="icon icon-home">
-            rainfuzz
+          <a href="../index.html">
+            
+              <img src="../_static/boo-logo-light.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.0
+                0.4.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -86,12 +91,16 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Target.html">Target</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/connections.html">Connections</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/monitors.html">Monitors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/protocol-definition.html">Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/other-modules.html">Other Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/changelog.html">Changelog</a></li>
 </ul>
 
         </div>
@@ -100,7 +109,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">rainfuzz</a>
+          <a href="../index.html">boofuzz</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -174,7 +183,7 @@ message is clearly invalid.</p></li>
 <li><p><strong>ignore_connection_ssl_errors</strong> (<em>bool</em>) – Log SSL related errors as “info” instead of failures. Default False.</p></li>
 <li><p><strong>reuse_target_connection</strong> (<em>bool</em>) – If True, only use one target connection instead of reconnecting each test case.
 Default False.</p></li>
-<li><p><strong>target</strong> (<em>Target</em>) – Target for fuzz session. Target must be fully initialized. Default None.</p></li>
+<li><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – Target for fuzz session. Target must be fully initialized. Default None.</p></li>
 <li><p><strong>db_filename</strong> (<em>str</em>) – Filename to store sqlite db for test results and case information.
 Defaults to ./boofuzz-results/{uniq_timestamp}.db</p></li>
 <li><p><strong>web_address</strong> – Address where’s Boofuzz logger exposed. Default ‘localhost’</p></li>
@@ -199,7 +208,7 @@ node is added.</p>
 <dd><p>Add a target to the session. Multiple targets can be added for parallel fuzzing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>Target</em>) – Target to add to session</p>
+<dd class="field-odd"><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – Target to add to session</p>
 </dd>
 </dl>
 </dd></dl>
@@ -252,7 +261,7 @@ Remember to include **kwargs for forward-compatibility.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>Target</em>) – Target with sock-like interface.</p></li>
+<li><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – Target with sock-like interface.</p></li>
 <li><p><strong>fuzz_data_logger</strong> (<a class="reference internal" href="../user/logging.html#boofuzz.IFuzzLogger" title="boofuzz.ifuzz_logger.IFuzzLogger"><em>ifuzz_logger.IFuzzLogger</em></a>) – Allows logging of test checks and passes/failures.
 Provided with a test case and test step already opened.</p></li>
 <li><p><strong>session</strong> (<a class="reference internal" href="#boofuzz.Session" title="boofuzz.Session"><em>Session</em></a>) – Session object calling post_send.
@@ -443,7 +452,7 @@ for inline comments. The member variable self.total_num_mutations is updated app
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>sock</strong> (<em>Target</em><em>, </em><em>optional</em>) – Socket-like object on which to transmit node</p></li>
+<li><p><strong>sock</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a><em>, </em><em>optional</em>) – Socket-like object on which to transmit node</p></li>
 <li><p><strong>node</strong> (<em>pgraph.node.node</em><em> (</em><em>Node</em><em>)</em><em>, </em><em>optional</em>) – Request/Node to transmit</p></li>
 <li><p><strong>edge</strong> (<em>pgraph.edge.edge</em><em> (</em><em>pgraph.edge</em><em>)</em><em>, </em><em>optional</em>) – Edge along the current fuzz path from “node” to next node.</p></li>
 <li><p><strong>callback_data</strong> (<em>bytes</em>) – Data from previous callback.</p></li>
@@ -460,7 +469,7 @@ for inline comments. The member variable self.total_num_mutations is updated app
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>sock</strong> (<em>Target</em><em>, </em><em>optional</em>) – Socket-like object on which to transmit node</p></li>
+<li><p><strong>sock</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a><em>, </em><em>optional</em>) – Socket-like object on which to transmit node</p></li>
 <li><p><strong>node</strong> (<em>pgraph.node.node</em><em> (</em><em>Node</em><em>)</em><em>, </em><em>optional</em>) – Request/Node to transmit</p></li>
 <li><p><strong>edge</strong> (<em>pgraph.edge.edge</em><em> (</em><em>pgraph.edge</em><em>)</em><em>, </em><em>optional</em>) – Edge along the current fuzz path from “node” to next node.</p></li>
 <li><p><strong>callback_data</strong> (<em>bytes</em>) – Data from previous callback.</p></li>
@@ -544,13 +553,13 @@ for inline comments. The member variable self.total_num_mutations is updated app
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../user/contributing.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../user/connections.html" class="btn btn-neutral float-right" title="Connections" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Target.html" class="btn btn-neutral float-right" title="Target" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright boofuzz.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
