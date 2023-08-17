@@ -684,8 +684,6 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            node (pgraph.Node): 要加入会话图的节点</span>
-
-
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">node</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
@@ -698,8 +696,8 @@
 
 <div class="viewcode-block" id="Session.add_target"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session.add_target">[docs]</a>    <span class="k">def</span> <span class="nf">add_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        将一个 target 加入到 session 中</span>
 <span class="sd">        Add a target to the session. Multiple targets can be added for parallel fuzzing.</span>
+<span class="sd">        将一个 target 加入到 session 中。</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            target (Target): 要加入 session 的 Target 对象</span>
@@ -717,6 +715,10 @@
 
 <div class="viewcode-block" id="Session.connect"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        在两个 request（nodes）之间创建一个 Connection 对象并注册一个回调函数用于处理源请求和目的请求之间的传输过程。</span>
+<span class="sd">        session 类维持着一个顶级的节点即根节点，所有初始 requests 都必须连接到根节点。</span>
+
+<span class="sd">    </span>
 <span class="sd">        Create a connection between the two requests (nodes) and register an optional callback to process in between</span>
 <span class="sd">        transmissions of the source and destination request. The session class maintains a top level node that all</span>
 <span class="sd">        initial requests must be connected to. Example::</span>
@@ -1341,17 +1343,23 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_message_check</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Session.fuzz"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session.fuzz">[docs]</a>    <span class="k">def</span> <span class="nf">fuzz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fuzz the entire protocol tree.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;对整个协议树进行模糊测试</span>
+
+<span class="sd">        Fuzz the entire protocol tree.</span>
+<span class="sd">        </span>
+<span class="sd">        fuzz() 会遍历所有的 fuzz cases 并对其进行模糊测试，同时也会根据 self.skip 跳过一些元素以及根据 self.restart_interval 进行重启。</span>
+
 
 <span class="sd">        Iterates through and fuzzes all fuzz cases, skipping according to</span>
 <span class="sd">        self.skip and restarting based on self.restart_interval.</span>
-
+<span class="sd">        </span>
+<span class="sd">        </span>
 <span class="sd">        If you want the web server to be available, your program must persist</span>
 <span class="sd">        after calling this method. helpers.pause_for_signal() is</span>
 <span class="sd">        available to this end.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            name (str): Pass in a Request name to fuzz only a single request message. Pass in a test case name to fuzz</span>
+<span class="sd">            name (str): 传入一个 Request 对象的名称来表明仅对该 request 消息进行模糊测试。Pass in a Request name to fuzz only a single request message. Pass in a test case name to fuzz</span>
 <span class="sd">                        only a single test case.</span>
 <span class="sd">            max_depth (int): Maximum combinatorial depth; set to 1 for &quot;simple&quot; fuzzing.</span>
 
@@ -1451,11 +1459,19 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">export_file</span><span class="p">()</span>
             <span class="k">raise</span>
 
-    <span class="k">def</span> <span class="nf">_main_fuzz_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fuzz_case_iterator</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute main fuzz logic; takes an iterator of test cases.</span>
+<div class="viewcode-block" id="Session._main_fuzz_loop"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session._main_fuzz_loop">[docs]</a>    <span class="k">def</span> <span class="nf">_main_fuzz_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fuzz_case_iterator</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;执行主要的模糊测试逻辑，以一个可迭代的 test cases 作为参数。</span>
+
+<span class="sd">        </span>
+<span class="sd">        Execute main fuzz logic; takes an iterator of test cases.</span>
+<span class="sd">        </span>
+
+<span class="sd">        调用条件：`self.total_mutant_index` and `self.total_num_mutations` 都已正确设置。</span>
+
 
 <span class="sd">        Preconditions: `self.total_mutant_index` and `self.total_num_mutations` are set properly.</span>
 
+<span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            fuzz_case_iterator (Iterable): An iterator that walks through fuzz cases and yields MutationContext objects.</span>
 <span class="sd">                 See _iterate_single_node() for details.</span>
@@ -1521,7 +1537,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">export_file</span><span class="p">()</span>
             <span class="k">raise</span>
         <span class="k">finally</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">close_test</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fuzz_data_logger</span><span class="o">.</span><span class="n">close_test</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_generate_single_case_by_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_case_index</span><span class="p">):</span>
         <span class="n">fuzz_index</span> <span class="o">=</span> <span class="mi">1</span>
@@ -1532,8 +1548,13 @@
                 <span class="k">break</span>
             <span class="n">fuzz_index</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="k">def</span> <span class="nf">_generate_mutations_indefinitely</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Session._generate_mutations_indefinitely"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session._generate_mutations_indefinitely">[docs]</a>    <span class="k">def</span> <span class="nf">_generate_mutations_indefinitely</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        在一个消息列表中，通过生成器函数 yield 生成变异上下文对象，每个消息生成的变异上下文数量为 n，并且 n 的值会无限递增。</span>
+<span class="sd">        具体来说，假设你有一组消息，例如：[message1, message2, message3, ...]。开始时，每个消息生成的变异上下文数量为 1。</span>
+<span class="sd">        所以，对于每个消息，会生成一个变异上下文对象（MutationContext），然后在下一个消息中，变异数量增加到 2，依次类推。</span>
+<span class="sd">        </span>
+<span class="sd">        Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely.&quot;&quot;&quot;</span>
         <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">while</span> <span class="n">max_depth</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">depth</span> <span class="o">&lt;=</span> <span class="n">max_depth</span><span class="p">:</span>
             <span class="n">valid_case_found_at_this_depth</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1542,7 +1563,7 @@
                 <span class="k">yield</span> <span class="n">m</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_case_found_at_this_depth</span><span class="p">:</span>
                 <span class="k">break</span>
-            <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
     <span class="k">def</span> <span class="nf">_generate_n_mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield MutationContext with n mutations per message over all messages.&quot;&quot;&quot;</span>

@@ -80,6 +80,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.test_case_data"><code class="docutils literal notranslate"><span class="pre">Session.test_case_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.transmit_fuzz"><code class="docutils literal notranslate"><span class="pre">Session.transmit_fuzz()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.transmit_normal"><code class="docutils literal notranslate"><span class="pre">Session.transmit_normal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session._generate_mutations_indefinitely"><code class="docutils literal notranslate"><span class="pre">Session._generate_mutations_indefinitely()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session._main_fuzz_loop"><code class="docutils literal notranslate"><span class="pre">Session._main_fuzz_loop()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#request-graph-visualisation-options">Request-Graph visualisation options</a><ul>
@@ -190,8 +192,8 @@ receive_data_after_each_request is False.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.add_target">
 <span class="sig-name descname"><span class="pre">add_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.add_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.add_target" title="Permalink to this definition"></a></dt>
-<dd><p>将一个 target 加入到 session 中
-Add a target to the session. Multiple targets can be added for parallel fuzzing.</p>
+<dd><p>Add a target to the session. Multiple targets can be added for parallel fuzzing.
+将一个 target 加入到 session 中。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – 要加入 session 的 Target 对象</p>
@@ -208,7 +210,9 @@ Add a target to the session. Multiple targets can be added for parallel fuzzing.
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.connect">
 <span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.connect" title="Permalink to this definition"></a></dt>
-<dd><p>Create a connection between the two requests (nodes) and register an optional callback to process in between
+<dd><p>在两个 request（nodes）之间创建一个 Connection 对象并注册一个回调函数用于处理源请求和目的请求之间的传输过程。
+session 类维持着一个顶级的节点即根节点，所有初始 requests 都必须连接到根节点。</p>
+<p>Create a connection between the two requests (nodes) and register an optional callback to process in between
 transmissions of the source and destination request. The session class maintains a top level node that all
 initial requests must be connected to. Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sess</span> <span class="o">=</span> <span class="n">sessions</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
@@ -294,7 +298,9 @@ values are generally set within a callback and referenced in elements via defaul
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.fuzz">
 <span class="sig-name descname"><span class="pre">fuzz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.fuzz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.fuzz" title="Permalink to this definition"></a></dt>
-<dd><p>Fuzz the entire protocol tree.</p>
+<dd><p>对整个协议树进行模糊测试</p>
+<p>Fuzz the entire protocol tree.</p>
+<p>fuzz() 会遍历所有的 fuzz cases 并对其进行模糊测试，同时也会根据 self.skip 跳过一些元素以及根据 self.restart_interval 进行重启。</p>
 <p>Iterates through and fuzzes all fuzz cases, skipping according to
 self.skip and restarting based on self.restart_interval.</p>
 <p>If you want the web server to be available, your program must persist
@@ -303,7 +309,7 @@ available to this end.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – Pass in a Request name to fuzz only a single request message. Pass in a test case name to fuzz
+<li><p><strong>name</strong> (<em>str</em>) – 传入一个 Request 对象的名称来表明仅对该 request 消息进行模糊测试。Pass in a Request name to fuzz only a single request message. Pass in a test case name to fuzz
 only a single test case.</p></li>
 <li><p><strong>max_depth</strong> (<em>int</em>) – Maximum combinatorial depth; set to 1 for “simple” fuzzing.</p></li>
 </ul>
@@ -466,6 +472,33 @@ for inline comments. The member variable self.total_num_mutations is updated app
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session._generate_mutations_indefinitely">
+<span class="sig-prename descclassname"><span class="pre">Session.</span></span><span class="sig-name descname"><span class="pre">_generate_mutations_indefinitely</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session._generate_mutations_indefinitely"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session._generate_mutations_indefinitely" title="Permalink to this definition"></a></dt>
+<dd><p>在一个消息列表中，通过生成器函数 yield 生成变异上下文对象，每个消息生成的变异上下文数量为 n，并且 n 的值会无限递增。
+具体来说，假设你有一组消息，例如：[message1, message2, message3, …]。开始时，每个消息生成的变异上下文数量为 1。
+所以，对于每个消息，会生成一个变异上下文对象（MutationContext），然后在下一个消息中，变异数量增加到 2，依次类推。</p>
+<p>Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Session._main_fuzz_loop">
+<span class="sig-prename descclassname"><span class="pre">Session.</span></span><span class="sig-name descname"><span class="pre">_main_fuzz_loop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fuzz_case_iterator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session._main_fuzz_loop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session._main_fuzz_loop" title="Permalink to this definition"></a></dt>
+<dd><p>执行主要的模糊测试逻辑，以一个可迭代的 test cases 作为参数。</p>
+<p>Execute main fuzz logic; takes an iterator of test cases.</p>
+<p>调用条件：<cite>self.total_mutant_index</cite> and <cite>self.total_num_mutations</cite> 都已正确设置。</p>
+<p>Preconditions: <cite>self.total_mutant_index</cite> and <cite>self.total_num_mutations</cite> are set properly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fuzz_case_iterator</strong> (<em>Iterable</em>) – An iterator that walks through fuzz cases and yields MutationContext objects.
+See _iterate_single_node() for details.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <section id="request-graph-visualisation-options">

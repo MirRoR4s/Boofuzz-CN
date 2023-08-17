@@ -588,8 +588,6 @@ class Session(pgraph.Graph):
 
         Args:
             node (pgraph.Node): 要加入会话图的节点
-
-
         """
 
         node.number = len(self.nodes)
@@ -602,8 +600,8 @@ class Session(pgraph.Graph):
 
     def add_target(self, target):
         """
-        将一个 target 加入到 session 中
         Add a target to the session. Multiple targets can be added for parallel fuzzing.
+        将一个 target 加入到 session 中。
 
         Args:
             target (Target): 要加入 session 的 Target 对象
@@ -621,6 +619,10 @@ class Session(pgraph.Graph):
 
     def connect(self, src, dst=None, callback=None):
         """
+        在两个 request（nodes）之间创建一个 Connection 对象并注册一个回调函数用于处理源请求和目的请求之间的传输过程。
+        session 类维持着一个顶级的节点即根节点，所有初始 requests 都必须连接到根节点。
+
+    
         Create a connection between the two requests (nodes) and register an optional callback to process in between
         transmissions of the source and destination request. The session class maintains a top level node that all
         initial requests must be connected to. Example::
@@ -1245,17 +1247,23 @@ class Session(pgraph.Graph):
             self._message_check(path)
 
     def fuzz(self, name=None, max_depth=None):
-        """Fuzz the entire protocol tree.
+        """对整个协议树进行模糊测试
+
+        Fuzz the entire protocol tree.
+        
+        fuzz() 会遍历所有的 fuzz cases 并对其进行模糊测试，同时也会根据 self.skip 跳过一些元素以及根据 self.restart_interval 进行重启。
+
 
         Iterates through and fuzzes all fuzz cases, skipping according to
         self.skip and restarting based on self.restart_interval.
-
+        
+        
         If you want the web server to be available, your program must persist
         after calling this method. helpers.pause_for_signal() is
         available to this end.
 
         Args:
-            name (str): Pass in a Request name to fuzz only a single request message. Pass in a test case name to fuzz
+            name (str): 传入一个 Request 对象的名称来表明仅对该 request 消息进行模糊测试。Pass in a Request name to fuzz only a single request message. Pass in a test case name to fuzz
                         only a single test case.
             max_depth (int): Maximum combinatorial depth; set to 1 for "simple" fuzzing.
 
@@ -1356,10 +1364,18 @@ class Session(pgraph.Graph):
             raise
 
     def _main_fuzz_loop(self, fuzz_case_iterator):
-        """Execute main fuzz logic; takes an iterator of test cases.
+        """执行主要的模糊测试逻辑，以一个可迭代的 test cases 作为参数。
+
+        
+        Execute main fuzz logic; takes an iterator of test cases.
+        
+
+        调用条件：`self.total_mutant_index` and `self.total_num_mutations` 都已正确设置。
+
 
         Preconditions: `self.total_mutant_index` and `self.total_num_mutations` are set properly.
 
+        
         Args:
             fuzz_case_iterator (Iterable): An iterator that walks through fuzz cases and yields MutationContext objects.
                  See _iterate_single_node() for details.
@@ -1437,7 +1453,13 @@ class Session(pgraph.Graph):
             fuzz_index += 1
 
     def _generate_mutations_indefinitely(self, max_depth=None, path=None):
-        """Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely."""
+        """
+        在一个消息列表中，通过生成器函数 yield 生成变异上下文对象，每个消息生成的变异上下文数量为 n，并且 n 的值会无限递增。
+        
+        具体来说，假设有一组消息，例如：[message1, message2, message3, ...]。开始时，每个消息生成的变异上下文数量为 1。
+        所以，对于每个消息，会生成一个变异上下文对象（MutationContext），然后在下一个消息中，变异数量增加到 2，依次类推。
+
+        Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely."""
         depth = 1
         while max_depth is None or depth <= max_depth:
             valid_case_found_at_this_depth = False

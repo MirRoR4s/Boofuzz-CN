@@ -50,7 +50,7 @@ Fuzzable
 
 
 context_path
-^^^^^^^^^^^^^
+^^^^^^^^^^^^
 该方法返回一个以点分割的字符串，描述了到达当前 Fuzzable 对象的上下文路径。
 
 例如，若有一个
@@ -60,7 +60,7 @@ String 原语来说，其 context_path 就为 user。
 .. automethod:: boofuzz.Fuzzable.context_path
 
 qualified_name
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
 该方法与 context_path 基本类似，不过在末尾增加上了当前 Fuzzable 对象的 name。
 
 例如，若有一个

@@ -6,6 +6,9 @@ Session
     :undoc-members:
     :show-inheritance:
 
+.. automethod:: boofuzz.Session._generate_mutations_indefinitely
+.. automethod:: boofuzz.Session._main_fuzz_loop
+
 Request-Graph visualisation options
 -----------------------------------
 
