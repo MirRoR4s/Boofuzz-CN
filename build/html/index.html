@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>boofuzz: Network Protocol Fuzzing for Humans-中文版 &mdash; boofuzz 0.4.1 documentation</title>
+  <title>boofuzz: 网络协议模糊测试器 &mdash; boofuzz 0.4.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon-32x32.ico"/>
@@ -22,7 +22,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installing boofuzz" href="user/install.html" />
+    <link rel="next" title="安装 boofuzz" href="user/install.html" />
  
 </head>
 
@@ -51,8 +51,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user/contributing.html">Contributing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
@@ -84,7 +84,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">boofuzz: Network Protocol Fuzzing for Humans-中文版</li>
+      <li class="breadcrumb-item active">boofuzz: 网络协议模糊测试器</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -94,29 +94,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="boofuzz-network-protocol-fuzzing-for-humans">
-<h1>boofuzz: Network Protocol Fuzzing for Humans-中文版<a class="headerlink" href="#boofuzz-network-protocol-fuzzing-for-humans" title="Permalink to this heading"></a></h1>
-<a class="reference external image-reference" href="https://github.com/jtpereyda/boofuzz/actions?query=workflow%3ATest+branch%3Amaster"><img alt="https://github.com/jtpereyda/boofuzz/workflows/Test/badge.svg?branch=master" src="https://github.com/jtpereyda/boofuzz/workflows/Test/badge.svg?branch=master" /></a>
-<a class="reference external image-reference" href="https://boofuzz.readthedocs.io/"><img alt="Documentation Status" src="https://readthedocs.org/projects/boofuzz/badge/?version=latest" /></a>
-<a class="reference external image-reference" href="https://pypi.org/project/boofuzz/"><img alt="https://img.shields.io/pypi/v/boofuzz.svg" src="https://img.shields.io/pypi/v/boofuzz.svg" /></a>
-<a class="reference external image-reference" href="https://gitter.im/jtpereyda/boofuzz"><img alt="Join the chat at https://gitter.im/jtpereyda/boofuzz" src="https://badges.gitter.im/jtpereyda/boofuzz.svg" /></a>
-<a class="reference external image-reference" href="https://github.com/psf/black"><img alt="https://img.shields.io/badge/code%20style-black-000000.svg" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
-<p>Boofuzz is a fork of and the successor to the venerable <a class="reference external" href="https://github.com/OpenRCE/sulley">Sulley</a> fuzzing
-framework. Besides numerous bug fixes, boofuzz aims for extensibility.
-The goal: fuzz everything.</p>
-<section id="why">
-<h2>Why?<a class="headerlink" href="#why" title="Permalink to this heading"></a></h2>
-<p>Sulley has been the preeminent open source fuzzer for some time, but has
-fallen out of maintenance.</p>
+  <section id="boofuzz">
+<h1>boofuzz: 网络协议模糊测试器<a class="headerlink" href="#boofuzz" title="Permalink to this heading"></a></h1>
+<p>Boofuzz 源于 <a class="reference external" href="https://github.com/OpenRCE/sulley">Sulley</a> 模糊测试框架，但是修复了很多 Sulley 中的 bug，同时对可扩展性也作了增强。Boofuzz 的目标是万物皆可模糊测试！</p>
+<section id="id1">
+<h2>起源<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<p>长久以来，Sulley 都是一款优秀的模糊测试器，不过其已经多年未更新，所以 Boofuzz 粉墨登场！</p>
 </section>
-<section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
-<p>Like Sulley, boofuzz incorporates all the critical elements of a fuzzer:</p>
+<section id="id2">
+<h2>特点<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>类似于 Sulley，boofuzz 也包含模糊测试器必备的一些关键特性，具体如下：</p>
 <ul class="simple">
-<li><p>Easy and quick data generation.</p></li>
-<li><p>Instrumentation – AKA failure detection.</p></li>
-<li><p>Target reset after failure.</p></li>
-<li><p>Recording of test data.</p></li>
+<li><p>简单且快速的数据生成。</p></li>
+<li><p>失败检测 Instrumentation。</p></li>
+<li><p>失败后的目标复位。</p></li>
+<li><p>记录测试数据。</p></li>
 </ul>
 <p>Unlike Sulley, boofuzz also features:</p>
 <ul class="simple">
@@ -131,31 +123,31 @@ fallen out of maintenance.</p>
 <p>Sulley is affectionately named after the giant teal and purple creature
 from Monsters Inc. due to his fuzziness. Boofuzz is likewise named after
 the only creature known to have scared Sulley himself: Boo!</p>
-<figure class="align-default" id="id2">
+<figure class="align-default" id="id5">
 <img alt="Boo from Monsters Inc" src="https://github.com/jtpereyda/boofuzz/raw/master/_static/boo.png" />
 <figcaption>
-<p><span class="caption-text">Boo from Monsters Inc</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Boo from Monsters Inc</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 </section>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<section id="id3">
+<h2>安装<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">boofuzz</span>
 </pre></div>
 </div>
-<p>Boofuzz installs as a Python library used to build fuzzer scripts. See
-<span class="xref std std-ref">install</span> for advanced and detailed instructions.</p>
+<p>Boofuzz 实际上是一个 Python 库，我们可以利用其构建模糊测试脚本。具体安装参看
+<a class="reference internal" href="user/install.html#install"><span class="std std-ref">安装 boofuzz</span></a>。</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="user/install.html">Installing boofuzz</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user/install.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user/install.html#install">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/install.html">安装 boofuzz</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/install.html#id1">前提</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/install.html#id2">安装</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user/install.html#from-source">From Source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user/install.html#extras">Extras</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="user/quickstart.html">Quickstart</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="user/quickstart.html">快速开始</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="user/quickstart.html#more-examples">More examples</a></li>
 </ul>
 </li>
@@ -257,10 +249,10 @@ coverage:</p>
 <section id="contributions">
 <h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this heading"></a></h2>
 <p>Pull requests are welcome, as boofuzz is actively maintained (at the
-time of this writing ;)). See <span class="xref std std-ref">contributing</span>.</p>
+time of this writing ;)). See <a class="reference internal" href="user/contributing.html#contributing"><span class="std std-ref">Contributing</span></a>.</p>
 </section>
 <section id="community">
-<span id="id1"></span><h2>Community<a class="headerlink" href="#community" title="Permalink to this heading"></a></h2>
+<span id="id4"></span><h2>Community<a class="headerlink" href="#community" title="Permalink to this heading"></a></h2>
 <p>For questions that take the form of “How do I… with boofuzz?” or “I got
 this error with boofuzz, why?”, consider posting your question on Stack
 Overflow. Make sure to use the <code class="docutils literal notranslate"><span class="pre">fuzzing</span></code> tag.</p>
@@ -283,7 +275,7 @@ here on GitHub.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="user/install.html" class="btn btn-neutral float-right" title="Installing boofuzz" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="user/install.html" class="btn btn-neutral float-right" title="安装 boofuzz" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

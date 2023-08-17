@@ -1,38 +1,25 @@
-boofuzz: Network Protocol Fuzzing for Humans-中文版
+boofuzz: 网络协议模糊测试器
 =====================================================
 
-.. image:: https://github.com/jtpereyda/boofuzz/workflows/Test/badge.svg?branch=master
-    :target: https://github.com/jtpereyda/boofuzz/actions?query=workflow%3ATest+branch%3Amaster
-.. image:: https://readthedocs.org/projects/boofuzz/badge/?version=latest
-    :target: https://boofuzz.readthedocs.io/
-    :alt: Documentation Status
-.. image:: https://img.shields.io/pypi/v/boofuzz.svg
-    :target: https://pypi.org/project/boofuzz/
-.. image:: https://badges.gitter.im/jtpereyda/boofuzz.svg
-    :alt: Join the chat at https://gitter.im/jtpereyda/boofuzz
-    :target: https://gitter.im/jtpereyda/boofuzz
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :target: https://github.com/psf/black
 
-Boofuzz is a fork of and the successor to the venerable `Sulley`_ fuzzing
-framework. Besides numerous bug fixes, boofuzz aims for extensibility.
-The goal: fuzz everything.
+Boofuzz 源于 `Sulley`_ 模糊测试框架，但是修复了很多 Sulley 中的 bug，同时对可扩展性也作了增强。Boofuzz 的目标是万物皆可模糊测试！
 
-Why?
+
+起源
 ----
 
-Sulley has been the preeminent open source fuzzer for some time, but has
-fallen out of maintenance.
+长久以来，Sulley 都是一款优秀的模糊测试器，不过其已经多年未更新，所以 Boofuzz 粉墨登场！
 
-Features
+
+特点
 --------
 
-Like Sulley, boofuzz incorporates all the critical elements of a fuzzer:
+类似于 Sulley，boofuzz 也包含模糊测试器必备的一些关键特性，具体如下：
 
--  Easy and quick data generation.
--  Instrumentation – AKA failure detection.
--  Target reset after failure.
--  Recording of test data.
+-  简单且快速的数据生成。
+-  失败检测 Instrumentation。
+-  失败后的目标复位。
+-  记录测试数据。
 
 Unlike Sulley, boofuzz also features:
 
@@ -53,15 +40,15 @@ the only creature known to have scared Sulley himself: Boo!
 
    Boo from Monsters Inc
 
-Installation
+安装
 ------------
 ::
 
     pip install boofuzz
 
 
-Boofuzz installs as a Python library used to build fuzzer scripts. See
-:ref:`install` for advanced and detailed instructions.
+Boofuzz 实际上是一个 Python 库，我们可以利用其构建模糊测试脚本。具体安装参看
+:ref:`install`。
 
 
 .. toctree::

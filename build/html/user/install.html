@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installing boofuzz &mdash; boofuzz 0.4.1 documentation</title>
+  <title>安装 boofuzz &mdash; boofuzz 0.4.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon-32x32.ico"/>
@@ -22,8 +22,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Quickstart" href="quickstart.html" />
-    <link rel="prev" title="boofuzz: Network Protocol Fuzzing for Humans-中文版" href="../index.html" />
+    <link rel="next" title="快速开始" href="quickstart.html" />
+    <link rel="prev" title="boofuzz: 网络协议模糊测试器" href="../index.html" />
  
 </head>
 
@@ -52,9 +52,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing boofuzz</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">安装 boofuzz</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">前提</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">安装</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#from-source">From Source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#extras">Extras</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#process-monitor-py">process_monitor.py</a></li>
@@ -63,7 +63,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
@@ -95,7 +95,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Installing boofuzz</li>
+      <li class="breadcrumb-item active">安装 boofuzz</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/user/install.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -105,12 +105,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="installing-boofuzz">
-<h1>Installing boofuzz<a class="headerlink" href="#installing-boofuzz" title="Permalink to this heading"></a></h1>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
-<p>Boofuzz requires Python ≥ 3.7. Recommended installation requires <code class="docutils literal notranslate"><span class="pre">pip</span></code>. As a base requirement, the following packages
-are needed:</p>
+  <section id="boofuzz">
+<span id="install"></span><h1>安装 boofuzz<a class="headerlink" href="#boofuzz" title="Permalink to this heading"></a></h1>
+<section id="id1">
+<h2>前提<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<p>Boofuzz 要求 Python 版本 &gt;= 3.7，建议使用 pip 安装。此外，在安装 boofuzz 之前需要先安装以下的包：</p>
 <dl class="simple">
 <dt>Ubuntu/Debian</dt><dd><p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">python3-pip</span> <span class="pre">python3-venv</span> <span class="pre">build-essential</span></code></p>
 </dd>
@@ -120,36 +119,33 @@ are needed:</p>
 </dd>
 </dl>
 </section>
-<section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
-<p>It is strongly recommended to set up boofuzz in a <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">virtual environment
-(venv)</a>. First, create a directory that will hold our boofuzz install:</p>
+<section id="id2">
+<h2>安装<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>强烈建议将 boofuzz 设置在一个 <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">virtual environment
+(venv)</a> 中。首先，创建一个目录，该目录会作为 boofuzz 的安装目录。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>boofuzz<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>boofuzz
 $<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>env
 </pre></div>
 </div>
-<p>This creates a new virtual environment env in the current folder. Note that the
-Python version in a virtual environment is fixed and chosen at its creation.
-Unlike global installs, within a virtual environment <code class="docutils literal notranslate"><span class="pre">python</span></code> is aliased to
-the Python version of the virtual environment.</p>
-<p>Next, activate the virtual environment:</p>
+<p>以上命令会在当前目录中创建一个新的虚拟环境。注意到在虚拟环境中的 Python 版本是固定的，并且可在创建时选择。
+为什么要使用虚拟环境？不同于全局的安装，在虚拟环境中，<code class="docutils literal notranslate"><span class="pre">python</span></code> 是虚拟环境的 Python 版本的别名。</p>
+<p>紧接着，激活虚拟环境：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>env/bin/activate
 </pre></div>
 </div>
-<p>Or, if you are on Windows:</p>
+<p>如果你是在 Windows 下：</p>
 <div class="highlight-batch notranslate"><div class="highlight"><pre><span></span><span class="p">&gt;</span> env\Scripts\activate.bat
 </pre></div>
 </div>
-<p>Ensure you have the latest version of both <code class="docutils literal notranslate"><span class="pre">pip</span></code> and <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>:</p>
+<p>确保你的 <code class="docutils literal notranslate"><span class="pre">pip</span></code> 和 <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> 是最新的版本：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>env<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>pip<span class="w"> </span>setuptools
 </pre></div>
 </div>
-<p>Finally, install boofuzz:</p>
+<p>最后，安装 boofuzz：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>env<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>boofuzz
 </pre></div>
 </div>
-<p>To run and test your fuzzing scripts, make sure to always activate the virtual
-environment beforehand.</p>
+<p>为了运行以及测试你的模糊测试脚本，确保始终激活虚拟环境。</p>
 </section>
 <section id="from-source">
 <h2>From Source<a class="headerlink" href="#from-source" title="Permalink to this heading"></a></h2>
@@ -197,19 +193,18 @@ is within the main boofuzz directory).</p></li>
 <h2>Extras<a class="headerlink" href="#extras" title="Permalink to this heading"></a></h2>
 <section id="process-monitor-py">
 <h3>process_monitor.py<a class="headerlink" href="#process-monitor-py" title="Permalink to this heading"></a></h3>
-<p>The process monitor is a tool for detecting crashes and restarting an application on Windows or Linux. While boofuzz
-typically runs on a different machine than the target, the process monitor must run on the target machine itself.</p>
+<p>进程监视器（process monitor）是一个工具，用于监测 Windows 或 Linux 中应用程序的崩溃和重启。虽然 boofuzz 通常来说并不和目标运行在同一台机器上，但是进程监视器
+必须运行在目标上。</p>
 </section>
 <section id="network-monitor-py">
 <h3>network_monitor.py<a class="headerlink" href="#network-monitor-py" title="Permalink to this heading"></a></h3>
-<p>The network monitor was Sulley’s primary tool for recording test data,
-and has been replaced with boofuzz’s logging mechanisms.
-However, some people still prefer the PCAP approach.</p>
+<p>网络监视器（network monitor）是 Sulley’s 的主要工具之一，用于记录测试数据。不过在 boofuzz 中使用日志机制来替代了该功能。然而，
+一些人仍然更加喜爱 PCAP 方法。</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The network monitor requires Pcapy and Impacket, which will not be automatically installed with boofuzz. You can
-manually install them with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pcapy</span> <span class="pre">impacket</span></code>.</p>
-<p>If you run into errors, check out the Pcapy requirements on the <a class="reference external" href="https://github.com/helpsystems/pcapy">project page</a>.</p>
+<p>网络监视器需要安装 Pcapy 和 Impacket，但是 boofuzz 中并不会自动安装这两个包，所以你需要使用 <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pcapy</span> <span class="pre">impacket</span></code>
+手动地安装它们。</p>
+<p>如果运行时发生了错误，可在 <a class="reference external" href="https://github.com/helpsystems/pcapy">project page</a> 检查你的 Pcapy 是否符合要求。</p>
 </div>
 </section>
 </section>
@@ -219,8 +214,8 @@ manually install them with <code class="docutils literal notranslate"><span clas
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../index.html" class="btn btn-neutral float-left" title="boofuzz: Network Protocol Fuzzing for Humans-中文版" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="boofuzz: 网络协议模糊测试器" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="快速开始" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quickstart &mdash; boofuzz 0.4.1 documentation</title>
+  <title>快速开始 &mdash; boofuzz 0.4.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon-32x32.ico"/>
@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Contributing" href="contributing.html" />
-    <link rel="prev" title="Installing boofuzz" href="install.html" />
+    <link rel="prev" title="安装 boofuzz" href="install.html" />
  
 </head>
 
@@ -52,8 +52,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installing boofuzz</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">安装 boofuzz</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">快速开始</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#more-examples">More examples</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#simple-ftp">Simple FTP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#simple-http-and-http-with-body">Simple HTTP and HTTP with body</a></li>
@@ -92,7 +92,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Quickstart</li>
+      <li class="breadcrumb-item active">快速开始</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/user/quickstart.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -103,24 +103,22 @@
            <div itemprop="articleBody">
              
   <section id="quickstart">
-<span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading"></a></h1>
-<p>The <a class="reference internal" href="../source/Session.html#boofuzz.Session" title="boofuzz.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> object is the center of your fuzz… session. When you create it,
-you’ll pass it a <a class="reference internal" href="../source/Target.html#boofuzz.Target" title="boofuzz.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a> object, which will itself receive a <a class="reference internal" href="connections.html#connections"><span class="std std-ref">Connection</span></a>
-object. For example:</p>
+<span id="id1"></span><h1>快速开始<a class="headerlink" href="#quickstart" title="Permalink to this heading"></a></h1>
+<p><a class="reference internal" href="../source/Session.html#boofuzz.Session" title="boofuzz.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> 对象是模糊测试会话的核心。当创建 Session 对象时，需要给其传入一个
+<a class="reference internal" href="../source/Target.html#boofuzz.Target" title="boofuzz.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a> 对象, 而 Traget 对象本身又要接收一个 <a class="reference internal" href="connections.html#connections"><span class="std std-ref">Connection</span></a> 对象。举个例子：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span>
     <span class="n">target</span><span class="o">=</span><span class="n">Target</span><span class="p">(</span>
         <span class="n">connection</span><span class="o">=</span><span class="n">TCPSocketConnection</span><span class="p">(</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="mi">8021</span><span class="p">)))</span>
 </pre></div>
 </div>
-<p>Connection objects implement <a class="reference internal" href="connections.html#boofuzz.connections.ITargetConnection" title="boofuzz.connections.ITargetConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITargetConnection</span></code></a>. Available options
-include <a class="reference internal" href="connections.html#boofuzz.connections.TCPSocketConnection" title="boofuzz.connections.TCPSocketConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">TCPSocketConnection</span></code></a> and its sister classes for UDP, SSL and
-raw sockets, and <a class="reference internal" href="connections.html#boofuzz.connections.SerialConnection" title="boofuzz.connections.SerialConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">SerialConnection</span></code></a>.</p>
-<p>With a Session object ready, you next need to define the messages in your protocol. Once you’ve read the requisite
-RFC, tutorial, etc., you should be confident enough in the format to define your protocol using the various
-<a class="reference internal" href="protocol-definition.html#protocol-definition"><span class="std std-ref">block and primitive types</span></a>.</p>
-<p>Each message is a <a class="reference internal" href="protocol-definition.html#boofuzz.Request" title="boofuzz.Request"><code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code></a> object, whose children define the structure for that
-message.</p>
-<p>Here are several message definitions from the FTP protocol:</p>
+<p>Connection 对象族实现了 <a class="reference internal" href="connections.html#boofuzz.connections.ITargetConnection" title="boofuzz.connections.ITargetConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITargetConnection</span></code></a> 。 Connection 对象族包括
+<a class="reference internal" href="connections.html#boofuzz.connections.TCPSocketConnection" title="boofuzz.connections.TCPSocketConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">TCPSocketConnection</span></code></a> 以及 UDP、SSL、
+raw sockets 和 <a class="reference internal" href="connections.html#boofuzz.connections.SerialConnection" title="boofuzz.connections.SerialConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">SerialConnection</span></code></a> 等多个不同的套接字实现类。</p>
+<p>创建好一个 Session 对象后，下一步需要定义协议中消息的格式。不过在那之前最好先阅读一下 RFC、tutorial 等文档熟悉你要 fuzzing 的协议的格式，
+然后再利用
+<a class="reference internal" href="protocol-definition.html#protocol-definition"><span class="std std-ref">块和原语（block and primitive types）</span></a> 来构造消息。</p>
+<p>每个消息都是一个 <a class="reference internal" href="protocol-definition.html#boofuzz.Request" title="boofuzz.Request"><code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code></a> 对象，Request 对象的子节点定义了消息的结构。</p>
+<p>以下是一个针对 FTP 协议的消息格式：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">user</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">(</span>
     <span class="n">String</span><span class="p">(</span><span class="s2">&quot;key&quot;</span><span class="p">,</span> <span class="s2">&quot;USER&quot;</span><span class="p">),</span>
     <span class="n">Delim</span><span class="p">(</span><span class="s2">&quot;space&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">),</span>
@@ -150,56 +148,47 @@ message.</p>
 <span class="p">))</span>
 </pre></div>
 </div>
-<p>Once you’ve defined your message(s), you will connect them into a graph using the Session object you just created:</p>
+<p>完成消息的定义之后，需要使用刚刚创建好的 Session 对象将消息连接到图中。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">session</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 <span class="n">session</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">passw</span><span class="p">)</span>
 <span class="n">session</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">passw</span><span class="p">,</span> <span class="n">stor</span><span class="p">)</span>
 <span class="n">session</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">passw</span><span class="p">,</span> <span class="n">retr</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>When fuzzing, boofuzz will send <code class="docutils literal notranslate"><span class="pre">user</span></code> before fuzzing <code class="docutils literal notranslate"><span class="pre">passw</span></code>, and <code class="docutils literal notranslate"><span class="pre">user</span></code> and
-<code class="docutils literal notranslate"><span class="pre">passw</span></code> before fuzzing <code class="docutils literal notranslate"><span class="pre">stor</span></code> or <code class="docutils literal notranslate"><span class="pre">retr</span></code>.</p>
-<p>Now you are ready to fuzz:</p>
+<p>进行模糊测试时，boofuzz 会先对 <code class="docutils literal notranslate"><span class="pre">user</span></code> 进行模糊测试，之后才是 <code class="docutils literal notranslate"><span class="pre">passw</span></code>，最后是 <code class="docutils literal notranslate"><span class="pre">stor</span></code> 和 <code class="docutils literal notranslate"><span class="pre">retr</span></code>。</p>
+<p>在消息连接到图中之后就可以开始 fuzz 了：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">session</span><span class="o">.</span><span class="n">fuzz</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Note that at this point you have only a very basic fuzzer. Making it kick butt is up to you. There are some
-<a class="reference external" href="https://github.com/jtpereyda/boofuzz/tree/master/examples">examples</a> and
-<a class="reference external" href="https://github.com/jtpereyda/boofuzz/tree/master/request_definitions">request_definitions</a> in the repository that
-might help you get started.</p>
-<p>The log data of each run will be saved to a SQLite database located in the <strong>boofuzz-results</strong> directory in your
-current working directory. You can reopen the web interface on any of those databases at any time with</p>
+<p>当然，以上只是一个非常基础的模糊测试器，你可以根据自己的需要对其进行修改，官方仓库中有一些 <a class="reference external" href="https://github.com/jtpereyda/boofuzz/tree/master/examples">例子</a> 和
+<a class="reference external" href="https://github.com/jtpereyda/boofuzz/tree/master/request_definitions">请求定义（request_definitions）</a> 值得参考。</p>
+<p>每次运行 boofuzz 时产生的日志数据都会被保存到一个 SQLite 数据库中，该数据库位于当前工作目录下的 <strong>boofuzz-results</strong> 目录中。在任意时刻，你都可以通过以下命令打开数据库：</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>boo<span class="w"> </span>open<span class="w"> </span>&lt;run-*.db&gt;
 </pre></div>
 </div>
-<p>To do cool stuff like checking responses, you’ll want to use <code class="docutils literal notranslate"><span class="pre">post_test_case_callbacks</span></code> in
-<a class="reference internal" href="../source/Session.html#boofuzz.Session" title="boofuzz.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>. To use data from a response in a subsequent request, see
-<a class="reference internal" href="other-modules.html#boofuzz.ProtocolSessionReference" title="boofuzz.ProtocolSessionReference"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolSessionReference</span></code></a>.</p>
-<p>You may also be interested in <a class="reference internal" href="protocol-definition.html#custom-blocks"><span class="std std-ref">Making Your Own Block/Primitive</span></a>.</p>
-<p>Remember boofuzz is all Python, and advanced use cases often require customization.
-If you are doing crazy cool stuff, check out the <a class="reference internal" href="../index.html#community"><span class="std std-ref">community info</span></a> and consider contributing back!</p>
+<p>如果你想做一些更酷的事情，比如实现验证响应机制，那么你可以使用 <a class="reference internal" href="../source/Session.html#boofuzz.Session" title="boofuzz.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> 中的 <code class="docutils literal notranslate"><span class="pre">post_test_case_callbacks</span></code>。
+为了在后续的请求中使用来自前一个响应的数据，可以参看 <a class="reference internal" href="other-modules.html#boofuzz.ProtocolSessionReference" title="boofuzz.ProtocolSessionReference"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolSessionReference</span></code></a>。</p>
+<p>你或许对 <a class="reference internal" href="protocol-definition.html#custom-blocks"><span class="std std-ref">Making Your Own Block/Primitive</span></a> 也感兴趣。</p>
+<p>记住，boofuzz 是一个纯 Python 开发的框架，所以一些更加高级的用法都需要自行定义。如果你正在做一些超级酷的事情，可以向社区 <a class="reference internal" href="../index.html#community"><span class="std std-ref">community info</span></a> 贡献你的成果。</p>
 <p>Happy fuzzing, and Godspeed!</p>
 <section id="more-examples">
 <h2>More examples<a class="headerlink" href="#more-examples" title="Permalink to this heading"></a></h2>
 <section id="simple-ftp">
 <h3>Simple FTP<a class="headerlink" href="#simple-ftp" title="Permalink to this heading"></a></h3>
-<p>Check out the <a class="reference external" href="https://github.com/jtpereyda/boofuzz/blob/master/examples/ftp_simple.py">ftp_simple.py</a> example.
-To run it, you will need an <a class="reference external" href="https://github.com/Siim/ftp">FTP server</a>.</p>
-<p>Once you have compiled the FTP server, just run it with <code class="docutils literal notranslate"><span class="pre">./ftp</span></code>.
-The server runs on port 8021 by default. Make sure to run the ftp_simple.py script against the port that the server
-is listening on.</p>
+<p>此处介绍一个针对 FTP 协议的模糊测试脚本，源码参看 <a class="reference external" href="https://github.com/jtpereyda/boofuzz/blob/master/examples/ftp_simple.py">ftp_simple.py</a>。
+为了运行该脚本，首先需要搭建一个 <a class="reference external" href="https://github.com/Siim/ftp">FTP 服务器</a>。</p>
+<p>在 FTP 服务器搭建完毕之后，在命令行下使用 <code class="docutils literal notranslate"><span class="pre">./ftp</span></code> 命令运行脚本即可。</p>
+<p>注意：以上的 FTP 服务器默认情况下运行在 8021 端口，你可以根据需要自行修改。</p>
 </section>
 <section id="simple-http-and-http-with-body">
 <h3>Simple HTTP and HTTP with body<a class="headerlink" href="#simple-http-and-http-with-body" title="Permalink to this heading"></a></h3>
-<p>Good examples on how to get started with HTTP fuzzing can be found in
-<a class="reference external" href="https://github.com/jtpereyda/boofuzz/blob/master/examples/http_simple.py">http_simple.py</a>
-and <a class="reference external" href="https://github.com/jtpereyda/boofuzz/blob/master/examples/http_with_body.py">http_with_body.py</a>.
-Here is an example of how to execute theses scripts.</p>
-<p>You will need an HTTP server, you can use Python or any other webserver like Apache or NGINX for that.</p>
+<p>关于针对 HTTP 协议的模糊测试脚本可以参看 <a class="reference external" href="https://github.com/jtpereyda/boofuzz/blob/master/examples/http_simple.py">http_simple.py</a>
+和 <a class="reference external" href="https://github.com/jtpereyda/boofuzz/blob/master/examples/http_with_body.py">http_with_body.py</a>。</p>
+<p>在运行之前，首先需要搭建一个 HTTP 服务器，这可以通过使用 Python 或是其它类似于 Apache 或 NGINX 的 web 服务器来实现。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>http.server
 </pre></div>
 </div>
-<p>Then run <code class="docutils literal notranslate"><span class="pre">http_simple.py</span></code> or <code class="docutils literal notranslate"><span class="pre">http_with_body.py</span></code> against the IP and port that your server uses.</p>
+<p>然后根据你的服务器使用的 IP 和端口运行 <code class="docutils literal notranslate"><span class="pre">http_simple.py</span></code> 和 <code class="docutils literal notranslate"><span class="pre">http_with_body.py</span></code> 即可。</p>
 </section>
 </section>
 </section>
@@ -208,7 +197,7 @@ Here is an example of how to execute theses scripts.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="install.html" class="btn btn-neutral float-left" title="Installing boofuzz" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="install.html" class="btn btn-neutral float-left" title="安装 boofuzz" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
