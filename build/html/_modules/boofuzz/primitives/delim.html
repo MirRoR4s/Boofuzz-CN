@@ -47,13 +47,13 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Target.html">Target</a></li>
@@ -99,14 +99,13 @@
 
 
 <div class="viewcode-block" id="Delim"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.Delim">[docs]</a><span class="k">class</span> <span class="nc">Delim</span><span class="p">(</span><span class="n">BasePrimitive</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Represent a delimiter such as :,\r,\n, ,=,&gt;,&lt; etc... Mutations include repetition, substitution and exclusion.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;表示一个分隔符，比如空格,\r,\n, ,=,&gt;,&lt; 等等。注意变异包括重复、替换、缺少。</span>
 
-<span class="sd">    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,</span>
-<span class="sd">        defaults to None</span>
+<span class="sd">    :param name: 名称, 用于后续引用。默认为 None。</span>
 <span class="sd">    :type name: str, optional</span>
-<span class="sd">    :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value.</span>
+<span class="sd">    :param default_value: 当元素不进行模糊测试时所用的值，通常情况下应是一个合法的协议字段值。</span>
 <span class="sd">    :type default_value: char, optional</span>
-<span class="sd">    :param fuzzable: Enable/disable fuzzing of this primitive, defaults to true</span>
+<span class="sd">    :param fuzzable: 启用/禁用对该原语的模糊测试，默认为 true。</span>
 <span class="sd">    :type fuzzable: bool, optional</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 

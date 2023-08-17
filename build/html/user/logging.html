@@ -52,7 +52,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 </ul>
@@ -461,10 +461,8 @@ potential bug or anomaly.</p>
 <dt class="sig sig-object py" id="boofuzz.FuzzLoggerText">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">FuzzLoggerText</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_handle=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytes_to_str=&lt;function</span> <span class="pre">hex_to_hexstr&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/fuzz_logger_text.html#FuzzLoggerText"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.FuzzLoggerText" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#boofuzz.IFuzzLogger" title="boofuzz.ifuzz_logger.IFuzzLogger"><code class="xref py py-class docutils literal notranslate"><span class="pre">IFuzzLogger</span></code></a></p>
-<p>This class formats FuzzLogger data for text presentation. It can be
-configured to output to STDOUT, or to a named file.</p>
-<p>Using two FuzzLoggerTexts, a FuzzLogger instance can be configured to output to
-both console and file.</p>
+<p>该类会将 FuzzLogger 数据格式化成文本形式并输出到标准输出或是文件中。
+如果想要既输出到标准输出又输出到文件中，可以使用两个 FUzzLoggerTexts。</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="boofuzz.FuzzLoggerText.INDENT_SIZE">
 <span class="sig-name descname"><span class="pre">INDENT_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#boofuzz.FuzzLoggerText.INDENT_SIZE" title="Permalink to this definition"></a></dt>
@@ -1090,12 +1088,11 @@ potential bug or anomaly.</p>
 <dt class="sig sig-object py" id="boofuzz.FuzzLogger">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">FuzzLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fuzz_loggers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/fuzz_logger.html#FuzzLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.FuzzLogger" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#boofuzz.IFuzzLogger" title="boofuzz.ifuzz_logger.IFuzzLogger"><code class="xref py py-class docutils literal notranslate"><span class="pre">IFuzzLogger</span></code></a></p>
-<p>Takes a list of IFuzzLogger objects and multiplexes logged data to each one.</p>
-<p>FuzzLogger also maintains summary failure and error data.</p>
+<p>FuzzLogger 接收一列 IFuzzLogger 对象作为参数，并对每个已记录的数据进行复用。</p>
+<p>FUzzlogger 也记录着失败汇总和错误数据。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>fuzz_loggers</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <a class="reference internal" href="#boofuzz.IFuzzLogger" title="boofuzz.IFuzzLogger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IFuzzLogger</span></code></a>) – IFuzzLogger objects
-to which to send log data.</p>
+<dd class="field-odd"><p><strong>fuzz_loggers</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <a class="reference internal" href="#boofuzz.IFuzzLogger" title="boofuzz.IFuzzLogger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IFuzzLogger</span></code></a>) – 发送记录数据的 IFuzzLogger 对象。</p>
 </dd>
 </dl>
 <dl class="py method">

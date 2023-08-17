@@ -52,7 +52,7 @@ Boofuzz 实际上是一个 Python 库，我们可以利用其构建模糊测试�
 
 
 .. toctree::
-    :caption: User Guide
+    :caption: 用户指南
     :maxdepth: 2
 
     user/install
@@ -72,7 +72,7 @@ coverage:
 If you have an open source boofuzz protocol suite to share, please :ref:`let us know <community>`!
 
 .. toctree::
-    :caption: API Documentation
+    :caption: API 文档
     :maxdepth: 2
 
     source/Session

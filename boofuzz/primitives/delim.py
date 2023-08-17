@@ -3,14 +3,13 @@ from .. import helpers
 
 
 class Delim(BasePrimitive):
-    r"""Represent a delimiter such as :,\r,\n, ,=,>,< etc... Mutations include repetition, substitution and exclusion.
+    r"""表示一个分隔符，比如空格,\r,\n, ,=,>,< 等等。注意变异包括重复、替换、缺少。
 
-    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-        defaults to None
+    :param name: 名称, 用于后续引用。默认为 None。
     :type name: str, optional
-    :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value.
+    :param default_value: 当元素不进行模糊测试时所用的值，通常情况下应是一个合法的协议字段值。
     :type default_value: char, optional
-    :param fuzzable: Enable/disable fuzzing of this primitive, defaults to true
+    :param fuzzable: 启用/禁用对该原语的模糊测试，默认为 true。
     :type fuzzable: bool, optional
     """
 

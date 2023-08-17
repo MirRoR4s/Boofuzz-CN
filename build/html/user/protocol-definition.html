@@ -50,13 +50,13 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/Target.html">Target</a></li>
@@ -64,8 +64,24 @@
 <li class="toctree-l1"><a class="reference internal" href="monitors.html">Monitors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Protocol Definition</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">样例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fuzzable">Fuzzable</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Fuzzable"><code class="docutils literal notranslate"><span class="pre">Fuzzable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#context-path">context_path</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.context_path"><code class="docutils literal notranslate"><span class="pre">Fuzzable.context_path()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#qualified-name">qualified_name</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.qualified_name"><code class="docutils literal notranslate"><span class="pre">Fuzzable.qualified_name()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fuzzableblock">FuzzableBlock</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.FuzzableBlock"><code class="docutils literal notranslate"><span class="pre">FuzzableBlock()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#request">Request</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#boofuzz.Request"><code class="docutils literal notranslate"><span class="pre">Request()</span></code></a></li>
 </ul>
@@ -153,8 +169,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#making-your-own-block-primitive">Making Your Own Block/Primitive</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Fuzzable"><code class="docutils literal notranslate"><span class="pre">Fuzzable</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.context_path"><code class="docutils literal notranslate"><span class="pre">Fuzzable.context_path</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Fuzzable</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">Fuzzable.context_path</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.encode"><code class="docutils literal notranslate"><span class="pre">Fuzzable.encode()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.fuzzable"><code class="docutils literal notranslate"><span class="pre">Fuzzable.fuzzable</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.get_mutations"><code class="docutils literal notranslate"><span class="pre">Fuzzable.get_mutations()</span></code></a></li>
@@ -165,13 +181,13 @@
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.name_counter"><code class="docutils literal notranslate"><span class="pre">Fuzzable.name_counter</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.num_mutations"><code class="docutils literal notranslate"><span class="pre">Fuzzable.num_mutations()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.original_value"><code class="docutils literal notranslate"><span class="pre">Fuzzable.original_value()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.qualified_name"><code class="docutils literal notranslate"><span class="pre">Fuzzable.qualified_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">Fuzzable.qualified_name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.render"><code class="docutils literal notranslate"><span class="pre">Fuzzable.render()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.request"><code class="docutils literal notranslate"><span class="pre">Fuzzable.request</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.Fuzzable.stop_mutations"><code class="docutils literal notranslate"><span class="pre">Fuzzable.stop_mutations()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#boofuzz.FuzzableBlock"><code class="docutils literal notranslate"><span class="pre">FuzzableBlock</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">FuzzableBlock</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.FuzzableBlock.encode"><code class="docutils literal notranslate"><span class="pre">FuzzableBlock.encode()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.FuzzableBlock.get_child_data"><code class="docutils literal notranslate"><span class="pre">FuzzableBlock.get_child_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#boofuzz.FuzzableBlock.mutations"><code class="docutils literal notranslate"><span class="pre">FuzzableBlock.mutations()</span></code></a></li>
@@ -216,19 +232,17 @@
              
   <section id="protocol-definition">
 <span id="id1"></span><h1>Protocol Definition<a class="headerlink" href="#protocol-definition" title="Permalink to this heading"></a></h1>
-<p>For the old school Spike-style static protocol definition format, see
-<a class="reference internal" href="static-protocol-definition.html#static-primitives"><span class="std std-ref">static protocol definition functions</span></a>. The non-static protocol definition
-described here is the newer (but still somewhat experimental) approach.</p>
+<p>对于老旧风格的协议定义，可以参看 <a class="reference internal" href="static-protocol-definition.html#static-primitives"><span class="std std-ref">static protocol definition functions</span></a>，此处描述的是新版本（仍处于实验阶段）的协议格式。</p>
 <p>See the <a class="reference internal" href="quickstart.html#quickstart"><span class="std std-ref">Quickstart</span></a> guide for an intro to using boofuzz in general and a basic protocol definition
 example.</p>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>Requests are messages, Blocks are chunks within a message, and Primitives are the elements (bytes, strings, numbers,
-checksums, etc.) that make up a Block/Request.</p>
+<section id="id2">
+<h2>概述<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p><strong>Request</strong> 可以看作是要发送的消息，而 <strong>Blocks</strong> 则可视为消息内的块，
+<strong>Primitives</strong> 则是构成 Block/Request 的元素，这些元素可以是字节、字符串、数字、checksums。</p>
 </section>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
-<p>Here is an example of an HTTP message. It demonstrates how to use Request, Block, and several primitives:</p>
+<section id="id3">
+<h2>样例<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<p>以下是一个 HTTP 消息的例子，演示了如何使用 Request、Block 和 primitives。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="s2">&quot;HTTP-Request&quot;</span><span class="p">,</span><span class="n">children</span><span class="o">=</span><span class="p">(</span>
     <span class="n">Block</span><span class="p">(</span><span class="s2">&quot;Request-Line&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">(</span>
         <span class="n">Group</span><span class="p">(</span><span class="s2">&quot;Method&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;HEAD&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="s2">&quot;CONNECT&quot;</span><span class="p">,</span> <span class="s2">&quot;OPTIONS&quot;</span><span class="p">,</span> <span class="s2">&quot;TRACE&quot;</span><span class="p">]),</span>
@@ -248,20 +262,115 @@ checksums, etc.) that make up a Block/Request.</p>
 <span class="p">))</span>
 </pre></div>
 </div>
+<p>下面对协议定义的具体实现展开分析。</p>
+</section>
+<section id="fuzzable">
+<h2>Fuzzable<a class="headerlink" href="#fuzzable" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Fuzzable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzzable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/fuzzable.html#Fuzzable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Fuzzable" title="Permalink to this definition"></a></dt>
+<dd><p>Parent class for all primitives and blocks.</p>
+<p>When making new fuzzable types, one will typically override <a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> and/or <a class="reference internal" href="#boofuzz.Fuzzable.encode" title="boofuzz.Fuzzable.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code></a>.</p>
+<p><a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> is a generator function yielding mutations, typically of type bytes.</p>
+<p><a class="reference internal" href="#boofuzz.Fuzzable.encode" title="boofuzz.Fuzzable.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code></a> is a function that takes a value and encodes it. The value comes from <a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> or
+<code class="docutils literal notranslate"><span class="pre">default_value</span></code>. <a class="reference internal" href="#id6" title="boofuzz.FuzzableBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">FuzzableBlock</span></code></a> types can also encode the data generated by
+child nodes.</p>
+<p>Implementors may also want to override <a class="reference internal" href="#boofuzz.Fuzzable.num_mutations" title="boofuzz.Fuzzable.num_mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">num_mutations()</span></code></a> – the default implementation manually exhausts
+<a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> to get a number.</p>
+<p>The rest of the methods are used by boofuzz to handle fuzzing and are typically not overridden.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>default_value</strong> (<em>Any</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value.
+Can be a static value, or a ReferenceValueTestCaseSession, defaults to None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable fuzzing of this primitive, defaults to True</p></li>
+<li><p><strong>fuzz_values</strong> (<em>list</em><em>, </em><em>optional</em>) – List of custom fuzz values to add to the normal mutations, defaults to None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="context-path">
+<h3>context_path<a class="headerlink" href="#context-path" title="Permalink to this heading"></a></h3>
+<p>该方法返回一个以点分割的字符串，描述了到达当前 Fuzzable 对象的上下文路径。</p>
+<p>例如，若有一个
+名为 user 的 <code class="docutils literal notranslate"><span class="pre">Request</span></code> 对象，并且该对象包含了一个名为 key 的 <code class="docutils literal notranslate"><span class="pre">String</span></code> 原语，那么对于这个
+String 原语来说，其 context_path 就为 user。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.context_path">
+<span class="sig-prename descclassname"><span class="pre">Fuzzable.</span></span><span class="sig-name descname"><span class="pre">context_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.context_path" title="Permalink to this definition"></a></dt>
+<dd><p>Dot-delimited string that describes the path up to this element. Configured after the object is attached
+to a Request.</p>
+</dd></dl>
+
+</section>
+<section id="qualified-name">
+<h3>qualified_name<a class="headerlink" href="#qualified-name" title="Permalink to this heading"></a></h3>
+<p>该方法与 context_path 基本类似，不过在末尾增加上了当前 Fuzzable 对象的 name。</p>
+<p>例如，若有一个
+名为 user 的 <code class="docutils literal notranslate"><span class="pre">Request</span></code> 对象，并且该对象包含了一个名为 key 的 <code class="docutils literal notranslate"><span class="pre">String</span></code> 原语，那么对于这个
+String 原语来说，其 qualified_name 就为 <strong>user.key</strong>。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="boofuzz.Fuzzable.qualified_name">
+<span class="sig-prename descclassname"><span class="pre">Fuzzable.</span></span><span class="sig-name descname"><span class="pre">qualified_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#boofuzz.Fuzzable.qualified_name" title="Permalink to this definition"></a></dt>
+<dd><p>Dot-delimited name that describes the request name and the path to the element within the request.</p>
+<p>Example: “request1.block1.block2.node1”</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="fuzzableblock">
+<h2>FuzzableBlock<a class="headerlink" href="#fuzzableblock" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="boofuzz.FuzzableBlock">
+<span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">FuzzableBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/fuzzable_block.html#FuzzableBlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.FuzzableBlock" title="Permalink to this definition"></a></dt>
+<dd><p>Fuzzable type designed to have children elements.</p>
+<p>FuzzableBlock overrides the following methods, changing the default behavior for any type based on FuzzableBlock:</p>
+<ol class="arabic simple">
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code> Iterate through the mutations yielded by all child nodes.</p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">num_mutations()</span></code> Sum the mutations represented by each child node.</p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code> Call <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_child_data()</span></code>.</p></li>
+</ol>
+<p>FuzzableBlock adds the following methods:</p>
+<ol class="arabic simple">
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_child_data()</span></code> Render and concatenate all child nodes.</p></li>
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">push()</span></code> Add an additional child node; generally used only internally.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
+defaults to None</p></li>
+<li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – Request this block belongs to, defaults to None</p></li>
+<li><p><strong>children</strong> (<a class="reference internal" href="#id0" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – List of child nodes (typically given to FuzzableBlock types)m defaults to None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="request">
 <h2>Request<a class="headerlink" href="#request" title="Permalink to this heading"></a></h2>
+<p>Request 是顶级容器，可含有任何 block 结构或原语 primitive。
+有一些类的成员变量官方未给出明确说明，在此记录一下笔者的猜测：</p>
+<ul class="simple">
+<li><p>label：Request 的名称。</p></li>
+<li><p>stack：当前 request 对象的栈，栈中包含该 request 对象含有的块或原语。</p></li>
+<li><p>block_stack：open blocks 列表？</p></li>
+<li><p>names：一个包含多个 Fuzzable 对象的字典，以对象的 qualified_name 为键。</p></li>
+</ul>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.Request">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/blocks/request.html#Request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Request" title="Permalink to this definition"></a></dt>
 <dd><p>Top level container. Can hold any block structure or primitive.
-一个测试</p>
-<p>This can essentially be thought of as a super-block, root-block, daddy-block or whatever other alias you prefer.</p>
+This can essentially be thought of as a super-block, root-block, daddy-block or whatever other alias you prefer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of this request</p></li>
-<li><p><strong>children</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – Children of this request, defaults to None</p></li>
+<li><p><strong>children</strong> (<a class="reference internal" href="#id0" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – Children of this request, defaults to None</p></li>
 </ul>
 </dd>
 </dl>
@@ -284,7 +393,7 @@ defaults to None</p></li>
 <li><p><strong>default_value</strong> (<em>Any</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value,
 defaults to None</p></li>
 <li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – Request this block belongs to, defaults to None</p></li>
-<li><p><strong>children</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – Children of this block, defaults to None</p></li>
+<li><p><strong>children</strong> (<a class="reference internal" href="#id0" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – Children of this block, defaults to None</p></li>
 <li><p><strong>group</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of group to associate this block with, defaults to None</p></li>
 <li><p><strong>encoder</strong> (<em>callable</em><em>, </em><em>optional</em>) – Optional pointer to a function to pass rendered data to prior to return, defaults to None</p></li>
 <li><p><strong>dep</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional primitive whose specific value this block is dependant on, defaults to None</p></li>
@@ -415,6 +524,7 @@ be given, defaults to None</p></li>
 <h2>Primitives<a class="headerlink" href="#primitives" title="Permalink to this heading"></a></h2>
 <section id="static">
 <h3>Static<a class="headerlink" href="#static" title="Permalink to this heading"></a></h3>
+<p>Static 原语是固定的，在模糊测试时并不会发生变异。</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.Static">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Static</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/primitives/static.html#Static"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Static" title="Permalink to this definition"></a></dt>
@@ -430,6 +540,10 @@ defaults to None</p></li>
 </dl>
 </dd></dl>
 
+<p><strong>示例</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Static</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <section id="simple">
 <h3>Simple<a class="headerlink" href="#simple" title="Permalink to this heading"></a></h3>
@@ -456,19 +570,22 @@ defaults to None</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.Delim">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Delim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/primitives/delim.html#Delim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Delim" title="Permalink to this definition"></a></dt>
-<dd><p>Represent a delimiter such as :,r,n, ,=,&gt;,&lt; etc… Mutations include repetition, substitution and exclusion.</p>
+<dd><p>表示一个分隔符，比如空格,r,n, ,=,&gt;,&lt; 等等。注意变异包括重复、替换、缺少。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-defaults to None</p></li>
-<li><p><strong>default_value</strong> (<em>char</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value.</p></li>
-<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – 名称, 用于后续引用。默认为 None。</p></li>
+<li><p><strong>default_value</strong> (<em>char</em><em>, </em><em>optional</em>) – 当元素不进行模糊测试时所用的值，通常情况下应是一个合法的协议字段值。</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – 启用/禁用对该原语的模糊测试，默认为 true。</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
+<p><strong>示例</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Delim</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Space&quot;</span><span class="p">,</span><span class="n">default_value</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <section id="group">
 <h3>Group<a class="headerlink" href="#group" title="Permalink to this heading"></a></h3>
@@ -522,25 +639,23 @@ defaults to None</p></li>
 </section>
 <section id="string">
 <h3>String<a class="headerlink" href="#string" title="Permalink to this heading"></a></h3>
+<p>继承自 Fuzzable，注意到 FuzzableBlock 也继承自 Fuzzable。所以 String 不是 FuzzableBlocks
+的实例。</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.String">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">String</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b'\x00'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/primitives/string.html#String"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.String" title="Permalink to this definition"></a></dt>
-<dd><p>Primitive that cycles through a library of “bad” strings.</p>
-<p>The class variable ‘fuzz_library’ contains a list of
-smart fuzz values global across all instances. The ‘this_library’ variable contains fuzz values specific to
-the instantiated primitive. This allows us to avoid copying the near ~70MB fuzz_library data structure across
-each instantiated primitive.</p>
+<dd><p>通过某种糟糕的字符串进行循环迭代的原语。</p>
+<p>类变量 ‘fuzz_library’ 是一个包含着 fuzz 值的列表，所有实例都可共享该变量.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-defaults to None</p></li>
-<li><p><strong>default_value</strong> (<em>str</em>) – Value used when the element is not being fuzzed - should typically represent a valid value.</p></li>
-<li><p><strong>size</strong> (<em>int</em><em>, </em><em>optional</em>) – Static size of this field, leave None for dynamic, defaults to None</p></li>
-<li><p><strong>padding</strong> (<em>chr</em><em>, </em><em>optional</em>) – Value to use as padding to fill static field size, defaults to “x00”</p></li>
-<li><p><strong>encoding</strong> (<em>str</em><em>, </em><em>optional</em>) – String encoding, ex: utf_16_le for Microsoft Unicode, defaults to ascii</p></li>
-<li><p><strong>max_len</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum string length, defaults to None</p></li>
-<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>可选</em>) – 名称，用于后续引用。若未提供名称，那么默认为 None。</p></li>
+<li><p><strong>default_value</strong> (<em>str，可选</em>) – 当元素不进行模糊测试时所用的值，通常情况下应是一个有效值。</p></li>
+<li><p><strong>size</strong> (<em>int</em><em>, </em><em>可选</em>) – 该字段的静态长度，若为 None 则表示该字段是动态的。默认为 None。</p></li>
+<li><p><strong>padding</strong> (<em>chr</em><em>, </em><em>可选</em>) – 用于填充静态字段长度的值，默认为 “x00”。</p></li>
+<li><p><strong>encoding</strong> (<em>str</em><em>, </em><em>可选</em>) – 字符串编码类型，比如微软的 Unicode utf_16_le。</p></li>
+<li><p><strong>max_len</strong> – 最大字符串长度，默认为 None。</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>可选</em>) – 启用/禁用对该原语的模糊测试，默认为 true。</p></li>
 </ul>
 </dd>
 </dl>
@@ -746,7 +861,7 @@ defaults to None</p></li>
 conceivably need? And yet, I am urged by joy to contribute my own sweet blocks!”</p>
 <p>To make your own block/primitive:</p>
 <ol class="arabic simple">
-<li><p>Create an object that inherits from <a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fuzzable</span></code></a> or <a class="reference internal" href="#boofuzz.FuzzableBlock" title="boofuzz.FuzzableBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">FuzzableBlock</span></code></a></p></li>
+<li><p>Create an object that inherits from <a class="reference internal" href="#id0" title="boofuzz.Fuzzable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fuzzable</span></code></a> or <a class="reference internal" href="#id6" title="boofuzz.FuzzableBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">FuzzableBlock</span></code></a></p></li>
 <li><p>Override <a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations</span></code></a> and/or <a class="reference internal" href="#boofuzz.Fuzzable.encode" title="boofuzz.Fuzzable.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">encode</span></code></a>.</p></li>
 <li><p>Optional: Create an accompanying static primitive function. See boofuzz’s <cite>__init__.py</cite> file for examples.</p></li>
 <li><p>???</p></li>
@@ -756,14 +871,14 @@ conceivably need? And yet, I am urged by joy to contribute my own sweet blocks!�
 message, see the <a class="reference internal" href="#boofuzz.Size" title="boofuzz.Size"><code class="xref py py-class docutils literal notranslate"><span class="pre">Size</span></code></a> source code for an example of how to avoid recursion issues, and Be
 Careful. :)</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="boofuzz.Fuzzable">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Fuzzable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzzable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/fuzzable.html#Fuzzable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Fuzzable" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Fuzzable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzzable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/fuzzable.html#Fuzzable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Parent class for all primitives and blocks.</p>
 <p>When making new fuzzable types, one will typically override <a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> and/or <a class="reference internal" href="#boofuzz.Fuzzable.encode" title="boofuzz.Fuzzable.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code></a>.</p>
 <p><a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> is a generator function yielding mutations, typically of type bytes.</p>
 <p><a class="reference internal" href="#boofuzz.Fuzzable.encode" title="boofuzz.Fuzzable.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code></a> is a function that takes a value and encodes it. The value comes from <a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> or
-<code class="docutils literal notranslate"><span class="pre">default_value</span></code>. <a class="reference internal" href="#boofuzz.FuzzableBlock" title="boofuzz.FuzzableBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">FuzzableBlock</span></code></a> types can also encode the data generated by
+<code class="docutils literal notranslate"><span class="pre">default_value</span></code>. <a class="reference internal" href="#id6" title="boofuzz.FuzzableBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">FuzzableBlock</span></code></a> types can also encode the data generated by
 child nodes.</p>
 <p>Implementors may also want to override <a class="reference internal" href="#boofuzz.Fuzzable.num_mutations" title="boofuzz.Fuzzable.num_mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">num_mutations()</span></code></a> – the default implementation manually exhausts
 <a class="reference internal" href="#boofuzz.Fuzzable.mutations" title="boofuzz.Fuzzable.mutations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mutations()</span></code></a> to get a number.</p>
@@ -781,8 +896,8 @@ Can be a static value, or a ReferenceValueTestCaseSession, defaults to None</p><
 </dd>
 </dl>
 <dl class="py property">
-<dt class="sig sig-object py" id="boofuzz.Fuzzable.context_path">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context_path</span></span><a class="headerlink" href="#boofuzz.Fuzzable.context_path" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context_path</span></span><a class="headerlink" href="#id4" title="Permalink to this definition"></a></dt>
 <dd><p>Dot-delimited string that describes the path up to this element. Configured after the object is attached
 to a Request.</p>
 </dd></dl>
@@ -911,8 +1026,8 @@ length.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="boofuzz.Fuzzable.qualified_name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qualified_name</span></span><a class="headerlink" href="#boofuzz.Fuzzable.qualified_name" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qualified_name</span></span><a class="headerlink" href="#id5" title="Permalink to this definition"></a></dt>
 <dd><p>Dot-delimited name that describes the request name and the path to the element within the request.</p>
 <p>Example: “request1.block1.block2.node1”</p>
 </dd></dl>
@@ -948,9 +1063,9 @@ length.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="boofuzz.FuzzableBlock">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">FuzzableBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/fuzzable_block.html#FuzzableBlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.FuzzableBlock" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.fuzzable.Fuzzable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fuzzable</span></code></a></p>
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">FuzzableBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/fuzzable_block.html#FuzzableBlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id0" title="boofuzz.fuzzable.Fuzzable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fuzzable</span></code></a></p>
 <p>Fuzzable type designed to have children elements.</p>
 <p>FuzzableBlock overrides the following methods, changing the default behavior for any type based on FuzzableBlock:</p>
 <ol class="arabic simple">
@@ -969,7 +1084,7 @@ length.</p>
 <li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
 defaults to None</p></li>
 <li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – Request this block belongs to, defaults to None</p></li>
-<li><p><strong>children</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – List of child nodes (typically given to FuzzableBlock types)m defaults to None</p></li>
+<li><p><strong>children</strong> (<a class="reference internal" href="#id0" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – List of child nodes (typically given to FuzzableBlock types)m defaults to None</p></li>
 </ul>
 </dd>
 </dl>
@@ -1058,7 +1173,7 @@ length.</p>
 <dd><p>Push a child element onto this block’s stack.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>item</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>Fuzzable</em></a>) – Some wrapped Fuzzable element</p>
+<dd class="field-odd"><p><strong>item</strong> (<a class="reference internal" href="#id0" title="boofuzz.Fuzzable"><em>Fuzzable</em></a>) – Some wrapped Fuzzable element</p>
 </dd>
 </dl>
 <p>Returns: None</p>

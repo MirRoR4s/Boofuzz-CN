@@ -49,8 +49,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/contributing.html">Contributing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
@@ -101,13 +101,12 @@
 
 <div class="viewcode-block" id="FuzzLogger"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLogger">[docs]</a><span class="k">class</span> <span class="nc">FuzzLogger</span><span class="p">(</span><span class="n">IFuzzLogger</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Takes a list of IFuzzLogger objects and multiplexes logged data to each one.</span>
+<span class="sd">    FuzzLogger 接收一列 IFuzzLogger 对象作为参数，并对每个已记录的数据进行复用。</span>
 
-<span class="sd">    FuzzLogger also maintains summary failure and error data.</span>
+<span class="sd">    FUzzlogger 也记录着失败汇总和错误数据。</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        fuzz_loggers (:obj:`list` of :obj:`IFuzzLogger`): IFuzzLogger objects</span>
-<span class="sd">                                                          to which to send log data.</span>
+<span class="sd">        fuzz_loggers (:obj:`list` of :obj:`IFuzzLogger`): 发送记录数据的 IFuzzLogger 对象。</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fuzz_loggers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

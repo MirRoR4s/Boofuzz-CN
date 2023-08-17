@@ -47,13 +47,13 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Target.html">Target</a></li>
@@ -105,9 +105,8 @@
 
 
 <div class="viewcode-block" id="Request"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.Request">[docs]</a><span class="k">class</span> <span class="nc">Request</span><span class="p">(</span><span class="n">FuzzableBlock</span><span class="p">,</span> <span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Top level container. Can hold any block structure or primitive.</span>
-<span class="sd">    一个测试</span>
-
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Top level container. Can hold any block structure or primitive.</span>
 <span class="sd">    This can essentially be thought of as a super-block, root-block, daddy-block or whatever other alias you prefer.</span>
 
 <span class="sd">    :param name: Name of this request</span>
@@ -214,6 +213,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">block_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_generate_context_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_stack</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;生成上下文路径。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">context_path</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">block_stack</span><span class="p">)</span>  <span class="c1"># TODO put in method</span>
         <span class="n">context_path</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">context_path</span><span class="p">)))</span>
         <span class="k">return</span> <span class="n">context_path</span>

@@ -52,7 +52,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 </ul>
@@ -331,18 +331,18 @@ The full path is now boofuzz.connections.itarget_connection.ITargetConnection</p
 <dt class="sig sig-object py" id="boofuzz.connections.TCPSocketConnection">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.connections.</span></span><span class="sig-name descname"><span class="pre">TCPSocketConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">send_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recv_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/connections/tcp_socket_connection.html#TCPSocketConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.connections.TCPSocketConnection" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#boofuzz.connections.BaseSocketConnection" title="boofuzz.connections.base_socket_connection.BaseSocketConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSocketConnection</span></code></a></p>
-<p>BaseSocketConnection implementation for use with TCP Sockets.</p>
+<p>一个使用 TCP 套接字的 BaseSocketConnection 实现</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.2.0.</span></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>host</strong> (<em>str</em>) – Hostname or IP adress of target system.</p></li>
-<li><p><strong>port</strong> (<em>int</em>) – Port of target service.</p></li>
-<li><p><strong>send_timeout</strong> (<em>float</em>) – Seconds to wait for send before timing out. Default 5.0.</p></li>
-<li><p><strong>recv_timeout</strong> (<em>float</em>) – Seconds to wait for recv before timing out. Default 5.0.</p></li>
-<li><p><strong>server</strong> (<em>bool</em>) – Set to True to enable server side fuzzing.</p></li>
+<li><p><strong>host</strong> (<em>str</em>) – 目标系统的主机名或 IP 地址。</p></li>
+<li><p><strong>port</strong> (<em>int</em>) – 目标服务的端口号。</p></li>
+<li><p><strong>send_timeout</strong> (<em>float</em>) – 超时前等待的发送秒数，默认为 5.0。</p></li>
+<li><p><strong>recv_timeout</strong> (<em>float</em>) – 超时前等待的接收秒数，默认为 5.0。</p></li>
+<li><p><strong>server</strong> (<em>bool</em>) – server 为真 表示启用服务端模糊测试。</p></li>
 </ul>
 </dd>
 </dl>

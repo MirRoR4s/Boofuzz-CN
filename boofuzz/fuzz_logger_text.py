@@ -11,11 +11,8 @@ DEFAULT_HEX_TO_STR = helpers.hex_to_hexstr
 
 class FuzzLoggerText(ifuzz_logger_backend.IFuzzLoggerBackend):
     """
-    This class formats FuzzLogger data for text presentation. It can be
-    configured to output to STDOUT, or to a named file.
-
-    Using two FuzzLoggerTexts, a FuzzLogger instance can be configured to output to
-    both console and file.
+    该类会将 FuzzLogger 数据格式化成文本形式并输出到标准输出或是文件中。
+    如果想要既输出到标准输出又输出到文件中，可以使用两个 FUzzLoggerTexts。
     """
 
     INDENT_SIZE = 2
@@ -23,10 +20,10 @@ class FuzzLoggerText(ifuzz_logger_backend.IFuzzLoggerBackend):
     def __init__(self, file_handle=sys.stdout, bytes_to_str=DEFAULT_HEX_TO_STR):
         """
         :type file_handle: io.BinaryIO
-        :param file_handle: Open file handle for logging. Defaults to sys.stdout.
+        :param file_handle: 一个用于日志记录的文件句柄，默认值为`sys.stdout`，也就是标准输出流
 
         :type bytes_to_str: function
-        :param bytes_to_str: Function that converts sent/received bytes data to string for logging.
+        :param bytes_to_str: 用于将发送/接收的字节数据转换为字符串以进行日志记录，默认值为 DEFAULT_HEX_TO_STR
         """
         self._file_handle = file_handle
         self._format_raw_bytes = bytes_to_str

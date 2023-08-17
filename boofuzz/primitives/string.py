@@ -6,28 +6,23 @@ from ..fuzzable import Fuzzable
 
 
 class String(Fuzzable):
-    """Primitive that cycles through a library of "bad" strings.
+    """通过某种糟糕的字符串进行循环迭代的原语。
 
-    The class variable 'fuzz_library' contains a list of
-    smart fuzz values global across all instances. The 'this_library' variable contains fuzz values specific to
-    the instantiated primitive. This allows us to avoid copying the near ~70MB fuzz_library data structure across
-    each instantiated primitive.
+    类变量 'fuzz_library' 是一个包含着 fuzz 值的列表，所有实例都可共享该变量.
 
-    :type name: str, optional
-    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-        defaults to None
-    :type default_value: str
-    :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value.
-    :type size: int, optional
-    :param size: Static size of this field, leave None for dynamic, defaults to None
-    :type padding: chr, optional
-    :param padding: Value to use as padding to fill static field size, defaults to "\\x00"
-    :type encoding: str, optional
-    :param encoding: String encoding, ex: utf_16_le for Microsoft Unicode, defaults to ascii
-    :type max_len: int, optional
-    :param max_len: Maximum string length, defaults to None
-    :type fuzzable: bool, optional
-    :param fuzzable: Enable/disable fuzzing of this primitive, defaults to true
+    :type name: str, 可选
+    :param name: 名称，用于后续引用。若未提供名称，那么默认为 None。
+    :type default_value: str，可选
+    :param default_value: 当元素不进行模糊测试时所用的值，通常情况下应是一个有效值。
+    :type size: int, 可选
+    :param size: 该字段的静态长度，若为 None 则表示该字段是动态的。默认为 None。
+    :type padding: chr, 可选
+    :param padding: 用于填充静态字段长度的值，默认为 "\\x00"。
+    :type encoding: str, 可选
+    :param encoding: 字符串编码类型，比如微软的 Unicode utf_16_le。
+    :param max_len: 最大字符串长度，默认为 None。
+    :type fuzzable: bool, 可选
+    :param fuzzable: 启用/禁用对该原语的模糊测试，默认为 true。
     """
 
     # store fuzz_library as a class variable to avoid copying the ~70MB structure across each instantiated primitive.
@@ -199,11 +194,12 @@ class String(Fuzzable):
 
         local_random = random.Random(0)  # We want constant random numbers to generate reproducible test cases
         previous_length = 0
-        # For every length add a random number of random indices to the random_indices dict. Prevent duplicates by
+        # For every length, add a random number of random indices to the random_indices dict. Prevent duplicates by
         # adding only indices in between previous_length and current length.
         for length in self._long_string_lengths:
             self.random_indices[length] = local_random.sample(
-                range(previous_length, length), local_random.randint(1, self._long_string_lengths[0])
+                range(previous_length, length), local_random.randint(1, self._long_string_lengths[0]) # 生成一个范围在 preL 和 L
+                # 之间的长度为 randint 的列表
             )
             previous_length = length
 

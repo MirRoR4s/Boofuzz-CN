@@ -49,8 +49,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/contributing.html">Contributing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
@@ -107,11 +107,8 @@
 
 <div class="viewcode-block" id="FuzzLoggerText"><a class="viewcode-back" href="../../user/logging.html#boofuzz.FuzzLoggerText">[docs]</a><span class="k">class</span> <span class="nc">FuzzLoggerText</span><span class="p">(</span><span class="n">ifuzz_logger_backend</span><span class="o">.</span><span class="n">IFuzzLoggerBackend</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This class formats FuzzLogger data for text presentation. It can be</span>
-<span class="sd">    configured to output to STDOUT, or to a named file.</span>
-
-<span class="sd">    Using two FuzzLoggerTexts, a FuzzLogger instance can be configured to output to</span>
-<span class="sd">    both console and file.</span>
+<span class="sd">    该类会将 FuzzLogger 数据格式化成文本形式并输出到标准输出或是文件中。</span>
+<span class="sd">    如果想要既输出到标准输出又输出到文件中，可以使用两个 FUzzLoggerTexts。</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">INDENT_SIZE</span> <span class="o">=</span> <span class="mi">2</span>
@@ -119,10 +116,10 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_handle</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">bytes_to_str</span><span class="o">=</span><span class="n">DEFAULT_HEX_TO_STR</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :type file_handle: io.BinaryIO</span>
-<span class="sd">        :param file_handle: Open file handle for logging. Defaults to sys.stdout.</span>
+<span class="sd">        :param file_handle: 一个用于日志记录的文件句柄，默认值为`sys.stdout`，也就是标准输出流</span>
 
 <span class="sd">        :type bytes_to_str: function</span>
-<span class="sd">        :param bytes_to_str: Function that converts sent/received bytes data to string for logging.</span>
+<span class="sd">        :param bytes_to_str: 用于将发送/接收的字节数据转换为字符串以进行日志记录，默认值为 DEFAULT_HEX_TO_STR</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_file_handle</span> <span class="o">=</span> <span class="n">file_handle</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_format_raw_bytes</span> <span class="o">=</span> <span class="n">bytes_to_str</span>

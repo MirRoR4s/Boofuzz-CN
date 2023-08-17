@@ -32,13 +32,13 @@ def get_time_stamp():
 
 class FuzzLoggerDb(ifuzz_logger_backend.IFuzzLoggerBackend):
     """
-    Log fuzz data in a sqlite database file.
+    将模糊测试的数据存储在一个 sqlite 数据库文件中。
     Using an existing database requires more graceful exits to prevent case number duplication.
     """
 
     def __init__(self, db_filename, num_log_cases=0):
         # Check if a db exists before the connect leaves an "empty" file behind.
-        db_already_exist = helpers.path_exists(db_filename)
+        db_already_exist = helpers.path_exists(db_filename) # 判断 db_filename 是否存在，存在返回 True。
         self._database_connection = sqlite3.connect(db_filename, check_same_thread=False)
         self._db_cursor = self._database_connection.cursor()
 

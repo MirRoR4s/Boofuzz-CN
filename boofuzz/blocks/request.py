@@ -9,9 +9,8 @@ from ..pgraph.node import Node
 
 
 class Request(FuzzableBlock, Node):
-    """Top level container. Can hold any block structure or primitive.
-    一个测试
-
+    """
+    Top level container. Can hold any block structure or primitive.
     This can essentially be thought of as a super-block, root-block, daddy-block or whatever other alias you prefer.
 
     :param name: Name of this request
@@ -118,6 +117,8 @@ class Request(FuzzableBlock, Node):
             self.block_stack.append(item)
 
     def _generate_context_path(self, block_stack):
+        """生成上下文路径。
+        """
         context_path = ".".join(x.name for x in block_stack)  # TODO put in method
         context_path = ".".join(filter(None, (self.name, context_path)))
         return context_path

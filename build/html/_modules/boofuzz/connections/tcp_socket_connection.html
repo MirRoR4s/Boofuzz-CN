@@ -49,8 +49,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
@@ -103,16 +103,16 @@
 
 
 <div class="viewcode-block" id="TCPSocketConnection"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.TCPSocketConnection">[docs]</a><span class="k">class</span> <span class="nc">TCPSocketConnection</span><span class="p">(</span><span class="n">base_socket_connection</span><span class="o">.</span><span class="n">BaseSocketConnection</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;BaseSocketConnection implementation for use with TCP Sockets.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;一个使用 TCP 套接字的 BaseSocketConnection 实现</span>
 
 <span class="sd">    .. versionadded:: 0.2.0</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        host (str): Hostname or IP adress of target system.</span>
-<span class="sd">        port (int): Port of target service.</span>
-<span class="sd">        send_timeout (float): Seconds to wait for send before timing out. Default 5.0.</span>
-<span class="sd">        recv_timeout (float): Seconds to wait for recv before timing out. Default 5.0.</span>
-<span class="sd">        server (bool): Set to True to enable server side fuzzing.</span>
+<span class="sd">        host (str): 目标系统的主机名或 IP 地址。</span>
+<span class="sd">        port (int): 目标服务的端口号。</span>
+<span class="sd">        send_timeout (float): 超时前等待的发送秒数，默认为 5.0。</span>
+<span class="sd">        recv_timeout (float): 超时前等待的接收秒数，默认为 5.0。</span>
+<span class="sd">        server (bool): server 为真 表示启用服务端模糊测试。</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

@@ -5,13 +5,12 @@ from .ifuzz_logger import IFuzzLogger
 
 class FuzzLogger(IFuzzLogger):
     """
-    Takes a list of IFuzzLogger objects and multiplexes logged data to each one.
+    FuzzLogger 接收一列 IFuzzLogger 对象作为参数，并对每个已记录的数据进行复用。
 
-    FuzzLogger also maintains summary failure and error data.
+    FUzzlogger 也记录着失败汇总和错误数据。
 
     Args:
-        fuzz_loggers (:obj:`list` of :obj:`IFuzzLogger`): IFuzzLogger objects
-                                                          to which to send log data.
+        fuzz_loggers (:obj:`list` of :obj:`IFuzzLogger`): 发送记录数据的 IFuzzLogger 对象。
     """
 
     def __init__(self, fuzz_loggers=None):

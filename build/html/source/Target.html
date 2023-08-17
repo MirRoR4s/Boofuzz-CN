@@ -50,13 +50,13 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Session.html">Session</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Target</a><ul>
@@ -155,14 +155,12 @@ FuzzDataLogger calls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>connection</strong> (<a class="reference internal" href="../user/connections.html#boofuzz.connections.ITargetConnection" title="boofuzz.connections.itarget_connection.ITargetConnection"><em>itarget_connection.ITargetConnection</em></a>) – Connection to system under test.</p></li>
-<li><p><strong>monitors</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><em>IMonitor</em><em>, </em><a class="reference internal" href="../user/other-modules.html#boofuzz.monitors.pedrpc.Client" title="boofuzz.monitors.pedrpc.Client"><em>pedrpc.Client</em></a><em>]</em><em>]</em>) – List of Monitors for this Target.</p></li>
-<li><p><strong>monitor_alive</strong> – List of Functions that are called when a Monitor is alive. It is passed
-the monitor instance that became alive. Use it to e.g. set options
-on restart.</p></li>
-<li><p><strong>repeater</strong> (<a class="reference internal" href="#boofuzz.repeater.Repeater" title="boofuzz.repeater.Repeater"><em>repeater.Repeater</em></a>) – Repeater to use for sending. Default None.</p></li>
-<li><p><strong>procmon</strong> – Deprecated interface for adding a process monitor.</p></li>
-<li><p><strong>procmon_options</strong> – Deprecated interface for adding a process monitor.</p></li>
+<li><p><strong>connection</strong> (<a class="reference internal" href="../user/connections.html#boofuzz.connections.ITargetConnection" title="boofuzz.connections.itarget_connection.ITargetConnection"><em>itarget_connection.ITargetConnection</em></a>) – 到目标系统的连接对象</p></li>
+<li><p><strong>monitors</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><em>IMonitor</em><em>, </em><a class="reference internal" href="../user/other-modules.html#boofuzz.monitors.pedrpc.Client" title="boofuzz.monitors.pedrpc.Client"><em>pedrpc.Client</em></a><em>]</em><em>]</em>) – 当前 Target 对象的监视器列表。</p></li>
+<li><p><strong>monitor_alive</strong> – 当监视器处于活跃状态时会调用的一个函数列表</p></li>
+<li><p><strong>repeater</strong> (<a class="reference internal" href="#boofuzz.repeater.Repeater" title="boofuzz.repeater.Repeater"><em>repeater.Repeater</em></a>) – 发送时所用的 Repeater，默认为 None</p></li>
+<li><p><strong>procmon</strong> – 用于添加进程监视器的接口（已弃用）</p></li>
+<li><p><strong>procmon_options</strong> – 同上</p></li>
 </ul>
 </dd>
 </dl>
@@ -180,14 +178,10 @@ on restart.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Target.monitors_alive">
 <span class="sig-name descname"><span class="pre">monitors_alive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Target.monitors_alive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Target.monitors_alive" title="Permalink to this definition"></a></dt>
-<dd><p>Wait for the monitors to become alive / establish connection to the RPC server.
-This method is called on every restart of the target and when it’s added to a session.
-After successful probing, a callback is called, passing the monitor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
+<dd><p>等待监视器启动（活跃）/与 RPC 服务器建立连接。
+当某个 target 被添加到 session 中时，target 的每一次重启都会调用该方法。
+在成功 probing 后，会调用一个回调函数，并将 monitor 传进去。
+:return: None</p>
 </dd></dl>
 
 <dl class="py property">
@@ -247,7 +241,7 @@ After successful probing, a callback is called, passing the monitor.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Target.set_fuzz_data_logger">
 <span class="sig-name descname"><span class="pre">set_fuzz_data_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fuzz_data_logger</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Target.set_fuzz_data_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Target.set_fuzz_data_logger" title="Permalink to this definition"></a></dt>
-<dd><p>Set this object’s fuzz data logger – for sent and received fuzz data.</p>
+<dd><p>设置当前 Target 对象的 fuzz 数据记录器–用于发送和接收 fuzz 数据。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fuzz_data_logger</strong> (<a class="reference internal" href="../user/logging.html#boofuzz.IFuzzLogger" title="boofuzz.ifuzz_logger.IFuzzLogger"><em>ifuzz_logger.IFuzzLogger</em></a>) – New logger.</p>

@@ -50,13 +50,13 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Session</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#boofuzz.Session"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a><ul>
@@ -133,71 +133,56 @@
 <dt class="sig sig-object py" id="boofuzz.Session">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">web_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">26000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_web_open</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crash_threshold_request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crash_threshold_element</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_sleep_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_send_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_test_case_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_start_target_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_loggers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_db_keep_only_n_pass_cases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receive_data_after_each_request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_data_received_each_request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receive_data_after_fuzz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_aborted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_issues_when_sending_fuzz_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_ssl_errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse_target_connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">web_address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'localhost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></p>
-<p>Extends pgraph.graph and provides a container for architecting protocol dialogs.</p>
+<p>继承自 pgraph.graph，为协议对话的构造提供了一个容器。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>session_filename</strong> (<em>str</em>) – Filename to serialize persistent data to. Default None.</p></li>
+<li><p><strong>session_filename</strong> (<em>str</em>) – 存放序列化数据的文件名，默认为 None</p></li>
 <li><p><strong>index_start</strong> (<em>int</em>) – </p></li>
 <li><p><strong>index_end</strong> (<em>int</em>) – </p></li>
-<li><p><strong>sleep_time</strong> (<em>float</em>) – Time in seconds to sleep in between tests. Default 0.</p></li>
-<li><p><strong>restart_interval</strong> (<em>int</em>) – Restart the target after n test cases, disable by setting to 0 (default).</p></li>
-<li><p><strong>console_gui</strong> (<em>bool</em>) – Use curses to generate a static console screen similar to the webinterface. Has not been
-tested under Windows. Default False.</p></li>
-<li><p><strong>crash_threshold_request</strong> (<em>int</em>) – Maximum number of crashes allowed before a request is exhausted. Default 12.</p></li>
-<li><p><strong>crash_threshold_element</strong> (<em>int</em>) – Maximum number of crashes allowed before an element is exhausted. Default 3.</p></li>
-<li><p><strong>restart_sleep_time</strong> (<em>int</em>) – Time in seconds to sleep when target can’t be restarted. Default 5.</p></li>
-<li><p><strong>restart_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – The registered method will be called after a failed post_test_case_callback
-Default None.</p></li>
-<li><p><strong>restart_threshold</strong> (<em>int</em>) – Maximum number of retries on lost target connection. Default None (indefinitely).</p></li>
-<li><p><strong>restart_timeout</strong> (<em>float</em>) – Time in seconds for that a connection attempt should be retried. Default None
-(indefinitely).</p></li>
-<li><p><strong>pre_send_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – The registered method will be called prior to each fuzz request.
-Default None.</p></li>
-<li><p><strong>post_test_case_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – The registered method will be called after each fuzz test case.
-Default None.</p></li>
-<li><p><strong>post_start_target_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – Method(s) will be called after the target is started or restarted,
-say, by a process monitor.</p></li>
-<li><p><strong>web_port</strong> (<em>int</em><em> or </em><em>None</em>) – Port for monitoring fuzzing campaign via a web browser. Set to None to disable the web
-app. Default 26000.</p></li>
-<li><p><strong>keep_web_open</strong> (<em>bool</em>) – Keep the webinterface open after session completion. Default True.</p></li>
-<li><p><strong>fuzz_loggers</strong> (<em>list</em><em> of </em><a class="reference internal" href="../user/logging.html#boofuzz.IFuzzLogger" title="boofuzz.ifuzz_logger.IFuzzLogger"><em>ifuzz_logger.IFuzzLogger</em></a>) – For saving test data and results.. Default Log to STDOUT.</p></li>
+<li><p><strong>sleep_time</strong> (<em>float</em>) – 测试用例之间等待的秒数，默认为 0</p></li>
+<li><p><strong>restart_interval</strong> (<em>int</em>) – 在 n 个测试用例之后重启目标。默认情况下为0，表示禁用该选项</p></li>
+<li><p><strong>console_gui</strong> (<em>bool</em>) – 是否使用 curses 在 web 端生成一个静态控制台，默认为 False（还未在 Windows 下进行测试）</p></li>
+<li><p><strong>crash_threshold_request</strong> (<em>int</em>) – 请求耗尽之前允许的最大崩溃次数，默认为 12。</p></li>
+<li><p><strong>crash_threshold_element</strong> (<em>int</em>) – 元素耗尽之前允许的最大崩溃次数，默认为 3</p></li>
+<li><p><strong>restart_sleep_time</strong> (<em>int</em>) – 当目标无法重启时等待的秒数，默认为5</p></li>
+<li><p><strong>restart_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – 在 <cite>post_test_case_callback</cite> 失败后调用的回调方法列表，默认为 None</p></li>
+<li><p><strong>restart_threshold</strong> (<em>int</em>) – 丢失目标连接时的最大重试次数，默认为 None（无限次）</p></li>
+<li><p><strong>restart_timeout</strong> (<em>float</em>) – 重新连接尝试的超时时间（秒），默认为 None（无限次）</p></li>
+<li><p><strong>pre_send_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – 在每个模糊（测试）请求之前调用的注册方法列表，默认为 None</p></li>
+<li><p><strong>post_test_case_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – 在每个模糊测试用例之后调用的注册方法列表，默认为None</p></li>
+<li><p><strong>post_start_target_callbacks</strong> (<em>list</em><em> of </em><em>method</em>) – 目标启动或重新启动后进程监视器调用的方法，默认为 None 。</p></li>
+<li><p><strong>web_port</strong> (<em>int</em><em> or </em><em>None</em>) – 通过 Web 浏览器监视模糊测试活动的端口。设置为 None 表示禁用 Web 应用程序，默认为 26000</p></li>
+<li><p><strong>keep_web_open</strong> (<em>bool</em>) – 在会话完成后保持 Web 界面打开，默认为 True</p></li>
+<li><p><strong>fuzz_loggers</strong> (<em>list</em><em> of </em><a class="reference internal" href="../user/logging.html#boofuzz.IFuzzLogger" title="boofuzz.ifuzz_logger.IFuzzLogger"><em>ifuzz_logger.IFuzzLogger</em></a>) – 日志记录器列表，用于保存测试数据和结果。默认将日志记录到 STDOUT 。</p></li>
 <li><p><strong>fuzz_db_keep_only_n_pass_cases</strong> (<em>int</em>) – Minimize disk usage by only saving passing test cases
 if they are in the n test cases preceding a failure or error.
 Set to 0 to save after every test case (high disk I/O!). Default 0.</p></li>
-<li><p><strong>receive_data_after_each_request</strong> (<em>bool</em>) – If True, Session will attempt to receive a reply after transmitting
-each non-fuzzed node. Default True.</p></li>
+<li><p><strong>receive_data_after_each_request</strong> (<em>bool</em>) – 如果为 True，在传输每个不进行模糊测试的节点后尝试接收回复，默认为True。</p></li>
 <li><p><strong>check_data_received_each_request</strong> (<em>bool</em>) – If True, Session will verify that some data has
 been received after transmitting each non-fuzzed node, and if not,
 register a failure. If False, this check will not be performed. Default
 False. A receive attempt is still made unless
 receive_data_after_each_request is False.</p></li>
-<li><p><strong>receive_data_after_fuzz</strong> (<em>bool</em>) – If True, Session will attempt to receive a reply after transmitting
-a fuzzed message. Default False.</p></li>
-<li><p><strong>ignore_connection_reset</strong> (<em>bool</em>) – Log ECONNRESET errors (“Target connection reset”) as “info” instead of
-failures.</p></li>
-<li><p><strong>ignore_connection_aborted</strong> (<em>bool</em>) – Log ECONNABORTED errors as “info” instead of failures.</p></li>
-<li><p><strong>ignore_connection_issues_when_sending_fuzz_data</strong> (<em>bool</em>) – Ignore fuzz data transmission failures. Default True.
-This is usually a helpful setting to enable, as targets may drop connections once a
-message is clearly invalid.</p></li>
+<li><p><strong>receive_data_after_fuzz</strong> (<em>bool</em>) – 如果该变量为真，那么在传输完一个 fuzzed 消息后，Session 会尝试接收一个响应</p></li>
+<li><p><strong>ignore_connection_reset</strong> (<em>bool</em>) – 将 ECONNREST 错误（目标连接复位）记录为 “info” 而非 failures</p></li>
+<li><p><strong>ignore_connection_aborted</strong> (<em>bool</em>) – 将ECONNABORTED错误记录为”info”而不是失败，默认为False。</p></li>
+<li><p><strong>ignore_connection_issues_when_sending_fuzz_data</strong> (<em>bool</em>) – 忽略发送模糊数据时的连接故障，默认为 True。这通常是一个有用的设置，因为目标一旦消息明显无效就可能会断开连接。</p></li>
 <li><p><strong>ignore_connection_ssl_errors</strong> (<em>bool</em>) – Log SSL related errors as “info” instead of failures. Default False.</p></li>
-<li><p><strong>reuse_target_connection</strong> (<em>bool</em>) – If True, only use one target connection instead of reconnecting each test case.
-Default False.</p></li>
-<li><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – Target for fuzz session. Target must be fully initialized. Default None.</p></li>
-<li><p><strong>db_filename</strong> (<em>str</em>) – Filename to store sqlite db for test results and case information.
-Defaults to ./boofuzz-results/{uniq_timestamp}.db</p></li>
-<li><p><strong>web_address</strong> – Address where’s Boofuzz logger exposed. Default ‘localhost’</p></li>
+<li><p><strong>reuse_target_connection</strong> (<em>bool</em>) – 如果为 True，则只使用一个目标连接（Target connection），而不是每个测试用例都重新连接。默认为 False。</p></li>
+<li><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – 模糊（测试）会话的目标，必须完全初始化。默认为 None。</p></li>
+<li><p><strong>db_filename</strong> (<em>str</em>) – 存储测试结果和案例信息的 SQLite 数据库文件名。默认为 <cite>./boofuzz-results/{uniq_timestamp}.db</cite>。</p></li>
+<li><p><strong>web_address</strong> – Bofuzz 记录器对外的地址，默认为 <cite>localhost</cite>。</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.add_node">
 <span class="sig-name descname"><span class="pre">add_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.add_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.add_node" title="Permalink to this definition"></a></dt>
-<dd><p>Add a pgraph node to the graph. We overload this routine to automatically generate and assign an ID whenever a
-node is added.</p>
+<dd><p>将一个 pgraph 节点加入图中，当一个节点加入图中时，就会自动生成并分配一个 ID 给该节点。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>node</strong> (<em>pgraph.Node</em>) – Node to add to session graph</p>
+<dd class="field-odd"><p><strong>node</strong> (<em>pgraph.Node</em>) – 要加入会话图的节点</p>
 </dd>
 </dl>
 </dd></dl>
@@ -205,10 +190,11 @@ node is added.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.add_target">
 <span class="sig-name descname"><span class="pre">add_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.add_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.add_target" title="Permalink to this definition"></a></dt>
-<dd><p>Add a target to the session. Multiple targets can be added for parallel fuzzing.</p>
+<dd><p>将一个 target 加入到 session 中
+Add a target to the session. Multiple targets can be added for parallel fuzzing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – Target to add to session</p>
+<dd class="field-odd"><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – 要加入 session 的 Target 对象</p>
 </dd>
 </dl>
 </dd></dl>
@@ -216,7 +202,8 @@ node is added.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.build_webapp_thread">
 <span class="sig-name descname"><span class="pre">build_webapp_thread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">26000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'localhost'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.build_webapp_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.build_webapp_thread" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Session 对象作为 flask 实例的 session 属性，之后利用 Tornado 根据 flask 实例创建 http 服务</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.connect">

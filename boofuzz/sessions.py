@@ -51,14 +51,12 @@ class Target:
         tcp_target = Target(SocketConnection(host='127.0.0.1', port=17971))
 
     Args:
-        connection (itarget_connection.ITargetConnection): Connection to system under test.
-        monitors (List[Union[IMonitor, pedrpc.Client]]): List of Monitors for this Target.
-        monitor_alive: List of Functions that are called when a Monitor is alive. It is passed
-                          the monitor instance that became alive. Use it to e.g. set options
-                          on restart.
-        repeater (repeater.Repeater): Repeater to use for sending. Default None.
-        procmon: Deprecated interface for adding a process monitor.
-        procmon_options: Deprecated interface for adding a process monitor.
+        connection (itarget_connection.ITargetConnection): 到目标系统的连接对象
+        monitors (List[Union[IMonitor, pedrpc.Client]]): 当前 Target 对象的监视器列表。
+        monitor_alive: 当监视器处于活跃状态时会调用的一个函数列表
+        repeater (repeater.Repeater): 发送时所用的 Repeater，默认为 None
+        procmon: 用于添加进程监视器的接口（已弃用）
+        procmon_options: 同上
 
     """
 
@@ -73,11 +71,11 @@ class Target:
         procmon_options=None,
         **kwargs
     ):
-        self._fuzz_data_logger = None
+        self._fuzz_data_logger = None # 模糊测试数据记录器
 
         self._target_connection = connection
-        self.max_recv_bytes = max_recv_bytes
-        self.repeater = repeater
+        self.max_recv_bytes = max_recv_bytes # 最大接收字节数
+        self.repeater = repeater # repeater 是什么？或许类似于 Burp Repeater
         self.monitors = monitors if monitors is not None else []
         if procmon is not None:
             if procmon_options is not None:
@@ -105,7 +103,10 @@ class Target:
             self.monitors.append(kwargs["netmon"])
 
         # set these manually once target is instantiated.
-        self.vmcontrol = None
+        """vmcontrol 应该和目标的重启有关，如果 vmcontrol 可用，那
+        # 么就会恢复虚拟机快照。这个选项可能是在说明目标是运行在虚拟机中的。
+        """
+        self.vmcontrol = None 
         self.vmcontrol_options = {}
 
     @property
@@ -151,10 +152,9 @@ class Target:
 
     def monitors_alive(self):
         """
-        Wait for the monitors to become alive / establish connection to the RPC server.
-        This method is called on every restart of the target and when it's added to a session.
-        After successful probing, a callback is called, passing the monitor.
-
+        等待监视器启动（活跃）/与 RPC 服务器建立连接。
+        当某个 target 被添加到 session 中时，target 的每一次重启都会调用该方法。
+        在成功 probing 后，会调用一个回调函数，并将 monitor 传进去。
         :return: None
         """
         for monitor in self.monitors:
@@ -221,7 +221,7 @@ class Target:
 
     def set_fuzz_data_logger(self, fuzz_data_logger):
         """
-        Set this object's fuzz data logger -- for sent and received fuzz data.
+        设置当前 Target 对象的 fuzz 数据记录器--用于发送和接收 fuzz 数据。
 
         :param fuzz_data_logger: New logger.
         :type fuzz_data_logger: ifuzz_logger.IFuzzLogger
@@ -373,60 +373,45 @@ def open_test_run(db_filename, port=constants.DEFAULT_WEB_UI_PORT, address=const
 
 
 class Session(pgraph.Graph):
-    """
-    Extends pgraph.graph and provides a container for architecting protocol dialogs.
+    """继承自 pgraph.graph，为协议对话的构造提供了一个容器。
 
     Args:
-        session_filename (str): Filename to serialize persistent data to. Default None.
-        index_start (int);      First test case index to run
-        index_end (int);        Last test case index to run
-        sleep_time (float):     Time in seconds to sleep in between tests. Default 0.
-        restart_interval (int): Restart the target after n test cases, disable by setting to 0 (default).
-        console_gui (bool):     Use curses to generate a static console screen similar to the webinterface. Has not been
-                                tested under Windows. Default False.
-        crash_threshold_request (int):  Maximum number of crashes allowed before a request is exhausted. Default 12.
-        crash_threshold_element (int):  Maximum number of crashes allowed before an element is exhausted. Default 3.
-        restart_sleep_time (int): Time in seconds to sleep when target can't be restarted. Default 5.
-        restart_callbacks (list of method): The registered method will be called after a failed post_test_case_callback
-                                            Default None.
-        restart_threshold (int):    Maximum number of retries on lost target connection. Default None (indefinitely).
-        restart_timeout (float):    Time in seconds for that a connection attempt should be retried. Default None
-                                    (indefinitely).
-        pre_send_callbacks (list of method): The registered method will be called prior to each fuzz request.
-                                            Default None.
-        post_test_case_callbacks (list of method): The registered method will be called after each fuzz test case.
-                                                  Default None.
-        post_start_target_callbacks (list of method): Method(s) will be called after the target is started or restarted,
-                                                      say, by a process monitor.
-        web_port (int or None): Port for monitoring fuzzing campaign via a web browser. Set to None to disable the web
-                                app. Default 26000.
-        keep_web_open (bool):     Keep the webinterface open after session completion. Default True.
-        fuzz_loggers (list of ifuzz_logger.IFuzzLogger): For saving test data and results.. Default Log to STDOUT.
+        session_filename (str): 存放序列化数据的文件名，默认为 None
+        index_start (int);      要运行的第一个测试用例的索引
+        index_end (int);        要运行的最后一个测试用例的索引
+        sleep_time (float):     测试用例之间等待的秒数，默认为 0
+        restart_interval (int): 在 n 个测试用例之后重启目标。默认情况下为0，表示禁用该选项
+        console_gui (bool):     是否使用 curses 在 web 端生成一个静态控制台，默认为 False（还未在 Windows 下进行测试）
+        crash_threshold_request (int):  请求耗尽之前允许的最大崩溃次数，默认为 12。
+        crash_threshold_element (int):  元素耗尽之前允许的最大崩溃次数，默认为 3
+        restart_sleep_time (int): 当目标无法重启时等待的秒数，默认为5
+        restart_callbacks (list of method): 在 `post_test_case_callback` 失败后调用的回调方法列表，默认为 None
+        restart_threshold (int):    丢失目标连接时的最大重试次数，默认为 None（无限次）
+        restart_timeout (float):    重新连接尝试的超时时间（秒），默认为 None（无限次）
+        pre_send_callbacks (list of method): 在每个模糊（测试）请求之前调用的注册方法列表，默认为 None
+        post_test_case_callbacks (list of method): 在每个模糊测试用例之后调用的注册方法列表，默认为None
+        post_start_target_callbacks (list of method): 目标启动或重新启动后进程监视器调用的方法，默认为 None 。
+        web_port (int or None): 通过 Web 浏览器监视模糊测试活动的端口。设置为 None 表示禁用 Web 应用程序，默认为 26000
+        keep_web_open (bool): 在会话完成后保持 Web 界面打开，默认为 True
+        fuzz_loggers (list of ifuzz_logger.IFuzzLogger): 日志记录器列表，用于保存测试数据和结果。默认将日志记录到 STDOUT 。
         fuzz_db_keep_only_n_pass_cases (int): Minimize disk usage by only saving passing test cases
                                               if they are in the n test cases preceding a failure or error.
                                               Set to 0 to save after every test case (high disk I/O!). Default 0.
-        receive_data_after_each_request (bool): If True, Session will attempt to receive a reply after transmitting
-                                                each non-fuzzed node. Default True.
+        receive_data_after_each_request (bool): 如果为 True，在传输每个不进行模糊测试的节点后尝试接收回复，默认为True。
         check_data_received_each_request (bool): If True, Session will verify that some data has
                                                  been received after transmitting each non-fuzzed node, and if not,
                                                  register a failure. If False, this check will not be performed. Default
                                                  False. A receive attempt is still made unless
                                                  receive_data_after_each_request is False.
-        receive_data_after_fuzz (bool): If True, Session will attempt to receive a reply after transmitting
-                                        a fuzzed message. Default False.
-        ignore_connection_reset (bool): Log ECONNRESET errors ("Target connection reset") as "info" instead of
-                                failures.
-        ignore_connection_aborted (bool): Log ECONNABORTED errors as "info" instead of failures.
-        ignore_connection_issues_when_sending_fuzz_data (bool): Ignore fuzz data transmission failures. Default True.
-                                This is usually a helpful setting to enable, as targets may drop connections once a
-                                message is clearly invalid.
+        receive_data_after_fuzz (bool): 如果该变量为真，那么在传输完一个 fuzzed 消息后，Session 会尝试接收一个响应
+        ignore_connection_reset (bool): 将 ECONNREST 错误（目标连接复位）记录为 “info” 而非 failures
+        ignore_connection_aborted (bool): 将ECONNABORTED错误记录为"info"而不是失败，默认为False。
+        ignore_connection_issues_when_sending_fuzz_data (bool): 忽略发送模糊数据时的连接故障，默认为 True。这通常是一个有用的设置，因为目标一旦消息明显无效就可能会断开连接。
         ignore_connection_ssl_errors (bool): Log SSL related errors as "info" instead of failures. Default False.
-        reuse_target_connection (bool): If True, only use one target connection instead of reconnecting each test case.
-                                        Default False.
-        target (Target):        Target for fuzz session. Target must be fully initialized. Default None.
-        db_filename (str):      Filename to store sqlite db for test results and case information.
-                                Defaults to ./boofuzz-results/{uniq_timestamp}.db
-        web_address:            Address where's Boofuzz logger exposed. Default 'localhost'
+        reuse_target_connection (bool): 如果为 True，则只使用一个目标连接（Target connection），而不是每个测试用例都重新连接。默认为 False。
+        target (Target):        模糊（测试）会话的目标，必须完全初始化。默认为 None。
+        db_filename (str):      存储测试结果和案例信息的 SQLite 数据库文件名。默认为 `./boofuzz-results/{uniq_timestamp}.db`。
+        web_address:            Bofuzz 记录器对外的地址，默认为 `localhost`。
     """
 
     def __init__(
@@ -494,7 +479,7 @@ class Session(pgraph.Graph):
             else:
                 fuzz_loggers = [fuzz_logger_text.FuzzLoggerText()]
 
-        self._run_id = datetime.datetime.utcnow().replace(microsecond=0).isoformat().replace(":", "-")
+        self._run_id = datetime.datetime.utcnow().replace(microsecond=0).isoformat().replace(":", "-") # 运行 id，形如 '2023-08-17T02-47-17'
         if db_filename is not None:
             helpers.mkdir_safe(db_filename, file_included=True)
             self._db_filename = db_filename
@@ -599,11 +584,12 @@ class Session(pgraph.Graph):
 
     def add_node(self, node):
         """
-        Add a pgraph node to the graph. We overload this routine to automatically generate and assign an ID whenever a
-        node is added.
+        将一个 pgraph 节点加入图中，当一个节点加入图中时，就会自动生成并分配一个 ID 给该节点。
 
         Args:
-            node (pgraph.Node): Node to add to session graph
+            node (pgraph.Node): 要加入会话图的节点
+
+
         """
 
         node.number = len(self.nodes)
@@ -616,10 +602,11 @@ class Session(pgraph.Graph):
 
     def add_target(self, target):
         """
+        将一个 target 加入到 session 中
         Add a target to the session. Multiple targets can be added for parallel fuzzing.
 
         Args:
-            target (Target): Target to add to session
+            target (Target): 要加入 session 的 Target 对象
         """
 
         # pass specified target parameters to the PED-RPC server.
@@ -1227,6 +1214,7 @@ class Session(pgraph.Graph):
         self.last_recv = received
 
     def build_webapp_thread(self, port=constants.DEFAULT_WEB_UI_PORT, address=constants.DEFAULT_WEB_UI_ADDRESS):
+        """Session 对象作为 flask 实例的 session 属性，之后利用 Tornado 根据 flask 实例创建 http 服务"""
         app.session = self
         http_server = HTTPServer(WSGIContainer(app))
         while True:

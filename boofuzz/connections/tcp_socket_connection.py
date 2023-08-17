@@ -7,16 +7,16 @@ from boofuzz.connections import base_socket_connection
 
 
 class TCPSocketConnection(base_socket_connection.BaseSocketConnection):
-    """BaseSocketConnection implementation for use with TCP Sockets.
+    """一个使用 TCP 套接字的 BaseSocketConnection 实现
 
     .. versionadded:: 0.2.0
 
     Args:
-        host (str): Hostname or IP adress of target system.
-        port (int): Port of target service.
-        send_timeout (float): Seconds to wait for send before timing out. Default 5.0.
-        recv_timeout (float): Seconds to wait for recv before timing out. Default 5.0.
-        server (bool): Set to True to enable server side fuzzing.
+        host (str): 目标系统的主机名或 IP 地址。
+        port (int): 目标服务的端口号。
+        send_timeout (float): 超时前等待的发送秒数，默认为 5.0。
+        recv_timeout (float): 超时前等待的接收秒数，默认为 5.0。
+        server (bool): server 为真 表示启用服务端模糊测试。
 
     """
 

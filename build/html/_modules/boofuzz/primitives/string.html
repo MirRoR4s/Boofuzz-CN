@@ -47,13 +47,13 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Target.html">Target</a></li>
@@ -102,28 +102,23 @@
 
 
 <div class="viewcode-block" id="String"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.String">[docs]</a><span class="k">class</span> <span class="nc">String</span><span class="p">(</span><span class="n">Fuzzable</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Primitive that cycles through a library of &quot;bad&quot; strings.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;通过某种糟糕的字符串进行循环迭代的原语。</span>
 
-<span class="sd">    The class variable &#39;fuzz_library&#39; contains a list of</span>
-<span class="sd">    smart fuzz values global across all instances. The &#39;this_library&#39; variable contains fuzz values specific to</span>
-<span class="sd">    the instantiated primitive. This allows us to avoid copying the near ~70MB fuzz_library data structure across</span>
-<span class="sd">    each instantiated primitive.</span>
+<span class="sd">    类变量 &#39;fuzz_library&#39; 是一个包含着 fuzz 值的列表，所有实例都可共享该变量.</span>
 
-<span class="sd">    :type name: str, optional</span>
-<span class="sd">    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,</span>
-<span class="sd">        defaults to None</span>
-<span class="sd">    :type default_value: str</span>
-<span class="sd">    :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value.</span>
-<span class="sd">    :type size: int, optional</span>
-<span class="sd">    :param size: Static size of this field, leave None for dynamic, defaults to None</span>
-<span class="sd">    :type padding: chr, optional</span>
-<span class="sd">    :param padding: Value to use as padding to fill static field size, defaults to &quot;\\x00&quot;</span>
-<span class="sd">    :type encoding: str, optional</span>
-<span class="sd">    :param encoding: String encoding, ex: utf_16_le for Microsoft Unicode, defaults to ascii</span>
-<span class="sd">    :type max_len: int, optional</span>
-<span class="sd">    :param max_len: Maximum string length, defaults to None</span>
-<span class="sd">    :type fuzzable: bool, optional</span>
-<span class="sd">    :param fuzzable: Enable/disable fuzzing of this primitive, defaults to true</span>
+<span class="sd">    :type name: str, 可选</span>
+<span class="sd">    :param name: 名称，用于后续引用。若未提供名称，那么默认为 None。</span>
+<span class="sd">    :type default_value: str，可选</span>
+<span class="sd">    :param default_value: 当元素不进行模糊测试时所用的值，通常情况下应是一个有效值。</span>
+<span class="sd">    :type size: int, 可选</span>
+<span class="sd">    :param size: 该字段的静态长度，若为 None 则表示该字段是动态的。默认为 None。</span>
+<span class="sd">    :type padding: chr, 可选</span>
+<span class="sd">    :param padding: 用于填充静态字段长度的值，默认为 &quot;\\x00&quot;。</span>
+<span class="sd">    :type encoding: str, 可选</span>
+<span class="sd">    :param encoding: 字符串编码类型，比如微软的 Unicode utf_16_le。</span>
+<span class="sd">    :param max_len: 最大字符串长度，默认为 None。</span>
+<span class="sd">    :type fuzzable: bool, 可选</span>
+<span class="sd">    :param fuzzable: 启用/禁用对该原语的模糊测试，默认为 true。</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># store fuzz_library as a class variable to avoid copying the ~70MB structure across each instantiated primitive.</span>
@@ -295,11 +290,12 @@
 
         <span class="n">local_random</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># We want constant random numbers to generate reproducible test cases</span>
         <span class="n">previous_length</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="c1"># For every length add a random number of random indices to the random_indices dict. Prevent duplicates by</span>
+        <span class="c1"># For every length, add a random number of random indices to the random_indices dict. Prevent duplicates by</span>
         <span class="c1"># adding only indices in between previous_length and current length.</span>
         <span class="k">for</span> <span class="n">length</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_long_string_lengths</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">random_indices</span><span class="p">[</span><span class="n">length</span><span class="p">]</span> <span class="o">=</span> <span class="n">local_random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
-                <span class="nb">range</span><span class="p">(</span><span class="n">previous_length</span><span class="p">,</span> <span class="n">length</span><span class="p">),</span> <span class="n">local_random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_long_string_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="nb">range</span><span class="p">(</span><span class="n">previous_length</span><span class="p">,</span> <span class="n">length</span><span class="p">),</span> <span class="n">local_random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_long_string_lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># 生成一个范围在 preL 和 L</span>
+                <span class="c1"># 之间的长度为 randint 的列表</span>
             <span class="p">)</span>
             <span class="n">previous_length</span> <span class="o">=</span> <span class="n">length</span>
 
