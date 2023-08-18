@@ -373,12 +373,12 @@ def open_test_run(db_filename, port=constants.DEFAULT_WEB_UI_PORT, address=const
 
 
 class Session(pgraph.Graph):
-    """继承自 pgraph.graph，为协议对话的构造提供了一个容器。
+    """继承自 pgraph.graph，为协议交互的构造提供了一个容器。
 
     Args:
         session_filename (str): 存放序列化数据的文件名，默认为 None
-        index_start (int);      要运行的第一个测试用例的索引
-        index_end (int);        要运行的最后一个测试用例的索引
+        index_start (int): 要运行的第一个测试用例的索引
+        index_end (int): 要运行的最后一个测试用例的索引
         sleep_time (float):     测试用例之间等待的秒数，默认为 0
         restart_interval (int): 在 n 个测试用例之后重启目标。默认情况下为0，表示禁用该选项
         console_gui (bool):     是否使用 curses 在 web 端生成一个静态控制台，默认为 False（还未在 Windows 下进行测试）
@@ -410,8 +410,8 @@ class Session(pgraph.Graph):
         ignore_connection_ssl_errors (bool): Log SSL related errors as "info" instead of failures. Default False.
         reuse_target_connection (bool): 如果为 True，则只使用一个目标连接（Target connection），而不是每个测试用例都重新连接。默认为 False。
         target (Target):        模糊（测试）会话的目标，必须完全初始化。默认为 None。
-        db_filename (str):      存储测试结果和案例信息的 SQLite 数据库文件名。默认为 `./boofuzz-results/{uniq_timestamp}.db`。
-        web_address:            Bofuzz 记录器对外的地址，默认为 `localhost`。
+        db_filename (str):      存储测试结果和案例信息的 SQLite 数据库文件名。默认为 **./boofuzz-results/{uniq_timestamp}.db**。
+        web_address:            Bofuzz 记录器对外的地址，默认为 localhost。
     """
 
     def __init__(
@@ -584,7 +584,7 @@ class Session(pgraph.Graph):
 
     def add_node(self, node):
         """
-        将一个 pgraph 节点加入图中，当一个节点加入图中时，就会自动生成并分配一个 ID 给该节点。
+        将一个 pgraph 节点加入图中并自动生成分配一个 ID 给该节点。
 
         Args:
             node (pgraph.Node): 要加入会话图的节点
@@ -600,11 +600,13 @@ class Session(pgraph.Graph):
 
     def add_target(self, target):
         """
+        将一个 target 加入到 session 中，可同时对多个目标进行模糊测试。
+
         Add a target to the session. Multiple targets can be added for parallel fuzzing.
-        将一个 target 加入到 session 中。
+        
 
         Args:
-            target (Target): 要加入 session 的 Target 对象
+            target (Target): 要加入 session 的 Target 对象。
         """
 
         # pass specified target parameters to the PED-RPC server.
@@ -620,32 +622,41 @@ class Session(pgraph.Graph):
     def connect(self, src, dst=None, callback=None):
         """
         在两个 request（nodes）之间创建一个 Connection 对象并注册一个回调函数用于处理源请求和目的请求之间的传输过程。
-        session 类维持着一个顶级的节点即根节点，所有初始 requests 都必须连接到根节点。
+        Session 类维持着一个顶级节点（根节点），所有的 requests 初始时都必须连接到该节点，例如：
 
     
-        Create a connection between the two requests (nodes) and register an optional callback to process in between
+        （Create a connection between the two requests (nodes) and register an optional callback to process in between
         transmissions of the source and destination request. The session class maintains a top level node that all
-        initial requests must be connected to. Example::
+        initial requests must be connected to. Example）
+        ::
 
             sess = sessions.session()
             sess.connect(sess.root, s_get("HTTP"))
 
-        If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.
-        This is a convenient alias. The following line is identical to the second line from the above example::
+        
+        如果仅给定了一个参数，那么 sess.connect() 默认会将该节点与根节点连接起来。
+
+        （If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.
+        This is a convenient alias. The following line is identical to the second line from the above example）
+        ::
 
             sess.connect(s_get("HTTP"))
 
-        Leverage callback methods to handle situations such as challenge response systems.
+        
+        利用回调方法来处理类似于挑战应答机制的情况。回调方法必须遵循 :meth:`Session.example_test_case_callback` 这样的消息签名，同时为了
+        后续的兼容性，记得在参数中加上 \\*\\*kwargs。
+
+        （Leverage callback methods to handle situations such as challenge response systems.
         A callback method must follow the message signature of :meth:`Session.example_test_case_callback`.
-        Remember to include \\*\\*kwargs for forward-compatibility.
+        Remember to include \\*\\*kwargs for forward-compatibility.）
 
         Args:
-            src (str or Request (pgrah.Node)): Source request name or request node
-            dst (str or Request (pgrah.Node), optional): Destination request name or request node
-            callback (def, optional): Callback function to pass received data to between node xmits. Default None.
+            src (str or Request (pgrah.Node)): 源 request 名称或 reques 节点。（Source request name or request node）
+            dst (str or Request (pgrah.Node), optional): 目的 request 名称或节点。（Destination request name or request node）
+            callback (def, optional): 回调函数。（Callback function to pass received data to between node xmits. Default None.）
 
         Returns:
-            pgraph.Edge: The edge between the src and dst.
+            pgraph.Edge: src 和 dst 之间的边。（The edge between the src and dst.）
         """
         # if only a source was provided, then make it the destination and set the source to the root node.
         if dst is None:
@@ -754,15 +765,24 @@ class Session(pgraph.Graph):
 
     def num_mutations(self, max_depth=None):
         """
-        Number of total mutations in the graph. The logic of this routine is identical to that of fuzz(). See fuzz()
-        for inline comments. The member variable self.total_num_mutations is updated appropriately by this routine.
+        图中的总变异数。
+
+        Number of total mutations in the graph. 
+        
+        该方法的逻辑与 fuzz() 是相同的，具体可参看 fuzz()。
+
+        The logic of this routine is identical to that of fuzz(). See fuzz()
+        for inline comments. 
+        
+        通过该方法可对 self.total_num_mutations 成员变量进行更新。
+
+        The member variable self.total_num_mutations is updated appropriately by this routine.
 
         Args:
-            max_depth (int): Maximum combinatorial depth used for fuzzing. num_mutations returns None if this value is
-            None or greater than 1, as the number of mutations is typically very large when using combinatorial fuzzing.
-
+            max_depth (int): 模糊测试所用的最大组合深度。如果该值为 None 或者大于等于1，那么 num_mutations 返回 None，因为在使用组合模糊测试时，变异数通常是非常大的。（Maximum combinatorial depth used for fuzzing. num_mutations returns None if this value is None or greater than 1, as the number of mutations is typically very large when using combinatorial fuzzing.）
+        
         Returns:
-            int: Total number of mutations in this session.
+            int: 当前 session 对象的总变异数。（Total number of mutations in this session.）
         """
         if max_depth is None or max_depth > 1:
             self.total_num_mutations = None
@@ -1216,7 +1236,11 @@ class Session(pgraph.Graph):
         self.last_recv = received
 
     def build_webapp_thread(self, port=constants.DEFAULT_WEB_UI_PORT, address=constants.DEFAULT_WEB_UI_ADDRESS):
-        """Session 对象作为 flask 实例的 session 属性，之后利用 Tornado 根据 flask 实例创建 http 服务"""
+        """
+        构建 web 应用程序进程，具体来说
+        Session 对象作为 flask 实例的 session 属性，之后利用 Tornado 根据 flask 实例创建 http 服务。
+        
+        """
         app.session = self
         http_server = HTTPServer(WSGIContainer(app))
         while True:
@@ -1454,12 +1478,9 @@ class Session(pgraph.Graph):
 
     def _generate_mutations_indefinitely(self, max_depth=None, path=None):
         """
-        在一个消息列表中，通过生成器函数 yield 生成变异上下文对象，每个消息生成的变异上下文数量为 n，并且 n 的值会无限递增。
-        
-        具体来说，假设有一组消息，例如：[message1, message2, message3, ...]。开始时，每个消息生成的变异上下文数量为 1。
-        所以，对于每个消息，会生成一个变异上下文对象（MutationContext），然后在下一个消息中，变异数量增加到 2，依次类推。
+        在所有消息中，每条消息产生具有 n 个变异的 MutationContext 对象，n 的值会无限增加。
 
-        Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely."""
+        （Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely.）"""
         depth = 1
         while max_depth is None or depth <= max_depth:
             valid_case_found_at_this_depth = False
@@ -1471,20 +1492,26 @@ class Session(pgraph.Graph):
             depth += 1
 
     def _generate_n_mutations(self, depth, path):
-        """Yield MutationContext with n mutations per message over all messages."""
+        """
+        对所有消息来说，每个消息都利用 n 个 变异产生一个 MutationContext 对象。
+
+        Yield MutationContext with n mutations per message over all messages."""
         for path in self._iterate_protocol_message_paths(path=path):
             for m in self._generate_n_mutations_for_path(path, depth=depth):
                 yield m
 
     def _generate_n_mutations_for_path(self, path, depth):
-        """Yield MutationContext with n mutations for a specific message.
+        """
+        利用 n 个变异产生某个特定消息（实质上对应着一条边即一个 Connection 对象）的 MutationContext 对象。
+
+        Yield MutationContext with n mutations for a specific message.
 
         Args:
             path (list of Connection): Nodes (Requests) along the path to the current one being fuzzed.
             depth (int): Yield sets of depth mutations.
 
         Yields:
-            MutationContext: A MutationContext containing one mutation.
+            MutationContext: 包含着一个变异的 MutationContext 对象。（A MutationContext containing one mutation.）
         """
         for mutations in self._generate_n_mutations_for_path_recursive(path, depth=depth):
             if not self._mutations_contain_duplicate(mutations):
@@ -1505,13 +1532,15 @@ class Session(pgraph.Graph):
 
     def _iterate_protocol_message_paths(self, path=None):
         """
+        遍历协议并产生一条到达某个给定消息的路径。（Connection 对象的列表）
+
         Iterates over protocol and yields a path (list of Connection) leading to a given message).
 
         Args:
             path (list of Connection): Provide a specific path to yield only that specific path.
 
         Yields:
-            list of Connection: List of edges along the path to the current one being fuzzed.
+            list of Connection: 沿着当前路径到达当前被 fuzzed 节点的边列表。（List of edges along the path to the current one being fuzzed.）
 
         Raises:
             exception.SulleyRuntimeError: If no requests defined or no targets specified
@@ -1520,7 +1549,7 @@ class Session(pgraph.Graph):
         if not self.targets:
             raise exception.SullyRuntimeError("No targets specified in session")
 
-        if not self.edges_from(self.root.id):
+        if not self.edges_from(self.root.id): # 获得从给定节点开始的所有边，以列表的形式返回。
             raise exception.SullyRuntimeError("No requests specified in session")
 
         if path is not None:
@@ -1530,18 +1559,23 @@ class Session(pgraph.Graph):
                 yield x
 
     def _iterate_protocol_message_paths_recursive(self, this_node, path):
-        """Recursive helper for _iterate_protocol.
+        """
+        
+        Recursive helper for _iterate_protocol.
 
         Args:
-            this_node (node.Node): Current node that is being fuzzed.
+            this_node (node.Node): 当前正被模糊测试的节点。（Current node that is being fuzzed.）
             path (list of Connection): List of edges along the path to the current one being fuzzed.
 
         Yields:
             list of Connection: List of edges along the path to the current one being fuzzed.
         """
-        # step through every edge from the current node.
+        # 获得以当前节点为起点的所有边。step through every edge from the current node.
         for edge in self.edges_from(this_node.id):
             # keep track of the path as we fuzz through it, don't count the root node.
+
+            # 我们保持与节点相对应的边的追踪，因为如果存在超过一条路径通过了一个给定节点的集合，那么我们不想要任何的二义性。
+            
             # we keep track of edges as opposed to nodes because if there is more then one path through a set of
             # given nodes we don't want any ambiguity.
             path.append(edge)
@@ -1552,7 +1586,7 @@ class Session(pgraph.Graph):
 
             yield path
 
-            # recursively fuzz the remainder of the nodes in the session graph.
+            # 递归地对会话图中的剩余节点进行模糊测试。recursively fuzz the remainder of the nodes in the session graph.
             for x in self._iterate_protocol_message_paths_recursive(self.fuzz_node, path):
                 yield x
 
@@ -1568,14 +1602,17 @@ class Session(pgraph.Graph):
         return False
 
     def _generate_mutations_for_request(self, path, skip_elements=None):
-        """Yield each mutation for a specific message (the last message in path).
+        """
+        
+
+        Yield each mutation for a specific message (the last message in path).
 
         Args:
             path (list of Connection): Nodes (Requests) along the path to the current one being fuzzed.
             path (iter of str): Qualified names of elements to skip while fuzzing.
 
         Yields:
-            Mutation: Mutation object describing a single mutation.
+            Mutation: 描述单个变异的 Mutation 对象。（Mutation object describing a single mutation.）
         """
         if skip_elements is None:
             skip_elements = []

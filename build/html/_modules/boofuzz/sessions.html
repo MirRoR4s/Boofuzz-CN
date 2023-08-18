@@ -469,12 +469,12 @@
 
 
 <div class="viewcode-block" id="Session"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session">[docs]</a><span class="k">class</span> <span class="nc">Session</span><span class="p">(</span><span class="n">pgraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;继承自 pgraph.graph，为协议对话的构造提供了一个容器。</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;继承自 pgraph.graph，为协议交互的构造提供了一个容器。</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        session_filename (str): 存放序列化数据的文件名，默认为 None</span>
-<span class="sd">        index_start (int);      要运行的第一个测试用例的索引</span>
-<span class="sd">        index_end (int);        要运行的最后一个测试用例的索引</span>
+<span class="sd">        index_start (int): 要运行的第一个测试用例的索引</span>
+<span class="sd">        index_end (int): 要运行的最后一个测试用例的索引</span>
 <span class="sd">        sleep_time (float):     测试用例之间等待的秒数，默认为 0</span>
 <span class="sd">        restart_interval (int): 在 n 个测试用例之后重启目标。默认情况下为0，表示禁用该选项</span>
 <span class="sd">        console_gui (bool):     是否使用 curses 在 web 端生成一个静态控制台，默认为 False（还未在 Windows 下进行测试）</span>
@@ -506,8 +506,8 @@
 <span class="sd">        ignore_connection_ssl_errors (bool): Log SSL related errors as &quot;info&quot; instead of failures. Default False.</span>
 <span class="sd">        reuse_target_connection (bool): 如果为 True，则只使用一个目标连接（Target connection），而不是每个测试用例都重新连接。默认为 False。</span>
 <span class="sd">        target (Target):        模糊（测试）会话的目标，必须完全初始化。默认为 None。</span>
-<span class="sd">        db_filename (str):      存储测试结果和案例信息的 SQLite 数据库文件名。默认为 `./boofuzz-results/{uniq_timestamp}.db`。</span>
-<span class="sd">        web_address:            Bofuzz 记录器对外的地址，默认为 `localhost`。</span>
+<span class="sd">        db_filename (str):      存储测试结果和案例信息的 SQLite 数据库文件名。默认为 **./boofuzz-results/{uniq_timestamp}.db**。</span>
+<span class="sd">        web_address:            Bofuzz 记录器对外的地址，默认为 localhost。</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -680,7 +680,7 @@
 
 <div class="viewcode-block" id="Session.add_node"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session.add_node">[docs]</a>    <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        将一个 pgraph 节点加入图中，当一个节点加入图中时，就会自动生成并分配一个 ID 给该节点。</span>
+<span class="sd">        将一个 pgraph 节点加入图中并自动生成分配一个 ID 给该节点。</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            node (pgraph.Node): 要加入会话图的节点</span>
@@ -696,11 +696,13 @@
 
 <div class="viewcode-block" id="Session.add_target"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session.add_target">[docs]</a>    <span class="k">def</span> <span class="nf">add_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        将一个 target 加入到 session 中，可同时对多个目标进行模糊测试。</span>
+
 <span class="sd">        Add a target to the session. Multiple targets can be added for parallel fuzzing.</span>
-<span class="sd">        将一个 target 加入到 session 中。</span>
+<span class="sd">        </span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            target (Target): 要加入 session 的 Target 对象</span>
+<span class="sd">            target (Target): 要加入 session 的 Target 对象。</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># pass specified target parameters to the PED-RPC server.</span>
@@ -716,32 +718,40 @@
 <div class="viewcode-block" id="Session.connect"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        在两个 request（nodes）之间创建一个 Connection 对象并注册一个回调函数用于处理源请求和目的请求之间的传输过程。</span>
-<span class="sd">        session 类维持着一个顶级的节点即根节点，所有初始 requests 都必须连接到根节点。</span>
+<span class="sd">        Session 类维持着一个顶级节点（根节点），所有的 requests 初始时都必须连接到该节点，例如：</span>
 
 <span class="sd">    </span>
-<span class="sd">        Create a connection between the two requests (nodes) and register an optional callback to process in between</span>
+<span class="sd">        （Create a connection between the two requests (nodes) and register an optional callback to process in between</span>
 <span class="sd">        transmissions of the source and destination request. The session class maintains a top level node that all</span>
-<span class="sd">        initial requests must be connected to. Example::</span>
+<span class="sd">        initial requests must be connected to. Example）::</span>
 
 <span class="sd">            sess = sessions.session()</span>
 <span class="sd">            sess.connect(sess.root, s_get(&quot;HTTP&quot;))</span>
 
-<span class="sd">        If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.</span>
-<span class="sd">        This is a convenient alias. The following line is identical to the second line from the above example::</span>
+<span class="sd">        </span>
+<span class="sd">        如果仅给定了一个参数，那么 sess.connect() 默认会将该节点与根节点连接起来。</span>
+
+<span class="sd">        （If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.</span>
+<span class="sd">        This is a convenient alias. The following line is identical to the second line from the above example</span>
+<span class="sd">        ::</span>
 
 <span class="sd">            sess.connect(s_get(&quot;HTTP&quot;))</span>
 
-<span class="sd">        Leverage callback methods to handle situations such as challenge response systems.</span>
+<span class="sd">        </span>
+<span class="sd">        利用回调方法来处理类似于挑战应答机制的情况。回调方法必须遵循 :meth:`Session.example_test_case_callback` 这样的消息签名，同时为了</span>
+<span class="sd">        后续的兼容性，记得在参数中加上 \\*\\*kwargs。</span>
+
+<span class="sd">        （Leverage callback methods to handle situations such as challenge response systems.</span>
 <span class="sd">        A callback method must follow the message signature of :meth:`Session.example_test_case_callback`.</span>
-<span class="sd">        Remember to include \\*\\*kwargs for forward-compatibility.</span>
+<span class="sd">        Remember to include \\*\\*kwargs for forward-compatibility.）</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            src (str or Request (pgrah.Node)): Source request name or request node</span>
-<span class="sd">            dst (str or Request (pgrah.Node), optional): Destination request name or request node</span>
-<span class="sd">            callback (def, optional): Callback function to pass received data to between node xmits. Default None.</span>
+<span class="sd">            src (str or Request (pgrah.Node)): 源 request 名称或 reques 节点。（Source request name or request node）</span>
+<span class="sd">            dst (str or Request (pgrah.Node), optional): 目的 request 名称或节点。（Destination request name or request node）</span>
+<span class="sd">            callback (def, optional): 回调函数。（Callback function to pass received data to between node xmits. Default None.）</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            pgraph.Edge: The edge between the src and dst.</span>
+<span class="sd">            pgraph.Edge: src 和 dst 之间的边。（The edge between the src and dst.）</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># if only a source was provided, then make it the destination and set the source to the root node.</span>
         <span class="k">if</span> <span class="n">dst</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -850,15 +860,24 @@
 
 <div class="viewcode-block" id="Session.num_mutations"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session.num_mutations">[docs]</a>    <span class="k">def</span> <span class="nf">num_mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Number of total mutations in the graph. The logic of this routine is identical to that of fuzz(). See fuzz()</span>
-<span class="sd">        for inline comments. The member variable self.total_num_mutations is updated appropriately by this routine.</span>
+<span class="sd">        图中的总变异数。</span>
+
+<span class="sd">        Number of total mutations in the graph. </span>
+<span class="sd">        </span>
+<span class="sd">        该方法的逻辑与 fuzz() 是相同的，具体可参看 fuzz()。</span>
+
+<span class="sd">        The logic of this routine is identical to that of fuzz(). See fuzz()</span>
+<span class="sd">        for inline comments. </span>
+<span class="sd">        </span>
+<span class="sd">        通过该方法可对 self.total_num_mutations 成员变量进行更新。</span>
+
+<span class="sd">        The member variable self.total_num_mutations is updated appropriately by this routine.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            max_depth (int): Maximum combinatorial depth used for fuzzing. num_mutations returns None if this value is</span>
-<span class="sd">            None or greater than 1, as the number of mutations is typically very large when using combinatorial fuzzing.</span>
-
+<span class="sd">            max_depth (int): 模糊测试所用的最大组合深度。如果该值为 None 或者大于等于1，那么 num_mutations 返回 None，因为在使用组合模糊测试时，变异数通常是非常大的。（Maximum combinatorial depth used for fuzzing. num_mutations returns None if this value is None or greater than 1, as the number of mutations is typically very large when using combinatorial fuzzing.）</span>
+<span class="sd">        </span>
 <span class="sd">        Returns:</span>
-<span class="sd">            int: Total number of mutations in this session.</span>
+<span class="sd">            int: 当前 session 对象的总变异数。（Total number of mutations in this session.）</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">max_depth</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">max_depth</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">total_num_mutations</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1312,7 +1331,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last_recv</span> <span class="o">=</span> <span class="n">received</span></div>
 
 <div class="viewcode-block" id="Session.build_webapp_thread"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session.build_webapp_thread">[docs]</a>    <span class="k">def</span> <span class="nf">build_webapp_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">DEFAULT_WEB_UI_PORT</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">DEFAULT_WEB_UI_ADDRESS</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Session 对象作为 flask 实例的 session 属性，之后利用 Tornado 根据 flask 实例创建 http 服务&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        构建 web 应用程序进程，具体来说</span>
+<span class="sd">        Session 对象作为 flask 实例的 session 属性，之后利用 Tornado 根据 flask 实例创建 http 服务。</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">app</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="n">http_server</span> <span class="o">=</span> <span class="n">HTTPServer</span><span class="p">(</span><span class="n">WSGIContainer</span><span class="p">(</span><span class="n">app</span><span class="p">))</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -1550,11 +1573,9 @@
 
 <div class="viewcode-block" id="Session._generate_mutations_indefinitely"><a class="viewcode-back" href="../../source/Session.html#boofuzz.Session._generate_mutations_indefinitely">[docs]</a>    <span class="k">def</span> <span class="nf">_generate_mutations_indefinitely</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        在一个消息列表中，通过生成器函数 yield 生成变异上下文对象，每个消息生成的变异上下文数量为 n，并且 n 的值会无限递增。</span>
-<span class="sd">        具体来说，假设你有一组消息，例如：[message1, message2, message3, ...]。开始时，每个消息生成的变异上下文数量为 1。</span>
-<span class="sd">        所以，对于每个消息，会生成一个变异上下文对象（MutationContext），然后在下一个消息中，变异数量增加到 2，依次类推。</span>
-<span class="sd">        </span>
-<span class="sd">        Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely.&quot;&quot;&quot;</span>
+<span class="sd">        在所有消息中，每条消息产生具有 n 个变异的 MutationContext 对象，n 的值会无限增加。</span>
+
+<span class="sd">        （Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely.）&quot;&quot;&quot;</span>
         <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">while</span> <span class="n">max_depth</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">depth</span> <span class="o">&lt;=</span> <span class="n">max_depth</span><span class="p">:</span>
             <span class="n">valid_case_found_at_this_depth</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1566,20 +1587,26 @@
             <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
     <span class="k">def</span> <span class="nf">_generate_n_mutations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield MutationContext with n mutations per message over all messages.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        对所有消息来说，每个消息都利用 n 个 变异产生一个 MutationContext 对象。</span>
+
+<span class="sd">        Yield MutationContext with n mutations per message over all messages.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iterate_protocol_message_paths</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_n_mutations_for_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">):</span>
                 <span class="k">yield</span> <span class="n">m</span>
 
     <span class="k">def</span> <span class="nf">_generate_n_mutations_for_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield MutationContext with n mutations for a specific message.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        利用 n 个变异产生某个特定消息（实质上对应着一条边即一个 Connection 对象）的 MutationContext 对象。</span>
+
+<span class="sd">        Yield MutationContext with n mutations for a specific message.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            path (list of Connection): Nodes (Requests) along the path to the current one being fuzzed.</span>
 <span class="sd">            depth (int): Yield sets of depth mutations.</span>
 
 <span class="sd">        Yields:</span>
-<span class="sd">            MutationContext: A MutationContext containing one mutation.</span>
+<span class="sd">            MutationContext: 包含着一个变异的 MutationContext 对象。（A MutationContext containing one mutation.）</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">mutations</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_n_mutations_for_path_recursive</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mutations_contain_duplicate</span><span class="p">(</span><span class="n">mutations</span><span class="p">):</span>
@@ -1600,13 +1627,15 @@
 
     <span class="k">def</span> <span class="nf">_iterate_protocol_message_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        遍历协议并产生一条到达某个给定消息的路径。（Connection 对象的列表）</span>
+
 <span class="sd">        Iterates over protocol and yields a path (list of Connection) leading to a given message).</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            path (list of Connection): Provide a specific path to yield only that specific path.</span>
 
 <span class="sd">        Yields:</span>
-<span class="sd">            list of Connection: List of edges along the path to the current one being fuzzed.</span>
+<span class="sd">            list of Connection: 沿着当前路径到达当前被 fuzzed 节点的边列表。（List of edges along the path to the current one being fuzzed.）</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            exception.SulleyRuntimeError: If no requests defined or no targets specified</span>
@@ -1615,7 +1644,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">SullyRuntimeError</span><span class="p">(</span><span class="s2">&quot;No targets specified in session&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">id</span><span class="p">):</span> <span class="c1"># 获得从给定节点开始的所有边，以列表的形式返回。</span>
             <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">SullyRuntimeError</span><span class="p">(</span><span class="s2">&quot;No requests specified in session&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1625,18 +1654,23 @@
                 <span class="k">yield</span> <span class="n">x</span>
 
     <span class="k">def</span> <span class="nf">_iterate_protocol_message_paths_recursive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this_node</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursive helper for _iterate_protocol.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Recursive helper for _iterate_protocol.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            this_node (node.Node): Current node that is being fuzzed.</span>
+<span class="sd">            this_node (node.Node): 当前正被模糊测试的节点。（Current node that is being fuzzed.）</span>
 <span class="sd">            path (list of Connection): List of edges along the path to the current one being fuzzed.</span>
 
 <span class="sd">        Yields:</span>
 <span class="sd">            list of Connection: List of edges along the path to the current one being fuzzed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># step through every edge from the current node.</span>
+        <span class="c1"># 获得以当前节点为起点的所有边。step through every edge from the current node.</span>
         <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_from</span><span class="p">(</span><span class="n">this_node</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
             <span class="c1"># keep track of the path as we fuzz through it, don&#39;t count the root node.</span>
+
+            <span class="c1"># 我们保持与节点相对应的边的追踪，因为如果存在超过一条路径通过了一个给定节点的集合，那么我们不想要任何的二义性。</span>
+            
             <span class="c1"># we keep track of edges as opposed to nodes because if there is more then one path through a set of</span>
             <span class="c1"># given nodes we don&#39;t want any ambiguity.</span>
             <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
@@ -1647,7 +1681,7 @@
 
             <span class="k">yield</span> <span class="n">path</span>
 
-            <span class="c1"># recursively fuzz the remainder of the nodes in the session graph.</span>
+            <span class="c1"># 递归地对会话图中的剩余节点进行模糊测试。recursively fuzz the remainder of the nodes in the session graph.</span>
             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iterate_protocol_message_paths_recursive</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fuzz_node</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
                 <span class="k">yield</span> <span class="n">x</span>
 
@@ -1663,14 +1697,17 @@
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">_generate_mutations_for_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">skip_elements</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield each mutation for a specific message (the last message in path).</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+
+<span class="sd">        Yield each mutation for a specific message (the last message in path).</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            path (list of Connection): Nodes (Requests) along the path to the current one being fuzzed.</span>
 <span class="sd">            path (iter of str): Qualified names of elements to skip while fuzzing.</span>
 
 <span class="sd">        Yields:</span>
-<span class="sd">            Mutation: Mutation object describing a single mutation.</span>
+<span class="sd">            Mutation: 描述单个变异的 Mutation 对象。（Mutation object describing a single mutation.）</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">skip_elements</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">skip_elements</span> <span class="o">=</span> <span class="p">[]</span>

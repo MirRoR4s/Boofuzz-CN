@@ -20,7 +20,7 @@ class String(Fuzzable):
     :param padding: 用于填充静态字段长度的值，默认为 "\\x00"。
     :type encoding: str, 可选
     :param encoding: 字符串编码类型，比如微软的 Unicode utf_16_le。
-    :param max_len: 最大字符串长度，默认为 None。
+    :param max_len: 变异字符串的最大长度，默认为 None。
     :type fuzzable: bool, 可选
     :param fuzzable: 启用/禁用对该原语的模糊测试，默认为 true。
     """
@@ -256,14 +256,15 @@ class String(Fuzzable):
 
     def mutations(self, default_value):
         """
+        通过逐步遍历 fuzz 库对当前原语进行变异。
         Mutate the primitive by stepping through the fuzz library extended with the "this" library, return False on
         completion.
 
         Args:
-            default_value (str): Default value of element.
+            default_value (str): 元素的默认值（Default value of element.）
 
         Yields:
-            str: Mutations
+            str: 变异后的字符串（Mutations）
         """
         last_val = None
 

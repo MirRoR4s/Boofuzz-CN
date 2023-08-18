@@ -17,7 +17,7 @@ CentOS
 
 安装
 -------
-强烈建议将 boofuzz 设置在一个 `virtual environment
+强烈建议将 boofuzz 设置在一个 `虚拟环境
 (venv) <https://docs.python.org/3/tutorial/venv.html>`_ 中。首先，创建一个目录，该目录会作为 boofuzz 的安装目录。
 
 .. It is strongly recommended to set up boofuzz in a `virtual environment
@@ -73,7 +73,7 @@ CentOS
 .. To run and test your fuzzing scripts, make sure to always activate the virtual
  environment beforehand.
 
-From Source
+源安装
 -----------
 
 

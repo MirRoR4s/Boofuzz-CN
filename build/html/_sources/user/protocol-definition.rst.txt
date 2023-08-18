@@ -44,35 +44,8 @@ example.
 
 下面对协议定义的具体实现展开分析。
 
-Fuzzable
---------
-.. autoclass:: boofuzz.Fuzzable
 
 
-context_path
-^^^^^^^^^^^^
-该方法返回一个以点分割的字符串，描述了到达当前 Fuzzable 对象的上下文路径。
-
-例如，若有一个
-名为 user 的 ``Request`` 对象，并且该对象包含了一个名为 key 的 ``String`` 原语，那么对于这个
-String 原语来说，其 context_path 就为 user。
-
-.. automethod:: boofuzz.Fuzzable.context_path
-
-qualified_name
-^^^^^^^^^^^^^^
-该方法与 context_path 基本类似，不过在末尾增加上了当前 Fuzzable 对象的 name。
-
-例如，若有一个
-名为 user 的 ``Request`` 对象，并且该对象包含了一个名为 key 的 ``String`` 原语，那么对于这个
-String 原语来说，其 qualified_name 就为 **user.key**。
-
-
-.. automethod:: boofuzz.Fuzzable.qualified_name
-
-FuzzableBlock
---------------
-.. autofunction:: boofuzz.FuzzableBlock
 
 Request
 -------
@@ -83,6 +56,7 @@ Request 是顶级容器，可含有任何 block 结构或原语 primitive。
 - stack：当前 request 对象的栈，栈中包含该 request 对象含有的块或原语。
 - block_stack：open blocks 列表？
 - names：一个包含多个 Fuzzable 对象的字典，以对象的 qualified_name 为键。
+- mutant：当前 reuqest 对象正被模糊测试的子节点，可能是 String、Delim 等原语。
 
 .. autofunction:: boofuzz.Request
 

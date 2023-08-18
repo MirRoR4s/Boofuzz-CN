@@ -80,15 +80,18 @@
 <li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.test_case_data"><code class="docutils literal notranslate"><span class="pre">Session.test_case_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.transmit_fuzz"><code class="docutils literal notranslate"><span class="pre">Session.transmit_fuzz()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.transmit_normal"><code class="docutils literal notranslate"><span class="pre">Session.transmit_normal()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session._generate_mutations_indefinitely"><code class="docutils literal notranslate"><span class="pre">Session._generate_mutations_indefinitely()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session._main_fuzz_loop"><code class="docutils literal notranslate"><span class="pre">Session._main_fuzz_loop()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#request-graph-visualisation-options">Request-Graph visualisation options</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.render_graph_gml"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_gml()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.render_graph_graphviz"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_graphviz()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.render_graph_udraw"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_udraw()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session.render_graph_udraw_update"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_udraw_update()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#boofuzz">boofuzz 模糊测试</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session._generate_mutations_indefinitely"><code class="docutils literal notranslate"><span class="pre">Session._generate_mutations_indefinitely()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boofuzz.Session._main_fuzz_loop"><code class="docutils literal notranslate"><span class="pre">Session._main_fuzz_loop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#request-graph-visualisation-options">Request-Graph visualisation options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#boofuzz.Session.render_graph_gml"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_gml()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#boofuzz.Session.render_graph_graphviz"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_graphviz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#boofuzz.Session.render_graph_udraw"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_udraw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#boofuzz.Session.render_graph_udraw_update"><code class="docutils literal notranslate"><span class="pre">Session.render_graph_udraw_update()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -135,13 +138,13 @@
 <dt class="sig sig-object py" id="boofuzz.Session">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">web_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">26000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_web_open</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crash_threshold_request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crash_threshold_element</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_sleep_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_send_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_test_case_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_start_target_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_loggers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_db_keep_only_n_pass_cases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receive_data_after_each_request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_data_received_each_request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receive_data_after_fuzz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_aborted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_issues_when_sending_fuzz_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_connection_ssl_errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse_target_connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">web_address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'localhost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></p>
-<p>继承自 pgraph.graph，为协议对话的构造提供了一个容器。</p>
+<p>继承自 pgraph.graph，为协议交互的构造提供了一个容器。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>session_filename</strong> (<em>str</em>) – 存放序列化数据的文件名，默认为 None</p></li>
-<li><p><strong>index_start</strong> (<em>int</em>) – </p></li>
-<li><p><strong>index_end</strong> (<em>int</em>) – </p></li>
+<li><p><strong>index_start</strong> (<em>int</em>) – 要运行的第一个测试用例的索引</p></li>
+<li><p><strong>index_end</strong> (<em>int</em>) – 要运行的最后一个测试用例的索引</p></li>
 <li><p><strong>sleep_time</strong> (<em>float</em>) – 测试用例之间等待的秒数，默认为 0</p></li>
 <li><p><strong>restart_interval</strong> (<em>int</em>) – 在 n 个测试用例之后重启目标。默认情况下为0，表示禁用该选项</p></li>
 <li><p><strong>console_gui</strong> (<em>bool</em>) – 是否使用 curses 在 web 端生成一个静态控制台，默认为 False（还未在 Windows 下进行测试）</p></li>
@@ -173,15 +176,15 @@ receive_data_after_each_request is False.</p></li>
 <li><p><strong>ignore_connection_ssl_errors</strong> (<em>bool</em>) – Log SSL related errors as “info” instead of failures. Default False.</p></li>
 <li><p><strong>reuse_target_connection</strong> (<em>bool</em>) – 如果为 True，则只使用一个目标连接（Target connection），而不是每个测试用例都重新连接。默认为 False。</p></li>
 <li><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – 模糊（测试）会话的目标，必须完全初始化。默认为 None。</p></li>
-<li><p><strong>db_filename</strong> (<em>str</em>) – 存储测试结果和案例信息的 SQLite 数据库文件名。默认为 <cite>./boofuzz-results/{uniq_timestamp}.db</cite>。</p></li>
-<li><p><strong>web_address</strong> – Bofuzz 记录器对外的地址，默认为 <cite>localhost</cite>。</p></li>
+<li><p><strong>db_filename</strong> (<em>str</em>) – 存储测试结果和案例信息的 SQLite 数据库文件名。默认为 <strong>./boofuzz-results/{uniq_timestamp}.db</strong>。</p></li>
+<li><p><strong>web_address</strong> – Bofuzz 记录器对外的地址，默认为 localhost。</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.add_node">
 <span class="sig-name descname"><span class="pre">add_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.add_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.add_node" title="Permalink to this definition"></a></dt>
-<dd><p>将一个 pgraph 节点加入图中，当一个节点加入图中时，就会自动生成并分配一个 ID 给该节点。</p>
+<dd><p>将一个 pgraph 节点加入图中并自动生成分配一个 ID 给该节点。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>node</strong> (<em>pgraph.Node</em>) – 要加入会话图的节点</p>
@@ -192,11 +195,11 @@ receive_data_after_each_request is False.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.add_target">
 <span class="sig-name descname"><span class="pre">add_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.add_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.add_target" title="Permalink to this definition"></a></dt>
-<dd><p>Add a target to the session. Multiple targets can be added for parallel fuzzing.
-将一个 target 加入到 session 中。</p>
+<dd><p>将一个 target 加入到 session 中，可同时对多个目标进行模糊测试。</p>
+<p>Add a target to the session. Multiple targets can be added for parallel fuzzing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – 要加入 session 的 Target 对象</p>
+<dd class="field-odd"><p><strong>target</strong> (<a class="reference internal" href="Target.html#boofuzz.Target" title="boofuzz.Target"><em>Target</em></a>) – 要加入 session 的 Target 对象。</p>
 </dd>
 </dl>
 </dd></dl>
@@ -204,39 +207,43 @@ receive_data_after_each_request is False.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.build_webapp_thread">
 <span class="sig-name descname"><span class="pre">build_webapp_thread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">26000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'localhost'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.build_webapp_thread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.build_webapp_thread" title="Permalink to this definition"></a></dt>
-<dd><p>Session 对象作为 flask 实例的 session 属性，之后利用 Tornado 根据 flask 实例创建 http 服务</p>
+<dd><p>构建 web 应用程序进程，具体来说
+Session 对象作为 flask 实例的 session 属性，之后利用 Tornado 根据 flask 实例创建 http 服务。</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.connect">
 <span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.connect" title="Permalink to this definition"></a></dt>
 <dd><p>在两个 request（nodes）之间创建一个 Connection 对象并注册一个回调函数用于处理源请求和目的请求之间的传输过程。
-session 类维持着一个顶级的节点即根节点，所有初始 requests 都必须连接到根节点。</p>
-<p>Create a connection between the two requests (nodes) and register an optional callback to process in between
+Session 类维持着一个顶级节点（根节点），所有的 requests 初始时都必须连接到该节点，例如：</p>
+<p>（Create a connection between the two requests (nodes) and register an optional callback to process in between
 transmissions of the source and destination request. The session class maintains a top level node that all
-initial requests must be connected to. Example:</p>
+initial requests must be connected to. Example）:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sess</span> <span class="o">=</span> <span class="n">sessions</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
 <span class="n">sess</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">s_get</span><span class="p">(</span><span class="s2">&quot;HTTP&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.
-This is a convenient alias. The following line is identical to the second line from the above example:</p>
+<p>如果仅给定了一个参数，那么 sess.connect() 默认会将该节点与根节点连接起来。</p>
+<p>（If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.
+This is a convenient alias. The following line is identical to the second line from the above example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sess</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">s_get</span><span class="p">(</span><span class="s2">&quot;HTTP&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Leverage callback methods to handle situations such as challenge response systems.
+<p>利用回调方法来处理类似于挑战应答机制的情况。回调方法必须遵循 <a class="reference internal" href="#boofuzz.Session.example_test_case_callback" title="boofuzz.Session.example_test_case_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.example_test_case_callback()</span></code></a> 这样的消息签名，同时为了
+后续的兼容性，记得在参数中加上 **kwargs。</p>
+<p>（Leverage callback methods to handle situations such as challenge response systems.
 A callback method must follow the message signature of <a class="reference internal" href="#boofuzz.Session.example_test_case_callback" title="boofuzz.Session.example_test_case_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.example_test_case_callback()</span></code></a>.
-Remember to include **kwargs for forward-compatibility.</p>
+Remember to include **kwargs for forward-compatibility.）</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> (<em>str</em><em> or </em><em>Request</em><em> (</em><em>pgrah.Node</em><em>)</em>) – Source request name or request node</p></li>
-<li><p><strong>dst</strong> (<em>str</em><em> or </em><em>Request</em><em> (</em><em>pgrah.Node</em><em>)</em><em>, </em><em>optional</em>) – Destination request name or request node</p></li>
-<li><p><strong>callback</strong> (<em>def</em><em>, </em><em>optional</em>) – Callback function to pass received data to between node xmits. Default None.</p></li>
+<li><p><strong>src</strong> (<em>str</em><em> or </em><em>Request</em><em> (</em><em>pgrah.Node</em><em>)</em>) – 源 request 名称或 reques 节点。（Source request name or request node）</p></li>
+<li><p><strong>dst</strong> (<em>str</em><em> or </em><em>Request</em><em> (</em><em>pgrah.Node</em><em>)</em><em>, </em><em>optional</em>) – 目的 request 名称或节点。（Destination request name or request node）</p></li>
+<li><p><strong>callback</strong> (<em>def</em><em>, </em><em>optional</em>) – 回调函数。（Callback function to pass received data to between node xmits. Default None.）</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The edge between the src and dst.</p>
+<dd class="field-even"><p>src 和 dst 之间的边。（The edge between the src and dst.）</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pgraph.Edge</p>
@@ -368,18 +375,19 @@ only a single test case.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.num_mutations">
 <span class="sig-name descname"><span class="pre">num_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.num_mutations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.num_mutations" title="Permalink to this definition"></a></dt>
-<dd><p>Number of total mutations in the graph. The logic of this routine is identical to that of fuzz(). See fuzz()
-for inline comments. The member variable self.total_num_mutations is updated appropriately by this routine.</p>
+<dd><p>图中的总变异数。</p>
+<p>Number of total mutations in the graph.</p>
+<p>该方法的逻辑与 fuzz() 是相同的，具体可参看 fuzz()。</p>
+<p>The logic of this routine is identical to that of fuzz(). See fuzz()
+for inline comments.</p>
+<p>通过该方法可对 self.total_num_mutations 成员变量进行更新。</p>
+<p>The member variable self.total_num_mutations is updated appropriately by this routine.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>max_depth</strong> (<em>int</em>) – Maximum combinatorial depth used for fuzzing. num_mutations returns None if this value is</p></li>
-<li><p><strong>1</strong> (<em>None</em><em> or </em><em>greater than</em>) – </p></li>
-<li><p><strong>fuzzing.</strong> (<em>as the number</em><em> of </em><em>mutations is typically very large when using combinatorial</em>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>max_depth</strong> (<em>int</em>) – 模糊测试所用的最大组合深度。如果该值为 None 或者大于等于1，那么 num_mutations 返回 None，因为在使用组合模糊测试时，变异数通常是非常大的。（Maximum combinatorial depth used for fuzzing. num_mutations returns None if this value is None or greater than 1, as the number of mutations is typically very large when using combinatorial fuzzing.）</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Total number of mutations in this session.</p>
+<dd class="field-even"><p>当前 session 对象的总变异数。（Total number of mutations in this session.）</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -474,13 +482,14 @@ for inline comments. The member variable self.total_num_mutations is updated app
 
 </dd></dl>
 
+<section id="boofuzz">
+<h2>boofuzz 模糊测试<a class="headerlink" href="#boofuzz" title="Permalink to this heading"></a></h2>
+<p>下面的几个方法涉及到 boofuzz 框架模糊测试的具体逻辑和实现，是 boofuzz 模糊测试的精髓所在。</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session._generate_mutations_indefinitely">
 <span class="sig-prename descclassname"><span class="pre">Session.</span></span><span class="sig-name descname"><span class="pre">_generate_mutations_indefinitely</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session._generate_mutations_indefinitely"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session._generate_mutations_indefinitely" title="Permalink to this definition"></a></dt>
-<dd><p>在一个消息列表中，通过生成器函数 yield 生成变异上下文对象，每个消息生成的变异上下文数量为 n，并且 n 的值会无限递增。
-具体来说，假设你有一组消息，例如：[message1, message2, message3, …]。开始时，每个消息生成的变异上下文数量为 1。
-所以，对于每个消息，会生成一个变异上下文对象（MutationContext），然后在下一个消息中，变异数量增加到 2，依次类推。</p>
-<p>Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely.</p>
+<dd><p>在所有消息中，每条消息产生具有 n 个变异的 MutationContext 对象，n 的值会无限增加。</p>
+<p>（Yield MutationContext with n mutations per message over all messages, with n increasing indefinitely.）</p>
 </dd></dl>
 
 <dl class="py method">
@@ -502,7 +511,7 @@ See _iterate_single_node() for details.</p>
 </dd></dl>
 
 <section id="request-graph-visualisation-options">
-<h2>Request-Graph visualisation options<a class="headerlink" href="#request-graph-visualisation-options" title="Permalink to this heading"></a></h2>
+<h3>Request-Graph visualisation options<a class="headerlink" href="#request-graph-visualisation-options" title="Permalink to this heading"></a></h3>
 <p>The following methods are available to render data, which can then be used to visualise the request structure.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.Session.render_graph_gml">
@@ -565,6 +574,7 @@ See _iterate_single_node() for details.</p>
 </dl>
 </dd></dl>
 
+</section>
 </section>
 </section>
 

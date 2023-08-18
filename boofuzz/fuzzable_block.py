@@ -41,7 +41,7 @@ class FuzzableBlock(Fuzzable):
         for item in self.stack:
             if item.qualified_name in skip_elements:
                 continue
-            self.request.mutant = item
+            self.request.mutant = item # 
             for mutation in item.get_mutations():
                 yield mutation
 

@@ -65,7 +65,13 @@ class Fuzzable:
 
     @property
     def qualified_name(self):
-        """Dot-delimited name that describes the request name and the path to the element within the request.
+        """
+        该方法与 context_path 基本类似，不过在末尾增加上了当前 Fuzzable 对象的 name。
+
+        例如，若有一个名为 user 的 ``Request`` 对象，并且该对象包含了一个名为 key 的 ``String`` 原语，那么对于这个
+        String 原语来说，其 qualified_name 就为 **user.key**。
+        
+        Dot-delimited name that describes the request name and the path to the element within the request.
 
         Example: "request1.block1.block2.node1"
 
@@ -74,8 +80,18 @@ class Fuzzable:
 
     @property
     def context_path(self):
-        """Dot-delimited string that describes the path up to this element. Configured after the object is attached
-        to a Request."""
+        """
+        该方法返回一个以点分割的字符串，描述了到达当前 Fuzzable 对象的上下文路径。
+
+        例如，若有一个名为 user 的 ``Request`` 对象，并且该对象包含了一个名为 key 的 ``String`` 原语，那么对于这个
+        String 原语来说，其 context_path 就为 user。
+
+        Dot-delimited string that describes the path up to this element. Configured after the object is attached
+        to a Request.
+        
+        
+        """
+        
         if not hasattr(self, "_context_path"):
             self._context_path = None
         return self._context_path
@@ -106,12 +122,15 @@ class Fuzzable:
         self._halt_mutations = True
 
     def original_value(self, test_case_context=None):
-        """Original, non-mutated value of element.
+        """
+        原始的、未被变异的元素值。
+
+        Original, non-mutated value of element.
 
         Args:
             test_case_context (ProtocolSession): Used to resolve ReferenceValueTestCaseSession type default values.
 
-        Returns:
+        Returns: 一般都会返回原语定义时的默认值。
         """
         if isinstance(self._default_value, ProtocolSessionReference):
             if test_case_context is None:
@@ -122,10 +141,13 @@ class Fuzzable:
             return self._default_value
 
     def get_mutations(self):
-        """Iterate mutations. Used by boofuzz framework.
+        """
+        迭代产生变异，由 boofuzz 框架所使用。
+
+        Iterate mutations. Used by boofuzz framework.
 
         Yields:
-            list of Mutation: Mutations
+            list of Mutation: Mutation 构成的列表（Mutations）
 
         """
         try:
