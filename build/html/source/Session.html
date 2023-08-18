@@ -52,6 +52,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/foreword.html">前言</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/contributing.html">Contributing</a></li>
@@ -103,6 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../user/protocol-definition.html">Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/other-modules.html">Other Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/s7comm.html">Boofuzz 实战</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../user/changelog.html">Changelog</a></li>
@@ -216,24 +219,16 @@ Session 对象作为 flask 实例的 session 属性，之后利用 Tornado 根�
 <span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Session.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Session.connect" title="Permalink to this definition"></a></dt>
 <dd><p>在两个 request（nodes）之间创建一个 Connection 对象并注册一个回调函数用于处理源请求和目的请求之间的传输过程。
 Session 类维持着一个顶级节点（根节点），所有的 requests 初始时都必须连接到该节点，例如：</p>
-<p>（Create a connection between the two requests (nodes) and register an optional callback to process in between
-transmissions of the source and destination request. The session class maintains a top level node that all
-initial requests must be connected to. Example）:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sess</span> <span class="o">=</span> <span class="n">sessions</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
 <span class="n">sess</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">s_get</span><span class="p">(</span><span class="s2">&quot;HTTP&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>如果仅给定了一个参数，那么 sess.connect() 默认会将该节点与根节点连接起来。</p>
-<p>（If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.
-This is a convenient alias. The following line is identical to the second line from the above example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sess</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">s_get</span><span class="p">(</span><span class="s2">&quot;HTTP&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>利用回调方法来处理类似于挑战应答机制的情况。回调方法必须遵循 <a class="reference internal" href="#boofuzz.Session.example_test_case_callback" title="boofuzz.Session.example_test_case_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.example_test_case_callback()</span></code></a> 这样的消息签名，同时为了
 后续的兼容性，记得在参数中加上 **kwargs。</p>
-<p>（Leverage callback methods to handle situations such as challenge response systems.
-A callback method must follow the message signature of <a class="reference internal" href="#boofuzz.Session.example_test_case_callback" title="boofuzz.Session.example_test_case_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.example_test_case_callback()</span></code></a>.
-Remember to include **kwargs for forward-compatibility.）</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -589,7 +584,7 @@ See _iterate_single_node() for details.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

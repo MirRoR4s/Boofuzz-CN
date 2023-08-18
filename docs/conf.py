@@ -47,7 +47,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "boofuzz"
-copyright = "{}, Joshua Pereyda".format(datetime.now().year)
+copyright = "{}, Joshua Pereyda-修订-黄建涛".format(datetime.now().year)
 author = "黄建涛"
 
 # The version info for the project you're documenting, acts as replacement for

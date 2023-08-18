@@ -11,18 +11,28 @@ from .base_monitor import BaseMonitor
 
 class ProcessMonitor(BaseMonitor, pedrpc.Client):
     """
-    Proxy class for the process monitor interface.
+    ProcessMonitor 类继承自 BaseMonitor 以及 pedrpc.Client，是 process monitor 接口的代理类。
 
-    In Versions < 0.2.0, boofuzz had network and process monitors
-    that communicated over RPC. The RPC client was directly passed
-    to the session class, and resolved all method calls dynamically
-    on the RPC partner.
+    在 0.2.0 版本之前，boofuzz 的网络和进程监视器是在 RPC 之上进行通信的，
+    RPC 客户端被直接传递给 Session 类，并在 RPC partner 上动态地解析所有方法调用。
 
-    Since 0.2.0, every monitor class must implement the abstract class
-    BaseMonitor, which defines a common interface among all Monitors. To
-    aid future typehinting efforts and to disambiguate Network- and Process Monitors,
-    this explicit proxy class has been introduced that
-    fast-forwards all calls to the RPC partner.
+    .. Proxy class for the process monitor interface.
+
+     In Versions < 0.2.0, boofuzz had network and process monitors
+     that communicated over RPC. The RPC client was directly passed
+     to the session class, and resolved all method calls dynamically
+     on the RPC partner.
+    
+    自 0.2.0 版本以后，每个 monitor 类都必须实现抽象类 BaseMonitor。
+    它定义了所有 monitor 之间的公共接口。 
+    为了有助于以后的类型提示工作并消除网络和进程监视器的歧义，
+    引入了这个显式代理类，它将所有调用快速转发到 RPC partner。
+
+    .. Since 0.2.0, every monitor class must implement the abstract class
+     BaseMonitor, which defines a common interface among all Monitors. To
+     aid future typehinting efforts and to disambiguate Network- and Process Monitors,
+     this explicit proxy class has been introduced that
+     fast-forwards all calls to the RPC partner.
 
     .. versionadded:: 0.2.0
     """
@@ -49,12 +59,17 @@ class ProcessMonitor(BaseMonitor, pedrpc.Client):
 
     def set_options(self, *args, **kwargs):
         """
-        The old RPC interfaces specified set_foobar methods to set options.
-        As these vary by RPC implementation, this trampoline method translates
-        arguments that have been passed as keyword arguments to set_foobar calls.
+        旧的 RPC 接口指明用 set_foobar 方法设置选项，但是不同的 RPC 会实现不同的 set_foobar，
+        所以 set_options 方法负责转换参数后传给 set_foobar。
 
-        If you call ``set_options(foobar="barbaz")``, it will result in a call to
-        ``set_foobar("barbaz")`` on the RPC partner.
+        .. The old RPC interfaces specified set_foobar methods to set options.
+         As these vary by RPC implementation, this trampoline method translates
+         arguments that have been passed as keyword arguments to set_foobar calls.
+        
+        如果你调用 ``set_options(foobar="barbaz")``，那么实际上是在 RPC partner 上调用 ``set_foobar("barbaz")``。
+          
+        .. If you call ``set_options(foobar="barbaz")``, it will result in a call to
+         ``set_foobar("barbaz")`` on the RPC partner.
         """
         # args will be ignored, kwargs will be translated
 

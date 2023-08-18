@@ -49,6 +49,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/foreword.html">前言</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/contributing.html">Contributing</a></li>
@@ -63,6 +64,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user/protocol-definition.html">Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user/other-modules.html">Other Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/s7comm.html">Boofuzz 实战</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../user/changelog.html">Changelog</a></li>
@@ -134,25 +137,30 @@
 
 
 <div class="viewcode-block" id="Target"><a class="viewcode-back" href="../../source/Target.html#boofuzz.Target">[docs]</a><span class="k">class</span> <span class="nc">Target</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Target descriptor container.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Target 的用处更多的是体现在了 repeater 和 monitor 上，所以这里不必多做停留。</span>
+<span class="sd">    </span>
+<span class="sd">    .. Target descriptor container.</span>
 
-<span class="sd">    Takes an ITargetConnection and wraps send/recv with appropriate</span>
-<span class="sd">    FuzzDataLogger calls.</span>
+<span class="sd">     Takes an ITargetConnection and wraps send/recv with appropriate</span>
+<span class="sd">     FuzzDataLogger calls.</span>
 
-<span class="sd">    Encapsulates pedrpc connection logic.</span>
+<span class="sd">     Encapsulates pedrpc connection logic.</span>
 
-<span class="sd">    Contains a logger which is configured by Session.add_target().</span>
+<span class="sd">     Contains a logger which is configured by Session.add_target().</span>
 
-<span class="sd">    Example:</span>
+<span class="sd">    例如：</span>
+<span class="sd">    ::</span>
+
 <span class="sd">        tcp_target = Target(SocketConnection(host=&#39;127.0.0.1&#39;, port=17971))</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        connection (itarget_connection.ITargetConnection): 到目标系统的连接对象</span>
 <span class="sd">        monitors (List[Union[IMonitor, pedrpc.Client]]): 当前 Target 对象的监视器列表。</span>
-<span class="sd">        monitor_alive: 当监视器处于活跃状态时会调用的一个函数列表</span>
-<span class="sd">        repeater (repeater.Repeater): 发送时所用的 Repeater，默认为 None</span>
-<span class="sd">        procmon: 用于添加进程监视器的接口（已弃用）</span>
-<span class="sd">        procmon_options: 同上</span>
+<span class="sd">        monitor_alive: 当监视器处于活跃状态时会调用的一个函数列表。</span>
+<span class="sd">        repeater (repeater.Repeater): 发送时所用的中继器，默认为 None。</span>
+<span class="sd">        procmon: 用于添加进程监视器的接口。（已弃用）</span>
+<span class="sd">        procmon_options: 同上。</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -251,6 +259,11 @@
 <span class="sd">        等待监视器启动（活跃）/与 RPC 服务器建立连接。</span>
 <span class="sd">        当某个 target 被添加到 session 中时，target 的每一次重启都会调用该方法。</span>
 <span class="sd">        在成功 probing 后，会调用一个回调函数，并将 monitor 传进去。</span>
+
+<span class="sd">        .. Wait for the monitors to become alive / establish connection to the RPC server.</span>
+<span class="sd">         This method is called on every restart of the target and when it&#39;s added to a session.</span>
+<span class="sd">         After successful probing, a callback is called, passing the monitor.</span>
+
 <span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">monitor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitors</span><span class="p">:</span>
@@ -721,9 +734,11 @@
 <span class="sd">        Session 类维持着一个顶级节点（根节点），所有的 requests 初始时都必须连接到该节点，例如：</span>
 
 <span class="sd">    </span>
-<span class="sd">        （Create a connection between the two requests (nodes) and register an optional callback to process in between</span>
-<span class="sd">        transmissions of the source and destination request. The session class maintains a top level node that all</span>
-<span class="sd">        initial requests must be connected to. Example）::</span>
+<span class="sd">        .. Create a connection between the two requests (nodes) and register an optional callback to process in between</span>
+<span class="sd">         transmissions of the source and destination request. The session class maintains a top level node that all</span>
+<span class="sd">         initial requests must be connected to. Example</span>
+
+<span class="sd">        ::</span>
 
 <span class="sd">            sess = sessions.session()</span>
 <span class="sd">            sess.connect(sess.root, s_get(&quot;HTTP&quot;))</span>
@@ -731,8 +746,9 @@
 <span class="sd">        </span>
 <span class="sd">        如果仅给定了一个参数，那么 sess.connect() 默认会将该节点与根节点连接起来。</span>
 
-<span class="sd">        （If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.</span>
-<span class="sd">        This is a convenient alias. The following line is identical to the second line from the above example</span>
+<span class="sd">        .. If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.</span>
+<span class="sd">         This is a convenient alias. The following line is identical to the second line from the above example）</span>
+<span class="sd">        </span>
 <span class="sd">        ::</span>
 
 <span class="sd">            sess.connect(s_get(&quot;HTTP&quot;))</span>
@@ -741,9 +757,9 @@
 <span class="sd">        利用回调方法来处理类似于挑战应答机制的情况。回调方法必须遵循 :meth:`Session.example_test_case_callback` 这样的消息签名，同时为了</span>
 <span class="sd">        后续的兼容性，记得在参数中加上 \\*\\*kwargs。</span>
 
-<span class="sd">        （Leverage callback methods to handle situations such as challenge response systems.</span>
-<span class="sd">        A callback method must follow the message signature of :meth:`Session.example_test_case_callback`.</span>
-<span class="sd">        Remember to include \\*\\*kwargs for forward-compatibility.）</span>
+<span class="sd">        .. Leverage callback methods to handle situations such as challenge response systems.</span>
+<span class="sd">         A callback method must follow the message signature of :meth:`Session.example_test_case_callback`.</span>
+<span class="sd">         Remember to include \\*\\*kwargs for forward-compatibility.）</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            src (str or Request (pgrah.Node)): 源 request 名称或 reques 节点。（Source request name or request node）</span>
@@ -2020,7 +2036,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

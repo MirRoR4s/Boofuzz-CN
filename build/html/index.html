@@ -22,7 +22,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="安装 boofuzz" href="user/install.html" />
+    <link rel="next" title="前言" href="user/foreword.html" />
  
 </head>
 
@@ -51,6 +51,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="user/foreword.html">前言</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user/install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user/contributing.html">Contributing</a></li>
@@ -68,6 +69,12 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="user/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">学习记录</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/s7comm.html">Boofuzz 实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/work.html">工作记录</a></li>
 </ul>
 
         </div>
@@ -96,42 +103,53 @@
              
   <section id="boofuzz">
 <h1>boofuzz: 网络协议模糊测试器<a class="headerlink" href="#boofuzz" title="Permalink to this heading"></a></h1>
-<p>Boofuzz 源于 <a class="reference external" href="https://github.com/OpenRCE/sulley">Sulley</a> 模糊测试框架，但是修复了很多 Sulley 中的 bug，同时对可扩展性也作了增强。Boofuzz 的目标是万物皆可模糊测试！</p>
 <section id="id1">
-<h2>起源<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<h2>前言<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<p>Boofuzz 是 Sulley 框架的继承者，修复了很多 Sulley 中的 bug，并对可扩展性做了增强，可以看作是 Sulley 的升级版。</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Boofuzz 的宗旨是万物皆可模糊测试！</p>
+</div>
+<section id="id2">
+<h3>起源<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
 <p>长久以来，Sulley 都是一款优秀的模糊测试器，不过其已经多年未更新，所以 Boofuzz 粉墨登场！</p>
 </section>
-<section id="id2">
-<h2>特点<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<section id="id3">
+<h3>特点<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
 <p>类似于 Sulley，boofuzz 也包含模糊测试器必备的一些关键特性，具体如下：</p>
 <ul class="simple">
 <li><p>简单且快速的数据生成。</p></li>
-<li><p>失败检测 Instrumentation。</p></li>
+<li><p>失败检测。</p></li>
 <li><p>失败后的目标复位。</p></li>
 <li><p>记录测试数据。</p></li>
 </ul>
-<p>Unlike Sulley, boofuzz also features:</p>
+<p>但 boofuzz 不同于 Sulley 独有的特点如下：</p>
 <ul class="simple">
-<li><p>Much easier install experience!</p></li>
-<li><p>Support for arbitrary communications mediums.</p></li>
-<li><p>Built-in support for serial fuzzing, ethernet- and IP-layer, UDP broadcast.</p></li>
-<li><p>Better recording of test data – consistent, thorough, clear.</p></li>
-<li><p>Test result CSV export.</p></li>
-<li><p><em>Extensible</em> instrumentation/failure detection.</p></li>
-<li><p>Far fewer bugs.</p></li>
+<li><p>更加易于安装！</p></li>
 </ul>
-<p>Sulley is affectionately named after the giant teal and purple creature
-from Monsters Inc. due to his fuzziness. Boofuzz is likewise named after
-the only creature known to have scared Sulley himself: Boo!</p>
-<figure class="align-default" id="id5">
-<img alt="Boo from Monsters Inc" src="https://github.com/jtpereyda/boofuzz/raw/master/_static/boo.png" />
-<figcaption>
-<p><span class="caption-text">Boo from Monsters Inc</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
-</figcaption>
-</figure>
+<blockquote>
+<div></div></blockquote>
+<ul class="simple">
+<li><p>支持任意的通信介质。</p></li>
+</ul>
+<ul class="simple">
+<li><p>内置支持对一系列协议的模糊测试，比如以太网协议、IP层协议等。</p></li>
+</ul>
+<ul class="simple">
+<li><p>能够更好地记录测试数据 – 一致、彻底、清晰。</p></li>
+</ul>
+<ul class="simple">
+<li><p>测试结果 CVS 导出。</p></li>
+</ul>
+<ul class="simple">
+<li><p>可扩展指令/失败监测</p></li>
+</ul>
+<ul class="simple">
+<li><p>bugs 更少。</p></li>
+</ul>
 </section>
-<section id="id3">
-<h2>安装<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<section id="id4">
+<h3>安装<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">boofuzz</span>
 </pre></div>
 </div>
@@ -140,10 +158,14 @@ the only creature known to have scared Sulley himself: Boo!</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="user/foreword.html">前言</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/foreword.html#id2">模糊测试学习资源</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="user/install.html">安装 boofuzz</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="user/install.html#id1">前提</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user/install.html#id2">安装</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user/install.html#id3">源安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/install.html#id3">源码安装</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user/install.html#extras">Extras</a></li>
 </ul>
 </li>
@@ -160,16 +182,6 @@ the only creature known to have scared Sulley himself: Boo!</p>
 </li>
 </ul>
 </div>
-</section>
-<section id="public-protocol-libraries">
-<h2>Public Protocol Libraries<a class="headerlink" href="#public-protocol-libraries" title="Permalink to this heading"></a></h2>
-<p>The following protocol libraries are free and open source, but the implementations are not at all close to full protocol
-coverage:</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/jtpereyda/boofuzz-ftp">boofuzz-ftp</a></p></li>
-<li><p><a class="reference external" href="https://github.com/jtpereyda/boofuzz-http">boofuzz-http</a></p></li>
-</ul>
-<p>If you have an open source boofuzz protocol suite to share, please <a class="reference internal" href="#community"><span class="std std-ref">let us know</span></a>!</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
@@ -245,24 +257,17 @@ coverage:</p>
 <li class="toctree-l1"><a class="reference internal" href="user/changelog.html">Changelog</a></li>
 </ul>
 </div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">学习记录</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/s7comm.html">Boofuzz 实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user/work.html">工作记录</a></li>
+</ul>
+</div>
 </section>
-<section id="contributions">
-<h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this heading"></a></h2>
-<p>Pull requests are welcome, as boofuzz is actively maintained (at the
-time of this writing ;)). See <a class="reference internal" href="user/contributing.html#contributing"><span class="std std-ref">Contributing</span></a>.</p>
-</section>
-<section id="community">
-<span id="id4"></span><h2>Community<a class="headerlink" href="#community" title="Permalink to this heading"></a></h2>
-<p>For questions that take the form of “How do I… with boofuzz?” or “I got
-this error with boofuzz, why?”, consider posting your question on Stack
-Overflow. Make sure to use the <code class="docutils literal notranslate"><span class="pre">fuzzing</span></code> tag.</p>
-<p>If you’ve found a bug, or have an idea/suggestion/request, file an issue
-here on GitHub.</p>
-<p>For other questions, check out boofuzz on <a class="reference external" href="https://gitter.im/jtpereyda/boofuzz">gitter</a> or <a class="reference external" href="https://groups.google.com/d/forum/boofuzz">Google Groups</a>.</p>
-<p>For updates, follow <a class="reference external" href="https://twitter.com/b00fuzz">&#64;b00fuzz</a> on Twitter.</p>
-</section>
-<section id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h2>
+<section id="id5">
+<h3>索引<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
@@ -270,18 +275,19 @@ here on GitHub.</p>
 </ul>
 </section>
 </section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="user/install.html" class="btn btn-neutral float-right" title="安装 boofuzz" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="user/foreword.html" class="btn btn-neutral float-right" title="前言" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

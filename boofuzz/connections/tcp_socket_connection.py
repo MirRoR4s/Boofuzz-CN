@@ -7,7 +7,11 @@ from boofuzz.connections import base_socket_connection
 
 
 class TCPSocketConnection(base_socket_connection.BaseSocketConnection):
-    """一个使用 TCP 套接字的 BaseSocketConnection 实现
+    """一个使用 TCP 套接字的 BaseSocketConnection 实现类。
+
+    TCPSocketConnection 有一个内部变量 _serverSock，暂时未知该变量的作用。
+
+    - TCPSocketConnection 的 _sock 表示一个基于 TCP/IP 的套接字（Socket）对象！
 
     .. versionadded:: 0.2.0
 
@@ -16,7 +20,7 @@ class TCPSocketConnection(base_socket_connection.BaseSocketConnection):
         port (int): 目标服务的端口号。
         send_timeout (float): 超时前等待的发送秒数，默认为 5.0。
         recv_timeout (float): 超时前等待的接收秒数，默认为 5.0。
-        server (bool): server 为真 表示启用服务端模糊测试。
+        server (bool): server 为真表示启用服务端模糊测试。
 
     """
 
@@ -35,11 +39,18 @@ class TCPSocketConnection(base_socket_connection.BaseSocketConnection):
             self._serverSock.close()
 
     def open(self):
+        """
+        TCPSocketConnection 类的 open() 方法只做了两件事情：
+        
+        1. 创建 TCP 套接字并设置相应选项
+
+        2. 连接目标
+        """
         self._open_socket()
         self._connect_socket()
 
     def _open_socket(self):
-        self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # IPv4 地址族，流式套接字类型
 
         # call superclass to set timeout sockopt
         super(TCPSocketConnection, self).open()
@@ -110,13 +121,16 @@ class TCPSocketConnection(base_socket_connection.BaseSocketConnection):
 
     def send(self, data):
         """
-        Send data to the target. Only valid after calling open!
+        .. Send data to the target. Only valid after calling open!
+        
+        向目标发送数据，只有在调用了 open() 之后该方法才有效。
 
         Args:
-            data: Data to send.
+            data: 要发送的数据。（Data to send）
+        
 
         Returns:
-            int: Number of bytes actually sent.
+            int: 实际发送的字节数。（Number of bytes actually sent.）
         """
         num_sent = 0
 
@@ -136,4 +150,7 @@ class TCPSocketConnection(base_socket_connection.BaseSocketConnection):
 
     @property
     def info(self):
+        """
+        显示 host 和 port 信息。
+        """
         return "{0}:{1}".format(self.host, self.port)

@@ -52,6 +52,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/foreword.html">前言</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/contributing.html">Contributing</a></li>
@@ -110,6 +111,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../user/protocol-definition.html">Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user/other-modules.html">Other Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/s7comm.html">Boofuzz 实战</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../user/changelog.html">Changelog</a></li>
@@ -145,22 +148,20 @@
 <dt class="sig sig-object py" id="boofuzz.Target">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitor_alive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_recv_bytes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeater</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">procmon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">procmon_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Target" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Target descriptor container.</p>
-<p>Takes an ITargetConnection and wraps send/recv with appropriate
-FuzzDataLogger calls.</p>
-<p>Encapsulates pedrpc connection logic.</p>
-<p>Contains a logger which is configured by Session.add_target().</p>
-<p class="rubric">Example</p>
-<p>tcp_target = Target(SocketConnection(host=’127.0.0.1’, port=17971))</p>
+<p>Target 的用处更多的是体现在了 repeater 和 monitor 上，所以这里不必多做停留。</p>
+<p>例如：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tcp_target</span> <span class="o">=</span> <span class="n">Target</span><span class="p">(</span><span class="n">SocketConnection</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">17971</span><span class="p">))</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>connection</strong> (<a class="reference internal" href="../user/connections.html#boofuzz.connections.ITargetConnection" title="boofuzz.connections.itarget_connection.ITargetConnection"><em>itarget_connection.ITargetConnection</em></a>) – 到目标系统的连接对象</p></li>
 <li><p><strong>monitors</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><em>IMonitor</em><em>, </em><a class="reference internal" href="../user/other-modules.html#boofuzz.monitors.pedrpc.Client" title="boofuzz.monitors.pedrpc.Client"><em>pedrpc.Client</em></a><em>]</em><em>]</em>) – 当前 Target 对象的监视器列表。</p></li>
-<li><p><strong>monitor_alive</strong> – 当监视器处于活跃状态时会调用的一个函数列表</p></li>
-<li><p><strong>repeater</strong> (<a class="reference internal" href="#boofuzz.repeater.Repeater" title="boofuzz.repeater.Repeater"><em>repeater.Repeater</em></a>) – 发送时所用的 Repeater，默认为 None</p></li>
-<li><p><strong>procmon</strong> – 用于添加进程监视器的接口（已弃用）</p></li>
-<li><p><strong>procmon_options</strong> – 同上</p></li>
+<li><p><strong>monitor_alive</strong> – 当监视器处于活跃状态时会调用的一个函数列表。</p></li>
+<li><p><strong>repeater</strong> (<a class="reference internal" href="#boofuzz.repeater.Repeater" title="boofuzz.repeater.Repeater"><em>repeater.Repeater</em></a>) – 发送时所用的中继器，默认为 None。</p></li>
+<li><p><strong>procmon</strong> – 用于添加进程监视器的接口。（已弃用）</p></li>
+<li><p><strong>procmon_options</strong> – 同上。</p></li>
 </ul>
 </dd>
 </dl>
@@ -180,8 +181,12 @@ FuzzDataLogger calls.</p>
 <span class="sig-name descname"><span class="pre">monitors_alive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/sessions.html#Target.monitors_alive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Target.monitors_alive" title="Permalink to this definition"></a></dt>
 <dd><p>等待监视器启动（活跃）/与 RPC 服务器建立连接。
 当某个 target 被添加到 session 中时，target 的每一次重启都会调用该方法。
-在成功 probing 后，会调用一个回调函数，并将 monitor 传进去。
-:return: None</p>
+在成功 probing 后，会调用一个回调函数，并将 monitor 传进去。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -423,7 +428,7 @@ Specifying 1 would send exactly one packet.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

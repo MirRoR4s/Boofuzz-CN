@@ -1,8 +1,13 @@
 boofuzz: 网络协议模糊测试器
 =====================================================
+前言
+^^^^
+Boofuzz 是 Sulley 框架的继承者，修复了很多 Sulley 中的 bug，并对可扩展性做了增强，可以看作是 Sulley 的升级版。
 
+.. note::
+    
+    Boofuzz 的宗旨是万物皆可模糊测试！
 
-Boofuzz 源于 `Sulley`_ 模糊测试框架，但是修复了很多 Sulley 中的 bug，同时对可扩展性也作了增强。Boofuzz 的目标是万物皆可模糊测试！
 
 
 起源
@@ -17,32 +22,32 @@ Boofuzz 源于 `Sulley`_ 模糊测试框架，但是修复了很多 Sulley 中�
 类似于 Sulley，boofuzz 也包含模糊测试器必备的一些关键特性，具体如下：
 
 -  简单且快速的数据生成。
--  失败检测 Instrumentation。
+-  失败检测。
 -  失败后的目标复位。
 -  记录测试数据。
 
-Unlike Sulley, boofuzz also features:
+但 boofuzz 不同于 Sulley 独有的特点如下：
 
--  Much easier install experience!
--  Support for arbitrary communications mediums.
--  Built-in support for serial fuzzing, ethernet- and IP-layer, UDP broadcast.
--  Better recording of test data -- consistent, thorough, clear.
--  Test result CSV export.
--  *Extensible* instrumentation/failure detection.
--  Far fewer bugs.
+-  更加易于安装！
+ .. Much easier install experience!
+-  支持任意的通信介质。
+.. Support for arbitrary communications mediums.
+-  内置支持对一系列协议的模糊测试，比如以太网协议、IP层协议等。
+.. Built-in support for serial fuzzing, ethernet- and IP-layer, UDP broadcast.
+-  能够更好地记录测试数据 -- 一致、彻底、清晰。
+.. Better recording of test data -- consistent, thorough, clear.
+-  测试结果 CVS 导出。
+.. Test result CSV export.
+-  可扩展指令/失败监测 
+.. *Extensible* instrumentation/failure detection.
+-  bugs 更少。
+.. Far fewer bugs.
 
-Sulley is affectionately named after the giant teal and purple creature
-from Monsters Inc. due to his fuzziness. Boofuzz is likewise named after
-the only creature known to have scared Sulley himself: Boo!
 
-.. figure:: https://github.com/jtpereyda/boofuzz/raw/master/_static/boo.png
-   :alt: Boo from Monsters Inc
-
-   Boo from Monsters Inc
 
 安装
 ------------
-::
+:: 
 
     pip install boofuzz
 
@@ -55,21 +60,13 @@ Boofuzz 实际上是一个 Python 库，我们可以利用其构建模糊测试�
     :caption: 用户指南
     :maxdepth: 2
 
+    user/foreword
     user/install
     user/quickstart
     user/contributing
 
 
-Public Protocol Libraries
--------------------------
 
-The following protocol libraries are free and open source, but the implementations are not at all close to full protocol
-coverage:
-
-- `boofuzz-ftp`_
-- `boofuzz-http`_
-
-If you have an open source boofuzz protocol suite to share, please :ref:`let us know <community>`!
 
 .. toctree::
     :caption: API 文档
@@ -89,37 +86,18 @@ If you have an open source boofuzz protocol suite to share, please :ref:`let us 
 
     user/changelog
 
-Contributions
--------------
+.. toctree::
+    :caption: 学习记录
+    :maxdepth: 1
 
-Pull requests are welcome, as boofuzz is actively maintained (at the
-time of this writing ;)). See :ref:`contributing`.
-
-.. _community:
-
-Community
----------
-
-For questions that take the form of “How do I… with boofuzz?” or “I got
-this error with boofuzz, why?”, consider posting your question on Stack
-Overflow. Make sure to use the ``fuzzing`` tag.
-
-If you’ve found a bug, or have an idea/suggestion/request, file an issue
-here on GitHub.
-
-For other questions, check out boofuzz on `gitter`_ or `Google Groups`_.
-
-For updates, follow `@b00fuzz`_ on Twitter.
-
-.. _Sulley: https://github.com/OpenRCE/sulley
-.. _Google Groups: https://groups.google.com/d/forum/boofuzz
-.. _gitter: https://gitter.im/jtpereyda/boofuzz
-.. _@b00fuzz: https://twitter.com/b00fuzz
-.. _boofuzz-ftp: https://github.com/jtpereyda/boofuzz-ftp
-.. _boofuzz-http: https://github.com/jtpereyda/boofuzz-http
+    examples/official
+    examples/s7comm
+    user/work
 
 
-Indices and tables
+
+
+索引
 ------------------
 
 * :ref:`genindex`

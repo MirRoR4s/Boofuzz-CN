@@ -47,13 +47,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/foreword.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Target.html">Target</a></li>
@@ -63,6 +64,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user/protocol-definition.html">Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/other-modules.html">Other Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/s7comm.html">Boofuzz 实战</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/changelog.html">Changelog</a></li>
@@ -117,7 +120,13 @@
 
 
 <div class="viewcode-block" id="BaseSocketConnection"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.BaseSocketConnection">[docs]</a><span class="k">class</span> <span class="nc">BaseSocketConnection</span><span class="p">(</span><span class="n">itarget_connection</span><span class="o">.</span><span class="n">ITargetConnection</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This class serves as a base for a number of Connections over sockets.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    BaseSocketConnection 是大量套接字连接类的基类，定义了几个抽象方法，比如 open()、close() 等。</span>
+
+<span class="sd">    该类有一个内部成员变量 _sock，目前还不知道起何种作用。</span>
+
+
+<span class="sd">    .. This class serves as a base for a number of Connections over sockets.</span>
 
 <span class="sd">    .. versionadded:: 0.2.0</span>
 
@@ -134,7 +143,9 @@
 
 <div class="viewcode-block" id="BaseSocketConnection.close"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.BaseSocketConnection.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Close connection to the target.</span>
+<span class="sd">        关闭到目标的连接。</span>
+
+<span class="sd">        .. Close connection to the target.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            None</span>
@@ -144,12 +155,15 @@
 <div class="viewcode-block" id="BaseSocketConnection.open"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.BaseSocketConnection.open">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Opens connection to the target. Make sure to call close!</span>
+<span class="sd">        作者原意是说打开到目标的连接并且提醒我们最后调用 close() 关闭连接。不过从源码看出来 BaseSocketConnection 类的 open() 方法</span>
+<span class="sd">        其实是在设置套接字的选项。</span>
+
+<span class="sd">        .. Opens connection to the target. Make sure to call close!</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_SNDTIMEO</span><span class="p">,</span> <span class="n">_seconds_to_sockopt_format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_send_timeout</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_SNDTIMEO</span><span class="p">,</span> <span class="n">_seconds_to_sockopt_format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_send_timeout</span><span class="p">))</span> <span class="c1"># </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_RCVTIMEO</span><span class="p">,</span> <span class="n">_seconds_to_sockopt_format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_recv_timeout</span><span class="p">))</span></div></div>
 </pre></div>
 
@@ -160,7 +174,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -47,13 +47,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/foreword.html">前言</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Target.html">Target</a></li>
@@ -63,6 +64,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user/protocol-definition.html">Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/other-modules.html">Other Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/s7comm.html">Boofuzz 实战</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/changelog.html">Changelog</a></li>
@@ -103,7 +106,11 @@
 
 
 <div class="viewcode-block" id="TCPSocketConnection"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.TCPSocketConnection">[docs]</a><span class="k">class</span> <span class="nc">TCPSocketConnection</span><span class="p">(</span><span class="n">base_socket_connection</span><span class="o">.</span><span class="n">BaseSocketConnection</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;一个使用 TCP 套接字的 BaseSocketConnection 实现</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;一个使用 TCP 套接字的 BaseSocketConnection 实现类。</span>
+
+<span class="sd">    TCPSocketConnection 有一个内部变量 _serverSock，暂时未知该变量的作用。</span>
+
+<span class="sd">    - TCPSocketConnection 的 _sock 表示一个基于 TCP/IP 的套接字（Socket）对象！</span>
 
 <span class="sd">    .. versionadded:: 0.2.0</span>
 
@@ -112,7 +119,7 @@
 <span class="sd">        port (int): 目标服务的端口号。</span>
 <span class="sd">        send_timeout (float): 超时前等待的发送秒数，默认为 5.0。</span>
 <span class="sd">        recv_timeout (float): 超时前等待的接收秒数，默认为 5.0。</span>
-<span class="sd">        server (bool): server 为真 表示启用服务端模糊测试。</span>
+<span class="sd">        server (bool): server 为真表示启用服务端模糊测试。</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -131,11 +138,18 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_serverSock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TCPSocketConnection.open"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.TCPSocketConnection.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        TCPSocketConnection 类的 open() 方法只做了两件事情：</span>
+<span class="sd">        </span>
+<span class="sd">        1. 创建 TCP 套接字并设置相应选项</span>
+
+<span class="sd">        2. 连接目标</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_open_socket</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connect_socket</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_open_socket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="c1"># IPv4 地址族，流式套接字类型</span>
 
         <span class="c1"># call superclass to set timeout sockopt</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TCPSocketConnection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
@@ -206,13 +220,16 @@
 
 <div class="viewcode-block" id="TCPSocketConnection.send"><a class="viewcode-back" href="../../../user/connections.html#boofuzz.connections.TCPSocketConnection.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Send data to the target. Only valid after calling open!</span>
+<span class="sd">        .. Send data to the target. Only valid after calling open!</span>
+<span class="sd">        </span>
+<span class="sd">        向目标发送数据，只有在调用了 open() 之后该方法才有效。</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            data: Data to send.</span>
+<span class="sd">            data: 要发送的数据。（Data to send）</span>
+<span class="sd">        </span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: Number of bytes actually sent.</span>
+<span class="sd">            int: 实际发送的字节数。（Number of bytes actually sent.）</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">num_sent</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -232,6 +249,9 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        显示 host 和 port 信息。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">:</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)</span></div>
 </pre></div>
 
@@ -242,7 +262,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

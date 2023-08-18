@@ -47,13 +47,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/foreword.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Target.html">Target</a></li>
@@ -63,6 +64,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user/protocol-definition.html">Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/other-modules.html">Other Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/s7comm.html">Boofuzz 实战</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/changelog.html">Changelog</a></li>
@@ -107,18 +110,28 @@
 
 <div class="viewcode-block" id="ProcessMonitor"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.ProcessMonitor">[docs]</a><span class="k">class</span> <span class="nc">ProcessMonitor</span><span class="p">(</span><span class="n">BaseMonitor</span><span class="p">,</span> <span class="n">pedrpc</span><span class="o">.</span><span class="n">Client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Proxy class for the process monitor interface.</span>
+<span class="sd">    ProcessMonitor 类继承自 BaseMonitor 以及 pedrpc.Client，是 process monitor 接口的代理类。</span>
 
-<span class="sd">    In Versions &lt; 0.2.0, boofuzz had network and process monitors</span>
-<span class="sd">    that communicated over RPC. The RPC client was directly passed</span>
-<span class="sd">    to the session class, and resolved all method calls dynamically</span>
-<span class="sd">    on the RPC partner.</span>
+<span class="sd">    在 0.2.0 版本之前，boofuzz 的网络和进程监视器是在 RPC 之上进行通信的，</span>
+<span class="sd">    RPC 客户端被直接传递给 Session 类，并在 RPC partner 上动态地解析所有方法调用。</span>
 
-<span class="sd">    Since 0.2.0, every monitor class must implement the abstract class</span>
-<span class="sd">    BaseMonitor, which defines a common interface among all Monitors. To</span>
-<span class="sd">    aid future typehinting efforts and to disambiguate Network- and Process Monitors,</span>
-<span class="sd">    this explicit proxy class has been introduced that</span>
-<span class="sd">    fast-forwards all calls to the RPC partner.</span>
+<span class="sd">    .. Proxy class for the process monitor interface.</span>
+
+<span class="sd">     In Versions &lt; 0.2.0, boofuzz had network and process monitors</span>
+<span class="sd">     that communicated over RPC. The RPC client was directly passed</span>
+<span class="sd">     to the session class, and resolved all method calls dynamically</span>
+<span class="sd">     on the RPC partner.</span>
+<span class="sd">    </span>
+<span class="sd">    自 0.2.0 版本以后，每个 monitor 类都必须实现抽象类 BaseMonitor。</span>
+<span class="sd">    它定义了所有 monitor 之间的公共接口。 </span>
+<span class="sd">    为了有助于以后的类型提示工作并消除网络和进程监视器的歧义，</span>
+<span class="sd">    引入了这个显式代理类，它将所有调用快速转发到 RPC partner。</span>
+
+<span class="sd">    .. Since 0.2.0, every monitor class must implement the abstract class</span>
+<span class="sd">     BaseMonitor, which defines a common interface among all Monitors. To</span>
+<span class="sd">     aid future typehinting efforts and to disambiguate Network- and Process Monitors,</span>
+<span class="sd">     this explicit proxy class has been introduced that</span>
+<span class="sd">     fast-forwards all calls to the RPC partner.</span>
 
 <span class="sd">    .. versionadded:: 0.2.0</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -145,12 +158,17 @@
 
 <div class="viewcode-block" id="ProcessMonitor.set_options"><a class="viewcode-back" href="../../../user/monitors.html#boofuzz.monitors.ProcessMonitor.set_options">[docs]</a>    <span class="k">def</span> <span class="nf">set_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The old RPC interfaces specified set_foobar methods to set options.</span>
-<span class="sd">        As these vary by RPC implementation, this trampoline method translates</span>
-<span class="sd">        arguments that have been passed as keyword arguments to set_foobar calls.</span>
+<span class="sd">        旧的 RPC 接口指明用 set_foobar 方法设置选项，但是不同的 RPC 会实现不同的 set_foobar，</span>
+<span class="sd">        所以 set_options 方法负责转换参数后传给 set_foobar。</span>
 
-<span class="sd">        If you call ``set_options(foobar=&quot;barbaz&quot;)``, it will result in a call to</span>
-<span class="sd">        ``set_foobar(&quot;barbaz&quot;)`` on the RPC partner.</span>
+<span class="sd">        .. The old RPC interfaces specified set_foobar methods to set options.</span>
+<span class="sd">         As these vary by RPC implementation, this trampoline method translates</span>
+<span class="sd">         arguments that have been passed as keyword arguments to set_foobar calls.</span>
+<span class="sd">        </span>
+<span class="sd">        如果你调用 ``set_options(foobar=&quot;barbaz&quot;)``，那么实际上是在 RPC partner 上调用 ``set_foobar(&quot;barbaz&quot;)``。</span>
+<span class="sd">          </span>
+<span class="sd">        .. If you call ``set_options(foobar=&quot;barbaz&quot;)``, it will result in a call to</span>
+<span class="sd">         ``set_foobar(&quot;barbaz&quot;)`` on the RPC partner.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># args will be ignored, kwargs will be translated</span>
 
@@ -243,7 +261,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

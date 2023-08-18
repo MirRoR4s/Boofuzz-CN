@@ -38,25 +38,30 @@ from .exception import BoofuzzFailure
 
 
 class Target:
-    """Target descriptor container.
+    """
+    Target 的用处更多的是体现在了 repeater 和 monitor 上，所以这里不必多做停留。
+    
+    .. Target descriptor container.
 
-    Takes an ITargetConnection and wraps send/recv with appropriate
-    FuzzDataLogger calls.
+     Takes an ITargetConnection and wraps send/recv with appropriate
+     FuzzDataLogger calls.
 
-    Encapsulates pedrpc connection logic.
+     Encapsulates pedrpc connection logic.
 
-    Contains a logger which is configured by Session.add_target().
+     Contains a logger which is configured by Session.add_target().
 
-    Example:
+    例如：
+    ::
+
         tcp_target = Target(SocketConnection(host='127.0.0.1', port=17971))
 
     Args:
         connection (itarget_connection.ITargetConnection): 到目标系统的连接对象
         monitors (List[Union[IMonitor, pedrpc.Client]]): 当前 Target 对象的监视器列表。
-        monitor_alive: 当监视器处于活跃状态时会调用的一个函数列表
-        repeater (repeater.Repeater): 发送时所用的 Repeater，默认为 None
-        procmon: 用于添加进程监视器的接口（已弃用）
-        procmon_options: 同上
+        monitor_alive: 当监视器处于活跃状态时会调用的一个函数列表。
+        repeater (repeater.Repeater): 发送时所用的中继器，默认为 None。
+        procmon: 用于添加进程监视器的接口。（已弃用）
+        procmon_options: 同上。
 
     """
 
@@ -155,6 +160,11 @@ class Target:
         等待监视器启动（活跃）/与 RPC 服务器建立连接。
         当某个 target 被添加到 session 中时，target 的每一次重启都会调用该方法。
         在成功 probing 后，会调用一个回调函数，并将 monitor 传进去。
+
+        .. Wait for the monitors to become alive / establish connection to the RPC server.
+         This method is called on every restart of the target and when it's added to a session.
+         After successful probing, a callback is called, passing the monitor.
+
         :return: None
         """
         for monitor in self.monitors:
@@ -625,9 +635,10 @@ class Session(pgraph.Graph):
         Session 类维持着一个顶级节点（根节点），所有的 requests 初始时都必须连接到该节点，例如：
 
     
-        （Create a connection between the two requests (nodes) and register an optional callback to process in between
-        transmissions of the source and destination request. The session class maintains a top level node that all
-        initial requests must be connected to. Example）
+        .. Create a connection between the two requests (nodes) and register an optional callback to process in between
+         transmissions of the source and destination request. The session class maintains a top level node that all
+         initial requests must be connected to. Example
+
         ::
 
             sess = sessions.session()
@@ -636,8 +647,9 @@ class Session(pgraph.Graph):
         
         如果仅给定了一个参数，那么 sess.connect() 默认会将该节点与根节点连接起来。
 
-        （If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.
-        This is a convenient alias. The following line is identical to the second line from the above example）
+        .. If given only a single parameter, sess.connect() will default to attaching the supplied node to the root node.
+         This is a convenient alias. The following line is identical to the second line from the above example）
+        
         ::
 
             sess.connect(s_get("HTTP"))
@@ -646,9 +658,9 @@ class Session(pgraph.Graph):
         利用回调方法来处理类似于挑战应答机制的情况。回调方法必须遵循 :meth:`Session.example_test_case_callback` 这样的消息签名，同时为了
         后续的兼容性，记得在参数中加上 \\*\\*kwargs。
 
-        （Leverage callback methods to handle situations such as challenge response systems.
-        A callback method must follow the message signature of :meth:`Session.example_test_case_callback`.
-        Remember to include \\*\\*kwargs for forward-compatibility.）
+        .. Leverage callback methods to handle situations such as challenge response systems.
+         A callback method must follow the message signature of :meth:`Session.example_test_case_callback`.
+         Remember to include \\*\\*kwargs for forward-compatibility.）
 
         Args:
             src (str or Request (pgrah.Node)): 源 request 名称或 reques 节点。（Source request name or request node）

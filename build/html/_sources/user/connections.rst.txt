@@ -4,8 +4,10 @@
 Connections
 ===========
 
-Connection objects implement :class:`ITargetConnection <boofuzz.connections.ITargetConnection>`.
-Available options include:
+.. Connection objects implement :class:`ITargetConnection <boofuzz.connections.ITargetConnection>`.
+ Available options include:
+
+Connection 对象实现了 :class:`ITargetConnection <boofuzz.connections.ITargetConnection>` 类，具体的实现类有：
 
 - :class:`TCPSocketConnection <boofuzz.connections.TCPSocketConnection>`
 - :class:`UDPSocketConnection <boofuzz.connections.UDPSocketConnection>`

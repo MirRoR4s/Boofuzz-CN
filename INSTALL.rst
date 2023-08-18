@@ -73,7 +73,7 @@ CentOS
 .. To run and test your fuzzing scripts, make sure to always activate the virtual
  environment beforehand.
 
-源安装
+源码安装
 -----------
 
 

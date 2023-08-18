@@ -50,13 +50,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installing boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foreword.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/Target.html">Target</a></li>
@@ -128,6 +129,8 @@
 <li class="toctree-l1"><a class="reference internal" href="protocol-definition.html">Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="other-modules.html">Other Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/s7comm.html">Boofuzz 实战</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
@@ -159,21 +162,16 @@
              
   <section id="monitors">
 <span id="id1"></span><h1>Monitors<a class="headerlink" href="#monitors" title="Permalink to this heading"></a></h1>
-<p>Monitors are components that monitor the target for specific behaviour. A
-monitor can be passive and just observe and provide data or behave more actively,
-interacting directly with the target. Some monitors also have the capability to
-start, stop and restart targets.</p>
-<p>Detecting a crash or misbehaviour of your target can be a complex, non-straight
-forward process depending on the tools you have available on your targets host;
-this holds true especially for embedded devices. Boofuzz provides three main
-monitor implementations:</p>
+<p>Monitors 就是监视目标特定行为的组件，一般称之为监视器。监视器可以是被动的，也可以是主动的。
+被动的意思是仅对目标进行观察并提供一些数据，而主动的意思则是表明监视器的行为更加的积极，比如直接和目标进行交互等。
+更进一步地，有些监视器甚至具有启动、停止、重启目标的能力。</p>
+<p>监测目标的崩溃或异常行为可能是一件复杂的事情，主要取决于在目标系统上有哪些可用的工具。
+比如对嵌入式设备来说，在其上通常没有现成的能够监测崩溃/异常的工具。</p>
+<p>Boofuzz 主要提供了三种监视器实现类：</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#boofuzz.monitors.ProcessMonitor" title="boofuzz.monitors.ProcessMonitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMonitor</span></code></a>, a Monitor that collects debug info from process on Windows
-and Unix. It also can restart the target process and detect segfaults.</p></li>
-<li><p><a class="reference internal" href="#boofuzz.monitors.NetworkMonitor" title="boofuzz.monitors.NetworkMonitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkMonitor</span></code></a>, a Monitor that passively captures network traffic via PCAP
-and attaches it to the testcase log.</p></li>
-<li><p><a class="reference internal" href="#boofuzz.monitors.CallbackMonitor" title="boofuzz.monitors.CallbackMonitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">CallbackMonitor</span></code></a>, which is used to implement the callbacks that can be
-supplied to the Session class.</p></li>
+<li><p><a class="reference internal" href="#boofuzz.monitors.ProcessMonitor" title="boofuzz.monitors.ProcessMonitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMonitor</span></code></a>：从 Windows 和 Unix 进程中收集调试信息的监视器类。该类也可以重启目标进程以及监测段错误。</p></li>
+<li><p><a class="reference internal" href="#boofuzz.monitors.NetworkMonitor" title="boofuzz.monitors.NetworkMonitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkMonitor</span></code></a>：通过 PCAP 被动地捕获网络流量并将其写入测试用例日志中的监视器类。</p></li>
+<li><p><a class="reference internal" href="#boofuzz.monitors.CallbackMonitor" title="boofuzz.monitors.CallbackMonitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">CallbackMonitor</span></code></a>：用于实现回调函数的监视器类，可以传递给 Session 类。</p></li>
 </ul>
 <section id="monitor-interface-basemonitor">
 <h2>Monitor Interface (BaseMonitor)<a class="headerlink" href="#monitor-interface-basemonitor" title="Permalink to this heading"></a></h2>
@@ -329,16 +327,13 @@ breaks iterating.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="boofuzz.monitors.ProcessMonitor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">boofuzz.monitors.</span></span><span class="sig-name descname"><span class="pre">ProcessMonitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/monitors/process_monitor.html#ProcessMonitor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.monitors.ProcessMonitor" title="Permalink to this definition"></a></dt>
-<dd><p>Proxy class for the process monitor interface.</p>
-<p>In Versions &lt; 0.2.0, boofuzz had network and process monitors
-that communicated over RPC. The RPC client was directly passed
-to the session class, and resolved all method calls dynamically
-on the RPC partner.</p>
-<p>Since 0.2.0, every monitor class must implement the abstract class
-BaseMonitor, which defines a common interface among all Monitors. To
-aid future typehinting efforts and to disambiguate Network- and Process Monitors,
-this explicit proxy class has been introduced that
-fast-forwards all calls to the RPC partner.</p>
+<dd><p>ProcessMonitor 类继承自 BaseMonitor 以及 pedrpc.Client，是 process monitor 接口的代理类。</p>
+<p>在 0.2.0 版本之前，boofuzz 的网络和进程监视器是在 RPC 之上进行通信的，
+RPC 客户端被直接传递给 Session 类，并在 RPC partner 上动态地解析所有方法调用。</p>
+<p>自 0.2.0 版本以后，每个 monitor 类都必须实现抽象类 BaseMonitor。
+它定义了所有 monitor 之间的公共接口。
+为了有助于以后的类型提示工作并消除网络和进程监视器的歧义，
+引入了这个显式代理类，它将所有调用快速转发到 RPC partner。</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.2.0.</span></p>
 </div>
@@ -390,11 +385,9 @@ fast-forwards all calls to the RPC partner.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="boofuzz.monitors.ProcessMonitor.set_options">
 <span class="sig-name descname"><span class="pre">set_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/monitors/process_monitor.html#ProcessMonitor.set_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.monitors.ProcessMonitor.set_options" title="Permalink to this definition"></a></dt>
-<dd><p>The old RPC interfaces specified set_foobar methods to set options.
-As these vary by RPC implementation, this trampoline method translates
-arguments that have been passed as keyword arguments to set_foobar calls.</p>
-<p>If you call <code class="docutils literal notranslate"><span class="pre">set_options(foobar=&quot;barbaz&quot;)</span></code>, it will result in a call to
-<code class="docutils literal notranslate"><span class="pre">set_foobar(&quot;barbaz&quot;)</span></code> on the RPC partner.</p>
+<dd><p>旧的 RPC 接口指明用 set_foobar 方法设置选项，但是不同的 RPC 会实现不同的 set_foobar，
+所以 set_options 方法负责转换参数后传给 set_foobar。</p>
+<p>如果你调用 <code class="docutils literal notranslate"><span class="pre">set_options(foobar=&quot;barbaz&quot;)</span></code>，那么实际上是在 RPC partner 上调用 <code class="docutils literal notranslate"><span class="pre">set_foobar(&quot;barbaz&quot;)</span></code>。</p>
 </dd></dl>
 
 <dl class="py method">
@@ -610,7 +603,7 @@ it returns false; otherwise it returns true.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
