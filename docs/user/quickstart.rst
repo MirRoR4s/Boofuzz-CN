@@ -4,7 +4,7 @@
 ==========
 
 :class:`Session <boofuzz.Session>` 对象是模糊测试会话的核心。当创建 Session 对象时，需要给其传入一个
-:class:`Target <boofuzz.Target>` 对象, 而 Traget 对象本身又要接收一个 :ref:`Connection <connections>` 对象。举个例子：
+:class:`Target <boofuzz.Target>` 对象, 而 Traget 对象本身又要接收一个 :ref:`Connection <connections>` 对象族中的对象。举个例子：
 
 .. code-block:: python
 

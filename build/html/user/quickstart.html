@@ -52,6 +52,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="foreword.html">前言</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">安装 boofuzz</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">快速开始</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#more-examples">More examples</a><ul>
@@ -73,10 +74,15 @@
 <li class="toctree-l1"><a class="reference internal" href="protocol-definition.html">Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="other-modules.html">Other Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../examples/official.html">官方样例</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">学习记录</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/s7comm.html">Boofuzz 实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="work.html">工作记录</a></li>
 </ul>
 
         </div>
@@ -106,7 +112,7 @@
   <section id="quickstart">
 <span id="id1"></span><h1>快速开始<a class="headerlink" href="#quickstart" title="Permalink to this heading"></a></h1>
 <p><a class="reference internal" href="../source/Session.html#boofuzz.Session" title="boofuzz.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> 对象是模糊测试会话的核心。当创建 Session 对象时，需要给其传入一个
-<a class="reference internal" href="../source/Target.html#boofuzz.Target" title="boofuzz.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a> 对象, 而 Traget 对象本身又要接收一个 <a class="reference internal" href="connections.html#connections"><span class="std std-ref">Connection</span></a> 对象。举个例子：</p>
+<a class="reference internal" href="../source/Target.html#boofuzz.Target" title="boofuzz.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a> 对象, 而 Traget 对象本身又要接收一个 <a class="reference internal" href="connections.html#connections"><span class="std std-ref">Connection</span></a> 对象族中的对象。举个例子：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span>
     <span class="n">target</span><span class="o">=</span><span class="n">Target</span><span class="p">(</span>
         <span class="n">connection</span><span class="o">=</span><span class="n">TCPSocketConnection</span><span class="p">(</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="mi">8021</span><span class="p">)))</span>
@@ -170,7 +176,7 @@ raw sockets 和 <a class="reference internal" href="connections.html#boofuzz.con
 <p>如果你想做一些更酷的事情，比如实现验证响应机制，那么你可以使用 <a class="reference internal" href="../source/Session.html#boofuzz.Session" title="boofuzz.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> 中的 <code class="docutils literal notranslate"><span class="pre">post_test_case_callbacks</span></code>。
 为了在后续的请求中使用来自前一个响应的数据，可以参看 <a class="reference internal" href="other-modules.html#boofuzz.ProtocolSessionReference" title="boofuzz.ProtocolSessionReference"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolSessionReference</span></code></a>。</p>
 <p>你或许对 <a class="reference internal" href="protocol-definition.html#custom-blocks"><span class="std std-ref">Making Your Own Block/Primitive</span></a> 也感兴趣。</p>
-<p>记住，boofuzz 是一个纯 Python 开发的框架，所以一些更加高级的用法都需要自行定义。如果你正在做一些超级酷的事情，可以向社区 <a class="reference internal" href="../index.html#community"><span class="std std-ref">community info</span></a> 贡献你的成果。</p>
+<p>记住，boofuzz 是一个纯 Python 开发的框架，所以一些更加高级的用法都需要自行定义。如果你正在做一些超级酷的事情，可以向社区 <span class="xref std std-ref">community info</span> 贡献你的成果。</p>
 <p>Happy fuzzing, and Godspeed!</p>
 <section id="more-examples">
 <h2>More examples<a class="headerlink" href="#more-examples" title="Permalink to this heading"></a></h2>
