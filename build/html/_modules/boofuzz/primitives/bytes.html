@@ -47,13 +47,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/foreword.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Target.html">Target</a></li>
@@ -66,6 +67,12 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">学习记录</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/s7comm.html">Boofuzz 实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/work.html">工作记录</a></li>
 </ul>
 
         </div>
@@ -104,22 +111,24 @@
 
 
 <div class="viewcode-block" id="Bytes"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.Bytes">[docs]</a><span class="k">class</span> <span class="nc">Bytes</span><span class="p">(</span><span class="n">Fuzzable</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Primitive that fuzzes a binary byte string with arbitrary length.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bytes 原语对一个任意长的二进制字节串进行模糊测试。</span>
+<span class="sd">    </span>
+<span class="sd">    .. </span>
+<span class="sd">     Primitive that fuzzes a binary byte string with arbitrary length.</span>
 
 <span class="sd">    :type name: str, optional</span>
-<span class="sd">    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,</span>
-<span class="sd">        defaults to None</span>
+<span class="sd">    :param name: 当前 Bytes 对象的名称， 默认为空</span>
 <span class="sd">    :type default_value: bytes, optional</span>
-<span class="sd">    :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value,</span>
-<span class="sd">        defaults to b&quot;&quot;</span>
+<span class="sd">    :param default_value: 当不对当前 Bytes 对象进行模糊测试时所用的默认值，默认为 b&quot;&quot;</span>
 <span class="sd">    :type size: int, optional</span>
-<span class="sd">    :param size: Static size of this field, leave None for dynamic, defaults to None</span>
+<span class="sd">    :param size: 当前 Bytes 对象的固定长度，如果为 None则表示动态长度。size 默认为 None </span>
 <span class="sd">    :type padding: chr, optional</span>
-<span class="sd">    :param padding: Value to use as padding to fill static field size, defaults to b&quot;\\x00&quot;</span>
+<span class="sd">    :param padding: 为达到固定长度而填充的值，默认为 b&quot;\\x00&quot;</span>
 <span class="sd">    :type max_len: int, optional</span>
-<span class="sd">    :param max_len: Maximum string length, defaults to None</span>
+<span class="sd">    :param max_len: 最大字符串长度，默认为 None</span>
 <span class="sd">    :type fuzzable: bool, optional</span>
-<span class="sd">    :param fuzzable: Enable/disable fuzzing of this primitive, defaults to true</span>
+<span class="sd">    :param fuzzable: 是否要对当前 Bytes 对象进行模糊测试，默认为 True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># This binary strings will always included as testcases.</span>
@@ -328,7 +337,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

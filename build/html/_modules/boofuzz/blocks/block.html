@@ -47,13 +47,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/foreword.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Target.html">Target</a></li>
@@ -66,6 +67,12 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">学习记录</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/s7comm.html">Boofuzz 实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/work.html">工作记录</a></li>
 </ul>
 
         </div>
@@ -98,19 +105,21 @@
 
 
 <div class="viewcode-block" id="Block"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.Block">[docs]</a><span class="k">class</span> <span class="nc">Block</span><span class="p">(</span><span class="n">FuzzableBlock</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The basic building block. Can contain primitives, sizers, checksums or other blocks.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    基本的构造块（building block），可包含 primitives（原语）、sizers、checksums 以及其它 blocks。</span>
+<span class="sd">    </span>
+<span class="sd">    ..</span>
+<span class="sd">     The basic building block. Can contain primitives, sizers, checksums or other blocks.</span>
 
-<span class="sd">    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,</span>
-<span class="sd">        defaults to None</span>
+<span class="sd">    :param name: 当前 blocks 的名称，默认为空</span>
 <span class="sd">    :type name: str, optional</span>
-<span class="sd">    :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value,</span>
-<span class="sd">        defaults to None</span>
+<span class="sd">    :param default_value: 当元素不进行模糊测试时的默认值，通常应对应于一个有效的协议字段值，默认为空</span>
 <span class="sd">    :type default_value: Any, optional</span>
-<span class="sd">    :param request: Request this block belongs to, defaults to None</span>
+<span class="sd">    :param request: 当前的 block 所属的 Request 对象，默认为空</span>
 <span class="sd">    :type request: boofuzz.Request, optional</span>
-<span class="sd">    :param children: Children of this block, defaults to None</span>
+<span class="sd">    :param children: 当前 blocks 的子节点，默认为空</span>
 <span class="sd">    :type children: boofuzz.Fuzzable, optional</span>
-<span class="sd">    :param group: Name of group to associate this block with, defaults to None</span>
+<span class="sd">    :param group: 与当前的 block 相关联的 group 的名称，默认为空</span>
 <span class="sd">    :type group: str, optional</span>
 <span class="sd">    :param encoder: Optional pointer to a function to pass rendered data to prior to return, defaults to None</span>
 <span class="sd">    :type encoder: callable, optional</span>
@@ -221,7 +230,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

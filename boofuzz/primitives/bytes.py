@@ -8,22 +8,24 @@ from ..fuzzable import Fuzzable
 
 
 class Bytes(Fuzzable):
-    """Primitive that fuzzes a binary byte string with arbitrary length.
+    """
+    Bytes 原语对一个任意长的二进制字节串进行模糊测试。
+    
+    .. 
+     Primitive that fuzzes a binary byte string with arbitrary length.
 
     :type name: str, optional
-    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-        defaults to None
+    :param name: 当前 Bytes 对象的名称， 默认为空
     :type default_value: bytes, optional
-    :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value,
-        defaults to b""
+    :param default_value: 当不对当前 Bytes 对象进行模糊测试时所用的默认值，默认为 b""
     :type size: int, optional
-    :param size: Static size of this field, leave None for dynamic, defaults to None
+    :param size: 当前 Bytes 对象的固定长度，如果为 None则表示动态长度。size 默认为 None 
     :type padding: chr, optional
-    :param padding: Value to use as padding to fill static field size, defaults to b"\\x00"
+    :param padding: 为达到固定长度而填充的值，默认为 b"\\x00"
     :type max_len: int, optional
-    :param max_len: Maximum string length, defaults to None
+    :param max_len: 最大字符串长度，默认为 None
     :type fuzzable: bool, optional
-    :param fuzzable: Enable/disable fuzzing of this primitive, defaults to true
+    :param fuzzable: 是否要对当前 Bytes 对象进行模糊测试，默认为 True
     """
 
     # This binary strings will always included as testcases.

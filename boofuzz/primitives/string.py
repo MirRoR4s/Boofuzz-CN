@@ -6,7 +6,7 @@ from ..fuzzable import Fuzzable
 
 
 class String(Fuzzable):
-    """通过某种糟糕的字符串进行循环迭代的原语。
+    """String 原语通过变异事先定义好的字符串库从而进行模糊测试。
 
     类变量 'fuzz_library' 是一个包含着 fuzz 值的列表，所有实例都可共享该变量.
 

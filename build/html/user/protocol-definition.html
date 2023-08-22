@@ -52,6 +52,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="foreword.html">前言</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
@@ -185,10 +186,15 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static-protocol-definition.html">Static Protocol Definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="other-modules.html">Other Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../examples/official.html">官方样例</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">学习记录</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/s7comm.html">Boofuzz 实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="work.html">工作记录</a></li>
 </ul>
 
         </div>
@@ -263,13 +269,11 @@ example.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.Request">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/blocks/request.html#Request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Request" title="Permalink to this definition"></a></dt>
-<dd><p>Top level container. Can hold any block structure or primitive.
-This can essentially be thought of as a super-block, root-block, daddy-block or whatever other alias you prefer.</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of this request</p></li>
-<li><p><strong>children</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – Children of this request, defaults to None</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – 当前 request 的名称</p></li>
+<li><p><strong>children</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – 当前 request 的子节点，默认为空</p></li>
 </ul>
 </dd>
 </dl>
@@ -283,17 +287,15 @@ This can essentially be thought of as a super-block, root-block, daddy-block or 
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.Block">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dep_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dep_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dep_compare</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'=='</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/blocks/block.html#Block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Block" title="Permalink to this definition"></a></dt>
-<dd><p>The basic building block. Can contain primitives, sizers, checksums or other blocks.</p>
+<dd><p>基本的构造块（building block），可包含 primitives（原语）、sizers、checksums 以及其它 blocks。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-defaults to None</p></li>
-<li><p><strong>default_value</strong> (<em>Any</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value,
-defaults to None</p></li>
-<li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – Request this block belongs to, defaults to None</p></li>
-<li><p><strong>children</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – Children of this block, defaults to None</p></li>
-<li><p><strong>group</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of group to associate this block with, defaults to None</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – 当前 blocks 的名称，默认为空</p></li>
+<li><p><strong>default_value</strong> (<em>Any</em><em>, </em><em>optional</em>) – 当元素不进行模糊测试时的默认值，通常应对应于一个有效的协议字段值，默认为空</p></li>
+<li><p><strong>request</strong> (<em>boofuzz.Request</em><em>, </em><em>optional</em>) – 当前的 block 所属的 Request 对象，默认为空</p></li>
+<li><p><strong>children</strong> (<a class="reference internal" href="#boofuzz.Fuzzable" title="boofuzz.Fuzzable"><em>boofuzz.Fuzzable</em></a><em>, </em><em>optional</em>) – 当前 blocks 的子节点，默认为空</p></li>
+<li><p><strong>group</strong> (<em>str</em><em>, </em><em>optional</em>) – 与当前的 block 相关联的 group 的名称，默认为空</p></li>
 <li><p><strong>encoder</strong> (<em>callable</em><em>, </em><em>optional</em>) – Optional pointer to a function to pass rendered data to prior to return, defaults to None</p></li>
 <li><p><strong>dep</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional primitive whose specific value this block is dependant on, defaults to None</p></li>
 <li><p><strong>dep_value</strong> (<em>Any</em><em>, </em><em>optional</em>) – Value that field “dep” must contain for block to be rendered, defaults to None</p></li>
@@ -374,7 +376,26 @@ defaults to None</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.Size">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclusive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">math</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/blocks/size.html#Size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Size" title="Permalink to this definition"></a></dt>
-<dd><p>Create a sizer block bound to the block with the specified name.</p>
+<dd><p>Size 用于计算某个 Block 的大小。</p>
+<p>示例如下：</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">Block</span><span class="p">(</span><span class="s2">&quot;S7COMM&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">(</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s2">&quot;Protocol ID&quot;</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">h2b</span><span class="p">(</span><span class="n">s7comm</span><span class="o">.</span><span class="n">protocol_id</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s2">&quot;ROSCTR&quot;</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">h2b</span><span class="p">(</span><span class="n">s7comm</span><span class="o">.</span><span class="n">rosctr</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s2">&quot;Reserved&quot;</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">h2b</span><span class="p">(</span><span class="n">s7comm</span><span class="o">.</span><span class="n">reserved</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s2">&quot;PDU Reference&quot;</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">h2b</span><span class="p">(</span><span class="n">s7comm</span><span class="o">.</span><span class="n">pdu_reference</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s2">&quot;Parameter Length&quot;</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">h2b</span><span class="p">(</span><span class="n">s7comm</span><span class="o">.</span><span class="n">parameter_length</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s2">&quot;Data Length&quot;</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">h2b</span><span class="p">(</span><span class="n">s7comm</span><span class="o">.</span><span class="n">data_length</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s2">&quot;Parameter&quot;</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">h2b</span><span class="p">(</span><span class="n">s7comm</span><span class="o">.</span><span class="n">parameter</span><span class="p">),</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="n">h2b</span><span class="p">(</span><span class="n">s7comm</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="p">)),</span>
+<span class="n">Size</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span><span class="n">block_name</span><span class="o">=</span><span class="s2">&quot;S7COMM&quot;</span><span class="p">,</span> <span class="n">fuzzable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span> <span class="c1"># 实际使用时注意输出格式</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>如上代码用一个名为 test 的 Size 计算一个名为 S7COMM 的 Block 的大小，并在模糊测试时将计算结果附加在该 block 之后。</p>
+<p>使用时需要注意输出的格式是 ascii 格式还是 binary 格式，同时也要注意端序以及该 Size 本身是否也要算入长度中去。</p>
+<p>Create a sizer block bound to the block with the specified name.</p>
 <p>Size blocks that size their own parent or grandparent are allowed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -427,13 +448,11 @@ be given, defaults to None</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.Static">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Static</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/primitives/static.html#Static"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Static" title="Permalink to this definition"></a></dt>
-<dd><p>Static primitives are fixed and not mutated while fuzzing.</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-defaults to None</p></li>
-<li><p><strong>default_value</strong> (<em>Raw</em><em>, </em><em>optional</em>) – Raw static data</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Static 原语的名称，默认为 None</p></li>
+<li><p><strong>default_value</strong> (<em>Raw</em><em>, </em><em>optional</em>) – 原始的静态数据</p></li>
 </ul>
 </dd>
 </dl>
@@ -449,15 +468,14 @@ defaults to None</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.Simple">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Simple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzz_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/primitives/simple.html#Simple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Simple" title="Permalink to this definition"></a></dt>
-<dd><p>Simple bytes value with manually specified fuzz values only.</p>
+<dd><p>Simple 原语根据一个由单字节值组成的列表来进行模糊测试。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-defaults to None</p></li>
-<li><p><strong>default_value</strong> (<em>Raw</em><em>, </em><em>optional</em>) – Raw static data</p></li>
-<li><p><strong>fuzz_values</strong> (<em>list</em><em>, </em><em>optional</em>) – List of fuzz values, defaults to None. If empty, Simple is equivalent to Static.</p></li>
-<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Simple 原语的名称，默认为 None</p></li>
+<li><p><strong>default_value</strong> (<em>Raw</em><em>, </em><em>optional</em>) – 原始静态数据</p></li>
+<li><p><strong>fuzz_values</strong> (<em>list</em><em>, </em><em>optional</em>) – 由 fuzz 值组成的列表，默认为 None。如果为 None，那么 Simple 原语就等价于 Static 原语了。</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – 启用/禁用对 Simple 原语的模糊测试，默认为 True</p></li>
 </ul>
 </dd>
 </dl>
@@ -491,16 +509,14 @@ defaults to None</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.Group">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ascii'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/primitives/group.html#Group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Group" title="Permalink to this definition"></a></dt>
-<dd><p>This primitive represents a list of static values, stepping through each one on mutation.</p>
-<p>You can tie a block
-to a group primitive to specify that the block should cycle through all possible mutations for <em>each</em> value
-within the group. The group primitive is useful for example for representing a list of valid opcodes.</p>
+<dd><p>Group 原语表示一列静态值，在模糊测试时会逐个遍历这些值并变异它们。</p>
+<p>你可以将 Group 原语绑定到某个 block 中以此指明该 block 要对 group 中的每个值进行所有可能的变异。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
 defaults to None</p></li>
-<li><p><strong>values</strong> (<em>list</em><em> of </em><em>bytes</em><em> or </em><em>list</em><em> of </em><em>str</em>) – List of possible raw values this group can take.</p></li>
+<li><p><strong>values</strong> (<em>list</em><em> of </em><em>bytes</em><em> or </em><em>list</em><em> of </em><em>str</em>) – 该 group 可以取的所有可能的原始值。List of possible raw values this group can take.</p></li>
 <li><p><strong>default_value</strong> (<em>str</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value,
 defaults to None</p></li>
 <li><p><strong>encoding</strong> (<em>str</em><em>, </em><em>optional</em>) – String encoding, ex: utf_16_le for Microsoft Unicode, defaults to ascii</p></li>
@@ -543,7 +559,7 @@ defaults to None</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.String">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">String</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b'\x00'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/primitives/string.html#String"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.String" title="Permalink to this definition"></a></dt>
-<dd><p>通过某种糟糕的字符串进行循环迭代的原语。</p>
+<dd><p>String 原语通过变异事先定义好的字符串库从而进行模糊测试。</p>
 <p>类变量 ‘fuzz_library’ 是一个包含着 fuzz 值的列表，所有实例都可共享该变量.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -642,7 +658,7 @@ defaults to None</p></li>
 <li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
 defaults to None</p></li>
 <li><p><strong>default_value</strong> (<em>int</em><em>, </em><em>optional</em>) – Default integer value, defaults to 0</p></li>
-<li><p><strong>max_num</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number to iterate up to, defaults to None</p></li>
+<li><p><strong>max_num</strong> (<em>int</em><em>, </em><em>optional</em>) – 要迭代的最大整数值，默认为 None。例如 max_num=2 则表示该字段的值在0、1之间迭代变异。</p></li>
 <li><p><strong>endian</strong> (<em>char</em><em>, </em><em>optional</em>) – Endianness of the bit field (LITTLE_ENDIAN: &lt;, BIG_ENDIAN: &gt;), defaults to LITTLE_ENDIAN</p></li>
 <li><p><strong>output_format</strong> (<em>str</em><em>, </em><em>optional</em>) – Output format, “binary” or “ascii”, defaults to binary</p></li>
 <li><p><strong>signed</strong> (<em>bool</em><em>, </em><em>optional</em>) – Make size signed vs. unsigned (applicable only with format=”ascii”), defaults to False</p></li>
@@ -660,18 +676,16 @@ defaults to None</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="boofuzz.Bytes">
 <span class="sig-prename descclassname"><span class="pre">boofuzz.</span></span><span class="sig-name descname"><span class="pre">Bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">b''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">b'\x00'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/boofuzz/primitives/bytes.html#Bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#boofuzz.Bytes" title="Permalink to this definition"></a></dt>
-<dd><p>Primitive that fuzzes a binary byte string with arbitrary length.</p>
+<dd><p>Bytes 原语对一个任意长的二进制字节串进行模糊测试。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-defaults to None</p></li>
-<li><p><strong>default_value</strong> (<em>bytes</em><em>, </em><em>optional</em>) – Value used when the element is not being fuzzed - should typically represent a valid value,
-defaults to b””</p></li>
-<li><p><strong>size</strong> (<em>int</em><em>, </em><em>optional</em>) – Static size of this field, leave None for dynamic, defaults to None</p></li>
-<li><p><strong>padding</strong> (<em>chr</em><em>, </em><em>optional</em>) – Value to use as padding to fill static field size, defaults to b”x00”</p></li>
-<li><p><strong>max_len</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum string length, defaults to None</p></li>
-<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable/disable fuzzing of this primitive, defaults to true</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – 当前 Bytes 对象的名称， 默认为空</p></li>
+<li><p><strong>default_value</strong> (<em>bytes</em><em>, </em><em>optional</em>) – 当不对当前 Bytes 对象进行模糊测试时所用的默认值，默认为 b””</p></li>
+<li><p><strong>size</strong> (<em>int</em><em>, </em><em>optional</em>) – 当前 Bytes 对象的固定长度，如果为 None则表示动态长度。size 默认为 None</p></li>
+<li><p><strong>padding</strong> (<em>chr</em><em>, </em><em>optional</em>) – 为达到固定长度而填充的值，默认为 b”x00”</p></li>
+<li><p><strong>max_len</strong> (<em>int</em><em>, </em><em>optional</em>) – 最大字符串长度，默认为 None</p></li>
+<li><p><strong>fuzzable</strong> (<em>bool</em><em>, </em><em>optional</em>) – 是否要对当前 Bytes 对象进行模糊测试，默认为 True</p></li>
 </ul>
 </dd>
 </dl>

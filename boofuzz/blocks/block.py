@@ -2,19 +2,21 @@ from ..fuzzable_block import FuzzableBlock
 
 
 class Block(FuzzableBlock):
-    """The basic building block. Can contain primitives, sizers, checksums or other blocks.
+    """
+    基本的构造块（building block），可包含 primitives（原语）、sizers、checksums 以及其它 blocks。
+    
+    ..
+     The basic building block. Can contain primitives, sizers, checksums or other blocks.
 
-    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-        defaults to None
+    :param name: 当前 blocks 的名称，默认为空
     :type name: str, optional
-    :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value,
-        defaults to None
+    :param default_value: 当元素不进行模糊测试时的默认值，通常应对应于一个有效的协议字段值，默认为空
     :type default_value: Any, optional
-    :param request: Request this block belongs to, defaults to None
+    :param request: 当前的 block 所属的 Request 对象，默认为空
     :type request: boofuzz.Request, optional
-    :param children: Children of this block, defaults to None
+    :param children: 当前 blocks 的子节点，默认为空
     :type children: boofuzz.Fuzzable, optional
-    :param group: Name of group to associate this block with, defaults to None
+    :param group: 与当前的 block 相关联的 group 的名称，默认为空
     :type group: str, optional
     :param encoder: Optional pointer to a function to pass rendered data to prior to return, defaults to None
     :type encoder: callable, optional

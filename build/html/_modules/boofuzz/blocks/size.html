@@ -47,13 +47,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/foreword.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Target.html">Target</a></li>
@@ -66,6 +67,12 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">学习记录</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/s7comm.html">Boofuzz 实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/work.html">工作记录</a></li>
 </ul>
 
         </div>
@@ -112,7 +119,33 @@
 
 
 <div class="viewcode-block" id="Size"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.Size">[docs]</a><span class="k">class</span> <span class="nc">Size</span><span class="p">(</span><span class="n">Fuzzable</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a sizer block bound to the block with the specified name.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Size 用于计算某个 Block 的大小。</span>
+<span class="sd">    </span>
+<span class="sd">    示例如下：</span>
+
+<span class="sd">     ::</span>
+
+<span class="sd">            Block(&quot;S7COMM&quot;, children=(</span>
+<span class="sd">            Bytes(&quot;Protocol ID&quot;, default_value=h2b(s7comm.protocol_id), size=1, fuzzable=False),</span>
+<span class="sd">            Bytes(&quot;ROSCTR&quot;, default_value=h2b(s7comm.rosctr), size=1, fuzzable=False),</span>
+<span class="sd">            Bytes(&quot;Reserved&quot;, default_value=h2b(s7comm.reserved), size=2, fuzzable=False),</span>
+<span class="sd">            Bytes(&quot;PDU Reference&quot;, default_value=h2b(s7comm.pdu_reference), size=2, fuzzable=False),</span>
+<span class="sd">            Bytes(&quot;Parameter Length&quot;, default_value=h2b(s7comm.parameter_length), size=2, fuzzable=False),</span>
+<span class="sd">            Bytes(&quot;Data Length&quot;, default_value=h2b(s7comm.data_length), size=2, fuzzable=False),</span>
+<span class="sd">            Bytes(&quot;Parameter&quot;, default_value=h2b(s7comm.parameter), fuzzable=False),</span>
+<span class="sd">            Bytes(&quot;Data&quot;, default_value=h2b(s7comm.data), fuzzable=False)</span>
+<span class="sd">        )),</span>
+<span class="sd">        Size(name=&quot;test&quot;,block_name=&quot;S7COMM&quot;, fuzzable=False, length=2,output_format=&quot;ascii&quot;) # 实际使用时注意输出格式</span>
+
+<span class="sd">    如上代码用一个名为 test 的 Size 计算一个名为 S7COMM 的 Block 的大小，并在模糊测试时将计算结果附加在该 block 之后。</span>
+<span class="sd">    </span>
+<span class="sd">    使用时需要注意输出的格式是 ascii 格式还是 binary 格式，同时也要注意端序以及该 Size 本身是否也要算入长度中去。</span>
+<span class="sd">    </span>
+
+
+
+<span class="sd">    Create a sizer block bound to the block with the specified name.</span>
 
 <span class="sd">    Size blocks that size their own parent or grandparent are allowed.</span>
 
@@ -271,7 +304,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

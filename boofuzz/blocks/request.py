@@ -10,12 +10,13 @@ from ..pgraph.node import Node
 
 class Request(FuzzableBlock, Node):
     """
-    Top level container. Can hold any block structure or primitive.
-    This can essentially be thought of as a super-block, root-block, daddy-block or whatever other alias you prefer.
+    .. 
+     Top level container. Can hold any block structure or primitive.
+     This can essentially be thought of as a super-block, root-block, daddy-block or whatever other alias you prefer.
 
-    :param name: Name of this request
+    :param name: 当前 request 的名称
     :type name: str, optional
-    :param children: Children of this request, defaults to None
+    :param children: 当前 request 的子节点，默认为空
     :type children: boofuzz.Fuzzable, optional
     """
 

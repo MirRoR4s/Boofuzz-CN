@@ -47,13 +47,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">Installing boofuzz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/foreword.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API 文档</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Session.html">Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/Target.html">Target</a></li>
@@ -66,6 +67,12 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">学习记录</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/s7comm.html">Boofuzz 实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/work.html">工作记录</a></li>
 </ul>
 
         </div>
@@ -98,16 +105,22 @@
 
 
 <div class="viewcode-block" id="Group"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.Group">[docs]</a><span class="k">class</span> <span class="nc">Group</span><span class="p">(</span><span class="n">BasePrimitive</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This primitive represents a list of static values, stepping through each one on mutation.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Group 原语表示一列静态值，在模糊测试时会逐个遍历这些值并变异它们。</span>
+<span class="sd">    </span>
+<span class="sd">    你可以将 Group 原语绑定到某个 block 中以此指明该 block 要对 group 中的每个值进行所有可能的变异。</span>
 
-<span class="sd">    You can tie a block</span>
-<span class="sd">    to a group primitive to specify that the block should cycle through all possible mutations for *each* value</span>
-<span class="sd">    within the group. The group primitive is useful for example for representing a list of valid opcodes.</span>
+<span class="sd">    ..</span>
+<span class="sd">     This primitive represents a list of static values, stepping through each one on mutation.</span>
+
+<span class="sd">     You can tie a block</span>
+<span class="sd">     to a group primitive to specify that the block should cycle through all possible mutations for *each* value</span>
+<span class="sd">     within the group. The group primitive is useful for example for representing a list of valid opcodes.</span>
 
 <span class="sd">    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,</span>
 <span class="sd">        defaults to None</span>
 <span class="sd">    :type name: str, optional</span>
-<span class="sd">    :param values: List of possible raw values this group can take.</span>
+<span class="sd">    :param values: 该 group 可以取的所有可能的原始值。List of possible raw values this group can take.</span>
 <span class="sd">    :type values: list of bytes or list of str</span>
 <span class="sd">    :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value,</span>
 <span class="sd">        defaults to None</span>
@@ -160,7 +173,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

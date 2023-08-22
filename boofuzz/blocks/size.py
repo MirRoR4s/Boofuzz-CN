@@ -16,7 +16,33 @@ def _may_recurse(f):
 
 
 class Size(Fuzzable):
-    """Create a sizer block bound to the block with the specified name.
+    """
+    Size 用于计算某个 Block 的大小。
+    
+    示例如下：
+
+     ::
+
+            Block("S7COMM", children=(
+            Bytes("Protocol ID", default_value=h2b(s7comm.protocol_id), size=1, fuzzable=False),
+            Bytes("ROSCTR", default_value=h2b(s7comm.rosctr), size=1, fuzzable=False),
+            Bytes("Reserved", default_value=h2b(s7comm.reserved), size=2, fuzzable=False),
+            Bytes("PDU Reference", default_value=h2b(s7comm.pdu_reference), size=2, fuzzable=False),
+            Bytes("Parameter Length", default_value=h2b(s7comm.parameter_length), size=2, fuzzable=False),
+            Bytes("Data Length", default_value=h2b(s7comm.data_length), size=2, fuzzable=False),
+            Bytes("Parameter", default_value=h2b(s7comm.parameter), fuzzable=False),
+            Bytes("Data", default_value=h2b(s7comm.data), fuzzable=False)
+        )),
+        Size(name="test",block_name="S7COMM", fuzzable=False, length=2,output_format="ascii") # 实际使用时注意输出格式
+
+    如上代码用一个名为 test 的 Size 计算一个名为 S7COMM 的 Block 的大小，并在模糊测试时将计算结果附加在该 block 之后。
+    
+    使用时需要注意输出的格式是 ascii 格式还是 binary 格式，同时也要注意端序以及该 Size 本身是否也要算入长度中去。
+    
+
+
+
+    Create a sizer block bound to the block with the specified name.
 
     Size blocks that size their own parent or grandparent are allowed.
 

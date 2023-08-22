@@ -2,16 +2,22 @@ from .base_primitive import BasePrimitive
 
 
 class Group(BasePrimitive):
-    """This primitive represents a list of static values, stepping through each one on mutation.
+    """
+    Group 原语表示一列静态值，在模糊测试时会逐个遍历这些值并变异它们。
+    
+    你可以将 Group 原语绑定到某个 block 中以此指明该 block 要对 group 中的每个值进行所有可能的变异。
 
-    You can tie a block
-    to a group primitive to specify that the block should cycle through all possible mutations for *each* value
-    within the group. The group primitive is useful for example for representing a list of valid opcodes.
+    ..
+     This primitive represents a list of static values, stepping through each one on mutation.
+
+     You can tie a block
+     to a group primitive to specify that the block should cycle through all possible mutations for *each* value
+     within the group. The group primitive is useful for example for representing a list of valid opcodes.
 
     :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,
         defaults to None
     :type name: str, optional
-    :param values: List of possible raw values this group can take.
+    :param values: 该 group 可以取的所有可能的原始值。List of possible raw values this group can take.
     :type values: list of bytes or list of str
     :param default_value: Value used when the element is not being fuzzed - should typically represent a valid value,
         defaults to None

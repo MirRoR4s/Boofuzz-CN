@@ -3,13 +3,15 @@ from ..fuzzable import Fuzzable
 
 
 class Static(Fuzzable):
-    """Static primitives are fixed and not mutated while fuzzing.
+    """
+    
+    ..
+     Static primitives are fixed and not mutated while fuzzing.
 
     :type name: str, optional
-    :param name: Name, for referencing later. Names should always be provided, but if not, a default name will be given,
-        defaults to None
+    :param name: Static 原语的名称，默认为 None
     :type default_value: Raw, optional
-    :param default_value: Raw static data
+    :param default_value: 原始的静态数据
     """
 
     def __init__(self, name=None, default_value=None, *args, **kwargs):

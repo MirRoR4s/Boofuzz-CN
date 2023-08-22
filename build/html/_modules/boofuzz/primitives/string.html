@@ -49,6 +49,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">用户指南</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/foreword.html">前言</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/install.html">安装 boofuzz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/contributing.html">Contributing</a></li>
@@ -66,6 +67,12 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../user/changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">学习记录</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/official.html">官方样例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/s7comm.html">Boofuzz 实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/work.html">工作记录</a></li>
 </ul>
 
         </div>
@@ -102,7 +109,7 @@
 
 
 <div class="viewcode-block" id="String"><a class="viewcode-back" href="../../../user/protocol-definition.html#boofuzz.String">[docs]</a><span class="k">class</span> <span class="nc">String</span><span class="p">(</span><span class="n">Fuzzable</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;通过某种糟糕的字符串进行循环迭代的原语。</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;String 原语通过变异事先定义好的字符串库从而进行模糊测试。</span>
 
 <span class="sd">    类变量 &#39;fuzz_library&#39; 是一个包含着 fuzz 值的列表，所有实例都可共享该变量.</span>
 
@@ -408,7 +415,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Joshua Pereyda.</p>
+    <p>&#169; Copyright 2023, Joshua Pereyda-修订-黄建涛.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

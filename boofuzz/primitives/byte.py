@@ -12,7 +12,7 @@ class Byte(BitField):
     :type  default_value: int, optional
     :param default_value: Default integer value, defaults to 0
     :type  max_num: int, optional
-    :param max_num: Maximum number to iterate up to, defaults to None
+    :param max_num: 要迭代的最大整数值，默认为 None。例如 max_num=2 则表示该字段的值在0、1之间迭代变异。
     :type  endian: char, optional
     :param endian: Endianness of the bit field (LITTLE_ENDIAN: <, BIG_ENDIAN: >), defaults to LITTLE_ENDIAN
     :type  output_format: str, optional
