@@ -8,7 +8,7 @@ version: 2
 formats:
   - htmlzip
   - epub
-  - pdf
+  
 
 python:
    version: 3
