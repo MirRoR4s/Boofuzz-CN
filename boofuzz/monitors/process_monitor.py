@@ -11,7 +11,7 @@ from .base_monitor import BaseMonitor
 
 class ProcessMonitor(BaseMonitor, pedrpc.Client):
     """
-    ProcessMonitor 类继承自 BaseMonitor 以及 pedrpc.Client，是 process monitor 接口的代理类。
+    ProcessMonitor 继承自 BaseMonitor 以及 pedrpc.Client，是 process monitor 接口的代理类。
 
     在 0.2.0 版本之前，boofuzz 的网络和进程监视器是在 RPC 之上进行通信的，
     RPC 客户端被直接传递给 Session 类，并在 RPC partner 上动态地解析所有方法调用。
