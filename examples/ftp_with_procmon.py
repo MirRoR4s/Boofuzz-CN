@@ -23,7 +23,7 @@ def main():
     该脚本的用法应是首先连接到 RPC 服务端，然后发送 start_cmd 命令让 RPC 服务端启动一个 ftp 服务器。
     所以我们需要先编写一个 RPC 服务端，然后再编写一个 ftp 服务器，最后运行本脚本即可。
     """
-    target_ip = "127.0.0.1"
+    target_ip = "192.168.64.2"
     start_cmd = ["python", "C:\\ftpd\\ftpd.py"]
 
     # initialize the process monitor  初始化进程监视器
