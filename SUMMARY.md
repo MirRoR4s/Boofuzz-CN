@@ -1,10 +1,9 @@
 # Table of contents
 
 * [boofuzz](README.md)
-  * [Session](boofuzz/session/README.md)
-    * [init](boofuzz/session/init.md)
+  * [Session](readme/session.md)
   * [Connections](readme/connections/README.md)
-    * [ITargetConnection](boofuzz/connections/itargetconnection.md)
+    * [ITargetConnection](readme/connections/itargetconnection.md)
     * [BaseSocketConnection](readme/connections/basesocketconnection.md)
     * [TCPSocketConnection](readme/connections/tcpsocketconnection.md)
     * [UDPSocketConnection](readme/connections/udpsocketconnection.md)
